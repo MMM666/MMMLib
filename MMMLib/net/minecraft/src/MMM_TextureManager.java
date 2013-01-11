@@ -509,7 +509,14 @@ public class MMM_TextureManager {
 
 	public static String getTextureName(String name, int index) {
 		MMM_TextureBox ltb = getTextureBox(name);
-		if (ltb == null || !ltb.hasColor(index)) {
+		if (ltb == null) {
+			return null;
+		} else if (!ltb.hasColor(index)) {
+			// 特殊パターン
+			if (index >= 0x60 && index <= 0x6f) {
+				// 目のテクスチャ
+				return getTextureName(name, 0x13);
+			}
 			return null;
 		} else {
 			return ltb.getTextureName(index);
@@ -589,6 +596,27 @@ public class MMM_TextureManager {
 			if ((lcolor & 0x01) > 0) {
 				llist.add(li);
 				lcolor = lcolor >>> 1;
+			}
+		}
+		
+		if (llist.size() > 0) {
+			return llist.get(rand.nextInt(llist.size()));
+		} else {
+			return -1;
+		}
+	}
+
+	/**
+	 * 契約のメイドの色をランダムで返す
+	 */
+	public static int getRandomContractColor(int pIndex, Random rand) {
+		MMM_TextureBox ltb = getTextureBox(getIndexToString(pIndex));
+		if (ltb == null) return -1;
+		
+		List<Integer> llist = new ArrayList<Integer>();
+		for (int li = 0; li < 16; li++) {
+			if (ltb.hasColor(li)) {
+				llist.add(li);
 			}
 		}
 		
