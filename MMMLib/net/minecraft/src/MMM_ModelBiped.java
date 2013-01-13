@@ -66,6 +66,11 @@ public abstract class MMM_ModelBiped extends ModelBiped implements MMM_IModelBip
 	 */
 	public abstract void initModel(float psize, float pyoffset);
 
+	public MMM_ModelBiped[] getArmorModels() {
+		MMM_ModelBiped[] lo = new MMM_ModelBiped[] {new MMM_ModelBiped(0.3F), new MMM_ModelBiped(0.1F)};
+		return new MMM_ModelBiped[] {new MMM_ModelBiped(0.3F), new MMM_ModelBiped(0.1F)};
+	}
+
 	/**
 	 * モデル切替時に実行されるコード
 	 */
