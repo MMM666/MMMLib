@@ -274,8 +274,9 @@ public class MMM_TextureManager {
 				MMM_ModelBiped mlm[] = new MMM_ModelBiped[3];
 				Constructor<MMM_ModelBiped> cm = lclass.getConstructor(float.class);
 				mlm[0] = cm.newInstance(0.0F);
-				mlm[1] = cm.newInstance(0.5F);
-				mlm[2] = cm.newInstance(0.1F);
+				float[] lsize = mlm[0].getArmorModelsSize();
+				mlm[1] = cm.newInstance(lsize[0]);
+				mlm[2] = cm.newInstance(lsize[1]);
 				modelMap.put(pn, mlm);
 //				mod_littleMaidMob.Debug(String.format("getModelClass-%s", mlm[0].getClass().getName()));
 				mod_MMM_MMMLib.Debug(String.format("getModelClass-%s:%s", pn, cn));

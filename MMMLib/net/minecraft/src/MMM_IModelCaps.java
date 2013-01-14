@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * モデル共通化用インターフェース。
  */
-public interface MMM_IModelBiped {
+public interface MMM_IModelCaps {
 
 	/*
 	 * 機能名称群、取り敢えず書いてあるけど別に被らなければ何でも良し。
@@ -69,6 +69,10 @@ public interface MMM_IModelBiped {
 	 */
 	public Object getCapsValue(int pIndex);
 	public Object getCapsValue(String pCapsName);
+	public int getCapsValueInt(int pIndex);
+	public float getCapsValueFloat(int pIndex);
+	public double getCapsValueDouble(int pIndex);
+	public boolean getCapsValueBoolean(int pIndex);
 
 	/**
 	 * 機能番号に値を設定する。

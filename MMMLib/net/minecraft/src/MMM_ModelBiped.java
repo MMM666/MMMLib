@@ -1,5 +1,5 @@
 package net.minecraft.src;
-import static net.minecraft.src.MMM_IModelBiped.*;
+import static net.minecraft.src.MMM_IModelCaps.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +13,7 @@ import org.lwjgl.opengl.GL11;
 /**
  * 自作の人型モデル置き換え系の共通クラス
  */
-public abstract class MMM_ModelBiped extends ModelBiped implements MMM_IModelBiped {
+public abstract class MMM_ModelBiped extends ModelBiped implements MMM_IModelCaps {
 
 	/**
 	 * アイテム表示対策
@@ -23,11 +23,23 @@ public abstract class MMM_ModelBiped extends ModelBiped implements MMM_IModelBip
 	public MMM_ModelRenderer Arms[];
 	public MMM_ModelRenderer HeadMount;
 	public MMM_ModelRenderer HardPoint[];
-
+	
 	public Render render;
 	public Map<String, MMM_EquippedStabilizer> stabiliser;
-
-	private final Map<String, Integer> capsmap = new HashMap<String, Integer>();
+	public float scaleFactor = 0.9375F;
+	
+	/**
+	 * モデルが持っている機能群
+	 */
+	private final Map<String, Integer> capsmap = new HashMap<String, Integer>() {{
+		put("onGround",			caps_onGround);
+		put("isRiding",			caps_isRiding);
+		put("isChild",			caps_isChild);
+		put("heldItemLeft",		caps_heldItemLeft);
+		put("isheldItemRight",	caps_heldItemRight);
+		put("aimedBow",			caps_aimedBow);
+		put("ScaleFactor", 		caps_ScaleFactor);
+	}};
 
 	/**
 	 * コンストラクタは全て継承させること
@@ -35,14 +47,12 @@ public abstract class MMM_ModelBiped extends ModelBiped implements MMM_IModelBip
 	public MMM_ModelBiped() {
 		this(0.0F);
 	}
-
 	/**
 	 * コンストラクタは全て継承させること
 	 */
 	public MMM_ModelBiped(float psize) {
 		this(psize, 0.0F);
 	}
-
 	/**
 	 * コンストラクタは全て継承させること
 	 */
@@ -66,10 +76,11 @@ public abstract class MMM_ModelBiped extends ModelBiped implements MMM_IModelBip
 	 */
 	public abstract void initModel(float psize, float pyoffset);
 
-	public MMM_ModelBiped[] getArmorModels() {
-		MMM_ModelBiped[] lo = new MMM_ModelBiped[] {new MMM_ModelBiped(0.3F), new MMM_ModelBiped(0.1F)};
-		return new MMM_ModelBiped[] {new MMM_ModelBiped(0.3F), new MMM_ModelBiped(0.1F)};
-	}
+	/**
+	 * アーマーモデルのサイズを返す。
+	 * サイズは内側のものから。
+	 */
+	public abstract float[] getArmorModelsSize();
 
 	/**
 	 * モデル切替時に実行されるコード
@@ -100,8 +111,7 @@ public abstract class MMM_ModelBiped extends ModelBiped implements MMM_IModelBip
 			this.bipedHeadwear.render(par7);
 		}
 		renderExtention(par1Entity, par2, par3, par4, par5, par6, par7);
-		renderStabilizer(par1Entity, stabiliser, par2, par3, par4, par5, par6,
-				par7);
+		renderStabilizer(par1Entity, stabiliser, par2, par3, par4, par5, par6, par7);
 	}
 
 	/**
@@ -175,20 +185,12 @@ public abstract class MMM_ModelBiped extends ModelBiped implements MMM_IModelBip
 	 * モデル毎のスポーン判定。 マルチ化で実行不能になりました。
 	 */
 	@Deprecated
-	public boolean getCanSpawnHere(World pworld, int px, int py, int pz,
-			EntityLiving pentity) {
+	public boolean getCanSpawnHere(World pworld, int px, int py, int pz, EntityLiving pentity) {
 		return true;
 	}
 
 	@Override
 	public Map<String, Integer> getModelCaps() {
-		capsmap.put("onGround",			caps_onGround);
-		capsmap.put("isRiding",			caps_isRiding);
-		capsmap.put("isChild",			caps_isChild);
-		capsmap.put("heldItemLeft",		caps_heldItemLeft);
-		capsmap.put("isheldItemRight",	caps_heldItemRight);
-		capsmap.put("aimedBow",			caps_aimedBow);
-		
 		return capsmap;
 	}
 
@@ -207,12 +209,30 @@ public abstract class MMM_ModelBiped extends ModelBiped implements MMM_IModelBip
 			return heldItemRight;
 		case caps_aimedBow:
 			return aimedBow;
+		case caps_ScaleFactor:
+			return scaleFactor;
 		}
 		return null;
 	}
 	@Override
 	public Object getCapsValue(String pCapsName) {
 		return getCapsValue(capsmap.get(pCapsName));
+	}
+	@Override
+	public int getCapsValueInt(int pIndex) {
+		return (Integer)getCapsValue(pIndex);
+	}
+	@Override
+	public float getCapsValueFloat(int pIndex) {
+		return (Float)getCapsValue(pIndex);
+	}
+	@Override
+	public double getCapsValueDouble(int pIndex) {
+		return (Double)getCapsValue(pIndex);
+	}
+	@Override
+	public boolean getCapsValueBoolean(int pIndex) {
+		return (Boolean)getCapsValue(pIndex);
 	}
 
 	@Override
@@ -235,6 +255,9 @@ public abstract class MMM_ModelBiped extends ModelBiped implements MMM_IModelBip
 			return true;
 		case caps_aimedBow:
 			aimedBow = (Boolean)pArg[0];
+			return true;
+		case caps_ScaleFactor:
+			scaleFactor = (Float)pArg[0];
 			return true;
 		}
 		

@@ -8,7 +8,7 @@ import org.lwjgl.opengl.GL11;
 /**
  * アーマーの二重描画用クラス。
  */
-public class MMM_ModelArmors extends ModelBase implements MMM_IModelBiped {
+public class MMM_ModelArmors extends ModelBase implements MMM_IModelCaps {
 
 	public RenderLiving renderLiving;
 	public MMM_ModelBiped modelArmorOuter;
@@ -98,6 +98,22 @@ public class MMM_ModelArmors extends ModelBase implements MMM_IModelBiped {
 	@Override
 	public Object getCapsValue(String pCapsName) {
 		return modelArmorInner.getCapsValue(pCapsName);
+	}
+	@Override
+	public int getCapsValueInt(int pIndex) {
+		return modelArmorInner.getCapsValueInt(pIndex);
+	}
+	@Override
+	public float getCapsValueFloat(int pIndex) {
+		return modelArmorInner.getCapsValueFloat(pIndex);
+	}
+	@Override
+	public double getCapsValueDouble(int pIndex) {
+		return modelArmorInner.getCapsValueDouble(pIndex);
+	}
+	@Override
+	public boolean getCapsValueBoolean(int pIndex) {
+		return modelArmorInner.getCapsValueBoolean(pIndex);
 	}
 
 	@Override
