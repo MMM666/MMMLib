@@ -35,7 +35,6 @@ public class MMM_ModelArmors extends ModelBase implements MMM_IModelCaps {
 	public MMM_ModelArmors(RenderLiving pRender) {
 		renderLiving = pRender;
 		renderParts = 0;
-		isAlphablend = false;
 	}
 
 	@Override
@@ -44,6 +43,7 @@ public class MMM_ModelArmors extends ModelBase implements MMM_IModelCaps {
 			modelArmorOuter.setLivingAnimations(par1EntityLiving, par2, par3, par4);
 		}
 		modelArmorInner.setLivingAnimations(par1EntityLiving, par2, par3, par4);
+		isAlphablend = true;
 	}
 
 	@Override
