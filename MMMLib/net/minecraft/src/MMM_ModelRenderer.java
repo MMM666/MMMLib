@@ -40,20 +40,29 @@ public class MMM_ModelRenderer extends ModelRenderer {
 	public boolean adjust;
 	public FloatBuffer matrix;
 	public boolean isInvertX;
+	
+	public float scaleX;
+	public float scaleY;
+	public float scaleZ;
+
+
 
 	public MMM_ModelRenderer(ModelBase pModelBase, String pName) {
 		super(pModelBase, pName);
-
+		
 		compiled = false;
 		displayList = 0;
 		baseModel = pModelBase;
-
+		
 		rotatePriority = RotXYZ;
 		itemstack = null;
 		adjust = true;
 		matrix = BufferUtils.createFloatBuffer(16);
 		isInvertX = false;
-
+		
+		scaleX = 1.0F;
+		scaleY = 1.0F;
+		scaleZ = 1.0F;
 	}
 
 	public MMM_ModelRenderer(ModelBase pModelBase, int px, int py) {
@@ -64,6 +73,21 @@ public class MMM_ModelRenderer extends ModelRenderer {
 	public MMM_ModelRenderer(ModelBase pModelBase) {
 		this(pModelBase, null);
 	}
+
+	public MMM_ModelRenderer(ModelBase pModelBase, int px, int py, float pScaleX, float pScaleY, float pScaleZ) {
+		this(pModelBase, px, py);
+		this.scaleX = pScaleX;
+		this.scaleY = pScaleY;
+		this.scaleZ = pScaleZ;
+	}
+
+	public MMM_ModelRenderer(ModelBase pModelBase, float pScaleX, float pScaleY, float pScaleZ) {
+		this(pModelBase);
+		this.scaleX = pScaleX;
+		this.scaleY = pScaleY;
+		this.scaleZ = pScaleZ;
+	}
+
 
 	@Override
 	public MMM_ModelRenderer setTextureOffset(int i, int j) {
@@ -97,7 +121,8 @@ public class MMM_ModelRenderer extends ModelRenderer {
 	/**
 	 * ModelBox継承の独自オブジェクト追加用
 	 */
-	public MMM_ModelRenderer addCubeList() {
+	public MMM_ModelRenderer addCubeList(ModelBox pModelBox) {
+		cubeList.add(pModelBox);
 		return this;
 	}
 
@@ -300,15 +325,16 @@ public class MMM_ModelRenderer extends ModelRenderer {
 	protected void renderObject(float par1, EntityLiving pEntityLiving) {
 		// レンダリング、あと子供も
 		GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, matrix);
-		if (!(baseModel instanceof MMM_ModelBiped)
-				|| ((MMM_ModelBiped) baseModel).isRendering) {
+		if (!(baseModel instanceof MMM_ModelBiped) || ((MMM_ModelBiped) baseModel).isRendering) {
+			GL11.glPushMatrix();
+			GL11.glScalef(scaleX, scaleY, scaleZ);
 			GL11.glCallList(displayList);
+			GL11.glPopMatrix();
 		}
-
+		
 		if (childModels != null) {
-			for (int i = 0; i < childModels.size(); i++) {
-				((MMM_ModelRenderer) childModels.get(i)).render(par1,
-						pEntityLiving);
+			for (int li = 0; li < childModels.size(); li++) {
+				((MMM_ModelRenderer) childModels.get(li)).render(par1, pEntityLiving);
 			}
 		}
 	}
@@ -327,30 +353,25 @@ public class MMM_ModelRenderer extends ModelRenderer {
 		if (!showModel) {
 			return;
 		}
-
+		
 		if (!compiled) {
 			compileDisplayList(par1);
 		}
-
-		if (rotateAngleX != 0.0F || rotateAngleY != 0.0F
-				|| rotateAngleZ != 0.0F) {
+		
+		if (rotateAngleX != 0.0F || rotateAngleY != 0.0F || rotateAngleZ != 0.0F) {
 			GL11.glPushMatrix();
-			GL11.glTranslatef(rotationPointX * par1, rotationPointY * par1,
-					rotationPointZ * par1);
-
+			GL11.glTranslatef(rotationPointX * par1, rotationPointY * par1, rotationPointZ * par1);
+			
 			setRotation();
 			renderObject(par1, pEntityLiving);
-
+			
 			GL11.glPopMatrix();
-		} else if (rotationPointX != 0.0F || rotationPointY != 0.0F
-				|| rotationPointZ != 0.0F) {
-			GL11.glTranslatef(rotationPointX * par1, rotationPointY * par1,
-					rotationPointZ * par1);
+		} else if (rotationPointX != 0.0F || rotationPointY != 0.0F || rotationPointZ != 0.0F) {
+			GL11.glTranslatef(rotationPointX * par1, rotationPointY * par1, rotationPointZ * par1);
 
 			renderObject(par1, pEntityLiving);
 
-			GL11.glTranslatef(-rotationPointX * par1, -rotationPointY * par1,
-					-rotationPointZ * par1);
+			GL11.glTranslatef(-rotationPointX * par1, -rotationPointY * par1, -rotationPointZ * par1);
 		} else {
 			renderObject(par1, pEntityLiving);
 		}
@@ -394,16 +415,12 @@ public class MMM_ModelRenderer extends ModelRenderer {
 			compileDisplayList(par1);
 		}
 
-		if (rotateAngleX != 0.0F || rotateAngleY != 0.0F
-				|| rotateAngleZ != 0.0F) {
-			GL11.glTranslatef(rotationPointX * par1, rotationPointY * par1,
-					rotationPointZ * par1);
+		if (rotateAngleX != 0.0F || rotateAngleY != 0.0F || rotateAngleZ != 0.0F) {
+			GL11.glTranslatef(rotationPointX * par1, rotationPointY * par1, rotationPointZ * par1);
 
 			setRotation();
-		} else if (rotationPointX != 0.0F || rotationPointY != 0.0F
-				|| rotationPointZ != 0.0F) {
-			GL11.glTranslatef(rotationPointX * par1, rotationPointY * par1,
-					rotationPointZ * par1);
+		} else if (rotationPointX != 0.0F || rotationPointY != 0.0F || rotationPointZ != 0.0F) {
+			GL11.glTranslatef(rotationPointX * par1, rotationPointY * par1, rotationPointZ * par1);
 		}
 	}
 
@@ -420,24 +437,19 @@ public class MMM_ModelRenderer extends ModelRenderer {
 			compileDisplayList(par1);
 		}
 
-		if (rotateAngleX != 0.0F || rotateAngleY != 0.0F
-				|| rotateAngleZ != 0.0F) {
-			GL11.glTranslatef(rotationPointX * par1, rotationPointY * par1,
-					rotationPointZ * par1);
+		if (rotateAngleX != 0.0F || rotateAngleY != 0.0F || rotateAngleZ != 0.0F) {
+			GL11.glTranslatef(rotationPointX * par1, rotationPointY * par1, rotationPointZ * par1);
 
 			setRotation();
-		} else if (rotationPointX != 0.0F || rotationPointY != 0.0F
-				|| rotationPointZ != 0.0F) {
-			GL11.glTranslatef(rotationPointX * par1, rotationPointY * par1,
-					rotationPointZ * par1);
+		} else if (rotationPointX != 0.0F || rotationPointY != 0.0F || rotationPointZ != 0.0F) {
+			GL11.glTranslatef(rotationPointX * par1, rotationPointY * par1, rotationPointZ * par1);
 		}
 		// ポストレンダリング、あと子供も
 		GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, matrix);
 
 		if (childModels != null) {
 			for (int i = 0; i < childModels.size(); i++) {
-				((MMM_ModelRenderer) childModels.get(i)).postRenderAll(par1,
-						pEntityLiving);
+				((MMM_ModelRenderer) childModels.get(i)).postRenderAll(par1, pEntityLiving);
 			}
 		}
 	}
@@ -446,11 +458,11 @@ public class MMM_ModelRenderer extends ModelRenderer {
 		displayList = GLAllocation.generateDisplayLists(1);
 		GL11.glNewList(displayList, GL11.GL_COMPILE);
 		Tessellator tessellator = Tessellator.instance;
-
+		
 		for (int i = 0; i < cubeList.size(); i++) {
 			((ModelBox) cubeList.get(i)).render(tessellator, par1);
 		}
-
+		
 		GL11.glEndList();
 		compiled = true;
 	}
@@ -595,6 +607,25 @@ public class MMM_ModelRenderer extends ModelRenderer {
 	public float setRotationPointZ(float value) {
 		rotationPointZ = value;
 		return rotationPointZ;
+	}
+
+	public MMM_ModelRenderer setScale(float pX, float pY, float pZ) {
+		scaleX = pX;
+		scaleY = pY;
+		scaleZ = pZ;
+		return this;
+	}
+
+	public float setScaleX(float pValue) {
+		return scaleX = pValue;
+	}
+
+	public float setScaleY(float pValue) {
+		return scaleY = pValue;
+	}
+
+	public float setScaleZ(float pValue) {
+		return scaleZ = pValue;
 	}
 
 }

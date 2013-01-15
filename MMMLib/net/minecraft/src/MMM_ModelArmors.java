@@ -86,6 +86,13 @@ public class MMM_ModelArmors extends ModelBase implements MMM_IModelCaps {
 		modelArmorInner.setRotationAngles(par1, par2, par3, par4, par5, par6, par7Entity);
 	}
 
+	public void showArmorParts(int pIndex) {
+		if (modelArmorOuter != null) {
+			modelArmorOuter.showArmorParts(pIndex);
+		}
+		modelArmorInner.showArmorParts(pIndex);
+	}
+
 	@Override
 	public Map<String, Integer> getModelCaps() {
 		return modelArmorInner.getModelCaps();
