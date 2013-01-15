@@ -1,5 +1,5 @@
 package net.minecraft.src;
-import static net.minecraft.src.MMM_IModelCaps.*;
+
 
 import java.util.HashMap;
 import java.util.Map;
@@ -100,8 +100,7 @@ public abstract class MMM_ModelBiped extends ModelBiped implements MMM_IModelCap
 	public void render(Entity par1Entity, float par2, float par3, float par4,
 			float par5, float par6, float par7) {
 		if (preRender(par1Entity, par2, par3, par4, par5, par6, par7)) {
-			this.setRotationAngles(par2, par3, par4, par5, par6, par7,
-					par1Entity);
+			this.setRotationAngles(par2, par3, par4, par5, par6, par7, par1Entity);
 			this.bipedHead.render(par7);
 			this.bipedBody.render(par7);
 			this.bipedRightArm.render(par7);
@@ -156,11 +155,19 @@ public abstract class MMM_ModelBiped extends ModelBiped implements MMM_IModelCap
 		GL11.glPopMatrix();
 	}
 
-	// 身長
+	/**
+	 *  身長
+	 */
 	public abstract float getHeight();
-
-	// 横幅
+	/**
+	 * 横幅
+	 */
 	public abstract float getWidth();
+	/**
+	 * モデルのYオフセット
+	 * PF用。
+	 */
+	public abstract float getyOffset();
 
 	public boolean isItemHolder() {
 		// アイテムを持っているときに手を前に出すかどうか。

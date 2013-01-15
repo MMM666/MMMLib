@@ -59,11 +59,18 @@ public class MMM_TextureManager {
 	 * サーバーからリクエストされたインデックスを返す、無ければサーバー側のリストに追加して値を返す。
 	 * クライアント側のリストに追加。
 	 */
-	public static Map<Integer, String> textureIndex = new HashMap<Integer, String>();
+	public static Map<Integer, MMM_TextureBoxServer> textureServer = new HashMap<Integer, MMM_TextureBoxServer>();
+//	public static Map<Integer, String> textureIndex = new HashMap<Integer, String>();
 	/**
 	 * クライアント側は要らない
 	 */
-	public static Map<Integer, Integer> textureColor = new HashMap<Integer, Integer>();
+//	public static Map<Integer, Integer> textureColor	= new HashMap<Integer, Integer>();
+//	public static Map<Integer, Float> textureHeight		= new HashMap<Integer, Float>();
+//	public static Map<Integer, Float> textureWidth		= new HashMap<Integer, Float>();
+//	public static Map<Integer, Float> textureYOffset	= new HashMap<Integer, Float>();
+	/**
+	 * クライアント側で使う
+	 */
 	private static String[] requestString = new String[] {
 		null, null, null, null, null, null, null, null,
 		null, null, null, null, null, null, null, null
@@ -133,7 +140,7 @@ public class MMM_TextureManager {
 				addTextureName((new StringBuilder()).append(lss[1]).append("default/").append(defNames[i]).toString(), lss);
 			}
 			modelMap.put("default", defaultModel);
-			getStringToIndex("default");
+//			getStringToIndex("default");
 			mod_MMM_MMMLib.Debug("getTexture-append-default-done.");
 		}
 		
@@ -199,15 +206,19 @@ public class MMM_TextureManager {
 				BufferedReader br = new BufferedReader(fr);
 				String ls;
 				int li = 0;
-				textureIndex.clear();
-				textureColor.clear();
+				textureServer.clear();
 				
 				while ((ls = br.readLine()) != null) {
 					String lt[] = ls.split(",");
 					if (lt.length > 1) {
-						textureIndex.put(li, lt[1]);
-						textureColor.put(li, Integer.valueOf(lt[0], 16));
-						li++;
+						MMM_TextureBoxServer lbox = new MMM_TextureBoxServer();
+						lbox.contractColor	= Integer.valueOf(lt[0], 16);
+						lbox.wildColor		= Integer.valueOf(lt[1], 16);
+						lbox.modelHeight	= Float.valueOf(lt[2]);
+						lbox.modelWidth		= Float.valueOf(lt[3]);
+						lbox.modelYOffset	= Float.valueOf(lt[4]);
+						lbox.textureName	= lt[5];
+						textureServer.put(li++, lbox);
 					}
 				}
 				
@@ -218,8 +229,14 @@ public class MMM_TextureManager {
 			}
 			return true;
 		} else {
-			textureIndex.put(0, "default");
-			textureColor.put(0, 0x1000);
+			MMM_TextureBoxServer lbox = new MMM_TextureBoxServer();
+			lbox.contractColor	= 0xffff;
+			lbox.wildColor		= 0x1000;
+			lbox.modelHeight	= 1.35F;
+			lbox.modelWidth		= 0.5F;
+			lbox.modelYOffset	= 1.35F;
+			lbox.textureName	= "default";
+			textureServer.put(0, lbox);
 		}
 		
 		return false;
@@ -229,14 +246,19 @@ public class MMM_TextureManager {
 	 * テクスチャインデックスを構築。
 	 */
 	public static void initTextureList(boolean pFlag) {
-		textureIndex.clear();
-		textureColor.clear();
+		textureServer.clear();
 		if (pFlag) {
 			// Internal
 			int li = 0;
 			for (MMM_TextureBox lte : textures) {
-				textureIndex.put(li, lte.packegeName);
-				textureColor.put(li, lte.getWildColorBits());
+				MMM_TextureBoxServer lbox = new MMM_TextureBoxServer();
+				lbox.contractColor	= lte.getContractColorBits();
+				lbox.wildColor		= lte.getWildColorBits();
+				lbox.modelHeight	= lte.models[0].getHeight();
+				lbox.modelWidth		= lte.models[0].getWidth();
+				lbox.modelYOffset	= lte.models[0].getyOffset();
+				lbox.textureName	= lte.packegeName;
+				textureServer.put(li++, lbox);
 				li++;
 			}
 		}
@@ -577,22 +599,21 @@ public class MMM_TextureManager {
 	}
 
 	public static String getRandomTexture(Random pRand) {
-		if (textureIndex.isEmpty()) {
+		if (textureServer.isEmpty()) {
 			return "default";
 		} else {
-			return textureIndex.values().toArray()[pRand.nextInt(textureIndex.size())].toString();
+			return ((MMM_TextureBoxServer)textureServer.values().toArray()[pRand.nextInt(textureServer.size())]).textureName;
 		}
-//		return textures.keySet().toArray()[pRand.nextInt(getTextureCount())].toString();
 	}
 
 	/**
 	 * 野生のメイドの色をランダムで返す
 	 */
 	public static int getRandomWildColor(int pIndex, Random rand) {
-		if (textureColor.isEmpty() || pIndex < 0) return -1;
+		if (textureServer.isEmpty() || pIndex < 0) return -1;
 		
 		List<Integer> llist = new ArrayList<Integer>();
-		int lcolor = textureColor.get(pIndex);
+		int lcolor = textureServer.get(pIndex).wildColor;
 		for (int li = 0; li < 16; li++) {
 			if ((lcolor & 0x01) > 0) {
 				llist.add(li);
@@ -611,7 +632,7 @@ public class MMM_TextureManager {
 	 * 契約のメイドの色をランダムで返す
 	 */
 	public static int getRandomContractColor(int pIndex, Random rand) {
-		MMM_TextureBox ltb = getTextureBox(getIndexToString(pIndex));
+		MMM_TextureBox ltb = getTextureBox(getIndexToString(pIndex).textureName);
 		if (ltb == null) return -1;
 		
 		List<Integer> llist = new ArrayList<Integer>();
@@ -631,40 +652,80 @@ public class MMM_TextureManager {
 	/*
 	 * サーバークライアント間でのテクスチャ管理関数群
 	 */
+	
+	/**
+	 * 渡されたテクスチャパックの名称に関連付けされたインデックスを返す。
+	 */
 	public static int getStringToIndex(String pname) {
-		for (Entry<Integer, String> le : textureIndex.entrySet()) {
-			if (le.getValue().equals(pname)) {
+		for (Entry<Integer, MMM_TextureBoxServer> le : textureServer.entrySet()) {
+			if (le.getValue().textureName.equals(pname)) {
 				return le.getKey();
 			}
 		}
-		return -1;
+		if (MMM_Helper.isClient) {
+			// クライアントで未確認名称があった場合はサーバーへ問い合わせを行う。
+			int li = getRequestIndex(pname);
+			if (li < 0) {
+				// リクエスト中、もしくは空きがない。
+				return li;
+			}
+			if (li > -1) {
+				MMM_TextureBox lbox = MMM_TextureManager.getTextureBox(pname);
+				byte ldata[] = new byte[18 + pname.getBytes().length];
+				ldata[0] = mod_MMM_MMMLib.MMM_Server_GetTextureIndex;
+				ldata[1] = (byte)li;
+				MMM_Helper.setInt(ldata, 2, lbox.getWildColorBits());
+				MMM_Helper.setInt(ldata, 6, Float.floatToIntBits(lbox.models[0].getHeight()));
+				MMM_Helper.setInt(ldata, 10, Float.floatToIntBits(lbox.models[0].getWidth()));
+				MMM_Helper.setInt(ldata, 14, Float.floatToIntBits(lbox.models[0].getyOffset()));
+				MMM_Helper.setStr(ldata, 18, pname);
+				mod_MMM_MMMLib.sendToServer(ldata);
+				mod_MMM_MMMLib.Debug("GetTextureIndex");
+			}
+			return li;
+		} else {
+			// サーバー側で未確認名称があった場合はデフォルトを返す。
+			return 0;
+		}
 	}
 	public static int setStringToIndex(int pIndex, String pname) {
-		if (getTextureBox(pname) != null) {
-			textureIndex.put(pIndex, pname);
-		} else {
-			// 自分のところにはないテクスチャパック
-			textureIndex.put(pIndex, "default");
+		// クライアントの動作
+		MMM_TextureBox lbox = getTextureBox(pname);
+		if (lbox == null) {
+			// 自分のところにはないテクスチャパックはデフォルトで表示
+			lbox = getTextureBox("default");
 		}
+		textureServer.put(pIndex, new MMM_TextureBoxServer(lbox));
 		return getStringToIndex(pname);
 	}
-	public static int setStringToIndex(int pIndex) {
-		// サーチかける時用のブランクを設置
-		textureIndex.put(pIndex, "");
-		return pIndex;
-	}
-	public static int setStringToIndex(String pname, int pColorBits) {
-		if (!textureIndex.containsValue(pname)) {
-			// 既にある分は登録しない
-			int li = textureIndex.size();
-			textureIndex.put(li, pname);
-			textureColor.put(li, pColorBits);
+	public static int setTextureBoxToIndex(MMM_TextureBoxServer pBox) {
+		// サーバー側の動作
+		for (Entry<Integer, MMM_TextureBoxServer> le : textureServer.entrySet()) {
+			if (le.getValue().textureName.equals(pBox.textureName)) {
+				// 既にある分は登録しない
+				return le.getKey();
+			}
 		}
-		return getStringToIndex(pname);
+		int li = textureServer.size();
+		textureServer.put(li, pBox);
+		return li;
 	}
 
-	public static String getIndexToString(int pindex) {
-		return textureIndex.get(pindex);
+	public static MMM_TextureBoxServer getIndexToString(int pIndex) {
+		if (!textureServer.containsKey(pIndex)) {
+			if (MMM_Helper.isClient) {
+				// サーバー側へ番号に対応するテクスチャパックの名称を問い合わせ
+				// サーチかける時用のブランクを設置
+				textureServer.put(pIndex, new MMM_TextureBoxServer());
+				byte[] ldata = new byte[3];
+				ldata[0] = mod_MMM_MMMLib.MMM_Server_GetTextureStr;
+				MMM_Helper.setShort(ldata, 1, pIndex);
+				mod_MMM_MMMLib.sendToServer(ldata);
+			} else {
+				// サーバー側にインデックスが無いということは有り得ないはず。
+			}
+		}
+		return textureServer.get(pIndex);
 	}
 
 	// ネットワーク越しにテクスチャインデクスを得る際に使う

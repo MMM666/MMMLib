@@ -87,4 +87,9 @@ public class MMM_ModelBiped_Steve extends MMM_ModelBiped {
 		return 0.6F;
 	}
 
+	@Override
+	public float getyOffset() {
+		return 1.62F;
+	}
+
 }

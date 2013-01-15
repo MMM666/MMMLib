@@ -74,6 +74,18 @@ public class MMM_TextureBox {
 	/**
 	 * 野生色の有無をビット配列にして返す
 	 */
+	public int getContractColorBits() {
+		int li = 0;
+		for (Integer i : textures.keySet()) {
+			if (i >= 0x00 && i <= 0x0f) {
+				li |= 1 << (i & 0x0f);
+			}
+		}
+		return li;
+	}
+	/**
+	 * 野生色の有無をビット配列にして返す
+	 */
 	public int getWildColorBits() {
 		int li = 0;
 		for (Integer i : textures.keySet()) {

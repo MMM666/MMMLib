@@ -112,7 +112,15 @@ public class MMM_Helper {
 	public static int getInt(byte[] pData, int pIndex) {
 		return (pData[pIndex] & 0xff) | ((pData[pIndex + 1] & 0xff) << 8) | ((pData[pIndex + 2] & 0xff) << 16) | ((pData[pIndex + 3] & 0xff) << 24);
 	}
-	
+
+	public static void setFloat(byte[] pData, int pIndex, float pVal) {
+		setInt(pData, pIndex, Float.floatToIntBits(pVal));
+	}
+
+	public static float getFloat(byte[] pData, int pIndex) {
+		return Float.intBitsToFloat(getInt(pData, pIndex));
+	}
+
 	public static void setShort(byte[] pData, int pIndex, int pVal) {
 		pData[pIndex++]	= (byte)(pVal & 0xff);
 		pData[pIndex]	= (byte)((pVal >>> 8) & 0xff);
@@ -193,5 +201,13 @@ public class MMM_Helper {
 		}
 		return -1;
 	}
+
+	/**
+	 * EntityÇï‘Ç∑ÅB
+	 */
+	public static Entity getEntity(byte[] pData, int pIndex, World pWorld) {
+		return pWorld.getEntityByID(MMM_Helper.getInt(pData, pIndex));
+	}
+	
 
 }

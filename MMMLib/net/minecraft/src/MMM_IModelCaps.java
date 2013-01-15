@@ -44,7 +44,10 @@ public interface MMM_IModelCaps {
 	public static final int caps_isCamouflage	= 0x0111;
 	public static final int caps_isPlanter		= 0x0112;
 	public static final int caps_entityIdFactor	= 0x0120;
-	public static final int caps_entitySize		= 0x0121;
+	public static final int caps_height			= 0x0121;
+	public static final int caps_width			= 0x0122;
+	public static final int caps_YOffset		= 0x0123;
+	public static final int caps_mountedYOffset	= 0x0124;
 	public static final int caps_render			= 0x0130;
 	public static final int caps_Arms			= 0x0131;
 	public static final int caps_HeadMount		= 0x0132;
