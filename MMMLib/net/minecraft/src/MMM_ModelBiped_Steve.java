@@ -73,6 +73,12 @@ public class MMM_ModelBiped_Steve extends MMM_ModelBiped {
 	}
 
 	@Override
+	public void renderItems(EntityLiving pEntity, Render pRender) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
 	public float[] getArmorModelsSize() {
 		return new float[] {0.5F, 0.1F};
 	}

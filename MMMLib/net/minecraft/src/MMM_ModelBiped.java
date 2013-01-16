@@ -27,6 +27,8 @@ public abstract class MMM_ModelBiped extends ModelBiped implements MMM_IModelCap
 	public Render render;
 	public Map<String, MMM_EquippedStabilizer> stabiliser;
 	public float scaleFactor = 0.9375F;
+	protected MMM_IModelCaps modelCaps;
+	
 	
 	/**
 	 * モデルが持っている機能群
@@ -93,8 +95,7 @@ public abstract class MMM_ModelBiped extends ModelBiped implements MMM_IModelCap
 	/**
 	 * ハードポイントに接続されたアイテムを表示する
 	 */
-	public void renderItems(EntityLiving pEntity, Render pRender) {
-	}
+	public abstract void renderItems(EntityLiving pEntity, Render pRender);
 
 	@Override
 	public void render(Entity par1Entity, float par2, float par3, float par4,
@@ -273,6 +274,14 @@ public abstract class MMM_ModelBiped extends ModelBiped implements MMM_IModelCap
 	@Override
 	public boolean setCapsValue(String pCapsName, Object... pArg) {
 		return setCapsValue(capsmap.get(pCapsName), pArg);
+	}
+
+	/**
+	 * Renderer辺でこの変数を設定する。
+	 * 設定値はMMM_IModelCapsを継承したEntitiyとかを想定。
+	 */
+	public void setModelCaps(MMM_IModelCaps pModelCaps) {
+		modelCaps = pModelCaps;
 	}
 
 	// MathHelperトンネル関数群
