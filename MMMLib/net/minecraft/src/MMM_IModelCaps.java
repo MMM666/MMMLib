@@ -48,11 +48,18 @@ public interface MMM_IModelCaps {
 	public static final int caps_width			= 0x0122;
 	public static final int caps_YOffset		= 0x0123;
 	public static final int caps_mountedYOffset	= 0x0124;
+	public static final int caps_dominantArm	= 0x0125;
 	public static final int caps_render			= 0x0130;
 	public static final int caps_Arms			= 0x0131;
 	public static final int caps_HeadMount		= 0x0132;
 	public static final int caps_HardPoint		= 0x0133;
 	public static final int caps_stabiliser		= 0x0134;
+	public static final int caps_Items			= 0x0135;
+	public static final int caps_Actions		= 0x0136;
+	public static final int caps_Grounds		= 0x0137;
+	public static final int caps_Inventory		= 0x0138;
+	public static final int caps_interestedAngle	= 0x0150;
+	
 	// PlayerFormLittleMaid
 	public static final int caps_ScaleFactor	= 0x0200;
 	public static final int caps_PartsVisible	= 0x0201;
@@ -70,12 +77,12 @@ public interface MMM_IModelCaps {
 	 * @param pIndex
 	 * @return
 	 */
-	public Object getCapsValue(int pIndex);
-	public Object getCapsValue(String pCapsName);
-	public int getCapsValueInt(int pIndex);
-	public float getCapsValueFloat(int pIndex);
-	public double getCapsValueDouble(int pIndex);
-	public boolean getCapsValueBoolean(int pIndex);
+	public Object getCapsValue(int pIndex, Object ... pArg);
+	public Object getCapsValue(String pCapsName, Object ... pArg);
+	public int getCapsValueInt(int pIndex, Object ... pArg);
+	public float getCapsValueFloat(int pIndex, Object ... pArg);
+	public double getCapsValueDouble(int pIndex, Object ... pArg);
+	public boolean getCapsValueBoolean(int pIndex, Object ... pArg);
 
 	/**
 	 * 機能番号に値を設定する。

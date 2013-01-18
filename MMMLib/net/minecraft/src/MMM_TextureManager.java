@@ -658,7 +658,8 @@ public class MMM_TextureManager {
 	 */
 	public static int getStringToIndex(String pname) {
 		for (Entry<Integer, MMM_TextureBoxServer> le : textureServer.entrySet()) {
-			if (le.getValue().textureName.equals(pname)) {
+			// TODO:余計な処理込み
+			if (le.getValue().textureName != null && le.getValue().textureName.equals(pname)) {
 				return le.getKey();
 			}
 		}
@@ -716,6 +717,7 @@ public class MMM_TextureManager {
 			if (MMM_Helper.isClient) {
 				// サーバー側へ番号に対応するテクスチャパックの名称を問い合わせ
 				// サーチかける時用のブランクを設置
+				// TODO:このへんおかしい
 				textureServer.put(pIndex, new MMM_TextureBoxServer());
 				byte[] ldata = new byte[3];
 				ldata[0] = mod_MMM_MMMLib.MMM_Server_GetTextureStr;

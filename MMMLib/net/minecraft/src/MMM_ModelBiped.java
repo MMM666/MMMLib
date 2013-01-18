@@ -27,6 +27,7 @@ public abstract class MMM_ModelBiped extends ModelBiped implements MMM_IModelCap
 	public Render render;
 	public Map<String, MMM_EquippedStabilizer> stabiliser;
 	public float scaleFactor = 0.9375F;
+	public float entityIdFactor;
 	protected MMM_IModelCaps modelCaps;
 	
 	
@@ -36,11 +37,14 @@ public abstract class MMM_ModelBiped extends ModelBiped implements MMM_IModelCap
 	private final Map<String, Integer> capsmap = new HashMap<String, Integer>() {{
 		put("onGround",			caps_onGround);
 		put("isRiding",			caps_isRiding);
+		put("isSneak",			caps_isSneak);
+		put("isWait",			caps_isWait);
 		put("isChild",			caps_isChild);
 		put("heldItemLeft",		caps_heldItemLeft);
-		put("isheldItemRight",	caps_heldItemRight);
+		put("heldItemRight",	caps_heldItemRight);
 		put("aimedBow",			caps_aimedBow);
 		put("ScaleFactor", 		caps_ScaleFactor);
+		put("entityIdFactor", 	caps_entityIdFactor);
 	}};
 
 	/**
@@ -189,26 +193,22 @@ public abstract class MMM_ModelBiped extends ModelBiped implements MMM_IModelCap
 		return -1;
 	}
 
-	/**
-	 * モデル毎のスポーン判定。 マルチ化で実行不能になりました。
-	 */
-	@Deprecated
-	public boolean getCanSpawnHere(World pworld, int px, int py, int pz, EntityLiving pentity) {
-		return true;
-	}
-
 	@Override
 	public Map<String, Integer> getModelCaps() {
 		return capsmap;
 	}
 
 	@Override
-	public Object getCapsValue(int pIndex) {
+	public Object getCapsValue(int pIndex, Object ...pArg) {
 		switch (pIndex) {
 		case caps_onGround:
 			return onGround;
 		case caps_isRiding:
 			return isRiding;
+		case caps_isSneak:
+			return isSneak;
+		case caps_isWait:
+			return isWait;
 		case caps_isChild:
 			return isChild;
 		case caps_heldItemLeft:
@@ -219,28 +219,34 @@ public abstract class MMM_ModelBiped extends ModelBiped implements MMM_IModelCap
 			return aimedBow;
 		case caps_ScaleFactor:
 			return scaleFactor;
+		case caps_entityIdFactor:
+			return entityIdFactor;
 		}
 		return null;
 	}
 	@Override
-	public Object getCapsValue(String pCapsName) {
-		return getCapsValue(capsmap.get(pCapsName));
+	public Object getCapsValue(String pCapsName, Object ...pArg) {
+		return getCapsValue(capsmap.get(pCapsName), pArg);
 	}
 	@Override
-	public int getCapsValueInt(int pIndex) {
-		return (Integer)getCapsValue(pIndex);
+	public int getCapsValueInt(int pIndex, Object ...pArg) {
+		Integer li = (Integer)getCapsValue(pIndex, pArg);
+		return li == null ? 0 : li;
 	}
 	@Override
-	public float getCapsValueFloat(int pIndex) {
-		return (Float)getCapsValue(pIndex);
+	public float getCapsValueFloat(int pIndex, Object ...pArg) {
+		Float lf = (Float)getCapsValue(pIndex, pArg);
+		return lf == null ? 0F : lf;
 	}
 	@Override
-	public double getCapsValueDouble(int pIndex) {
-		return (Double)getCapsValue(pIndex);
+	public double getCapsValueDouble(int pIndex, Object ...pArg) {
+		Double ld = (Double)getCapsValue(pIndex, pArg);
+		return ld == null ? 0D : ld;
 	}
 	@Override
-	public boolean getCapsValueBoolean(int pIndex) {
-		return (Boolean)getCapsValue(pIndex);
+	public boolean getCapsValueBoolean(int pIndex, Object ...pArg) {
+		Boolean lb = (Boolean)getCapsValue(pIndex, pArg);
+		return lb == null ? false : lb;
 	}
 
 	@Override
@@ -251,6 +257,12 @@ public abstract class MMM_ModelBiped extends ModelBiped implements MMM_IModelCap
 			return true;
 		case caps_isRiding:
 			isRiding = (Boolean)pArg[0];
+			return true;
+		case caps_isSneak:
+			isSneak = (Boolean)pArg[0];
+			return true;
+		case caps_isWait:
+			isWait = (Boolean)pArg[0];
 			return true;
 		case caps_isChild:
 			isChild = (Boolean)pArg[0];
@@ -266,6 +278,9 @@ public abstract class MMM_ModelBiped extends ModelBiped implements MMM_IModelCap
 			return true;
 		case caps_ScaleFactor:
 			scaleFactor = (Float)pArg[0];
+			return true;
+		case caps_entityIdFactor:
+			entityIdFactor = (Float)pArg[0];
 			return true;
 		}
 		

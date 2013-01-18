@@ -8,7 +8,7 @@ import org.lwjgl.opengl.GL11;
 /**
  * アーマーの二重描画用クラス。
  */
-public class MMM_ModelArmors extends ModelBase implements MMM_IModelCaps {
+public class MMM_ModelDuo extends ModelBase implements MMM_IModelCaps {
 
 	public RenderLiving renderLiving;
 	public MMM_ModelBiped modelArmorOuter;
@@ -30,9 +30,10 @@ public class MMM_ModelArmors extends ModelBase implements MMM_IModelCaps {
 	public int renderParts;
 	public boolean isAlphablend;
 	public boolean isModelAlphablend;
+	public MMM_ModelDuo capsLink;
 
 
-	public MMM_ModelArmors(RenderLiving pRender) {
+	public MMM_ModelDuo(RenderLiving pRender) {
 		renderLiving = pRender;
 		renderParts = 0;
 	}
@@ -93,38 +94,55 @@ public class MMM_ModelArmors extends ModelBase implements MMM_IModelCaps {
 		modelArmorInner.showArmorParts(pIndex);
 	}
 
+	/**
+	 * Renderer辺でこの変数を設定する。
+	 * 設定値はMMM_IModelCapsを継承したEntitiyとかを想定。
+	 */
+	public void setModelCaps(MMM_IModelCaps pModelCaps) {
+		modelArmorInner.setModelCaps(pModelCaps);
+		if (modelArmorOuter != null) {
+			modelArmorOuter.setModelCaps(pModelCaps);
+		}
+		if (capsLink != null) {
+			capsLink.setModelCaps(pModelCaps);
+		}
+	}
+
 	@Override
 	public Map<String, Integer> getModelCaps() {
 		return modelArmorInner.getModelCaps();
 	}
 
 	@Override
-	public Object getCapsValue(int pIndex) {
-		return modelArmorInner.getCapsValue(pIndex);
+	public Object getCapsValue(int pIndex, Object ... pArg) {
+		return modelArmorInner.getCapsValue(pIndex, pArg);
 	}
 	@Override
-	public Object getCapsValue(String pCapsName) {
-		return modelArmorInner.getCapsValue(pCapsName);
+	public Object getCapsValue(String pCapsName, Object ... pArg) {
+		return modelArmorInner.getCapsValue(pCapsName, pArg);
 	}
 	@Override
-	public int getCapsValueInt(int pIndex) {
-		return modelArmorInner.getCapsValueInt(pIndex);
+	public int getCapsValueInt(int pIndex, Object ... pArg) {
+		return modelArmorInner.getCapsValueInt(pIndex, pArg);
 	}
 	@Override
-	public float getCapsValueFloat(int pIndex) {
-		return modelArmorInner.getCapsValueFloat(pIndex);
+	public float getCapsValueFloat(int pIndex, Object ... pArg) {
+		return modelArmorInner.getCapsValueFloat(pIndex, pArg);
 	}
 	@Override
-	public double getCapsValueDouble(int pIndex) {
-		return modelArmorInner.getCapsValueDouble(pIndex);
+	public double getCapsValueDouble(int pIndex, Object ... pArg) {
+		return modelArmorInner.getCapsValueDouble(pIndex, pArg);
 	}
 	@Override
-	public boolean getCapsValueBoolean(int pIndex) {
-		return modelArmorInner.getCapsValueBoolean(pIndex);
+	public boolean getCapsValueBoolean(int pIndex, Object ... pArg) {
+		return modelArmorInner.getCapsValueBoolean(pIndex, pArg);
 	}
 
 	@Override
 	public boolean setCapsValue(int pIndex, Object... pArg) {
+		if (capsLink != null) {
+			capsLink.setCapsValue(pIndex, pArg);
+		}
 		if (modelArmorOuter != null) {
 			modelArmorOuter.setCapsValue(pIndex, pArg);
 		}
@@ -132,10 +150,7 @@ public class MMM_ModelArmors extends ModelBase implements MMM_IModelCaps {
 	}
 	@Override
 	public boolean setCapsValue(String pCapsName, Object... pArg) {
-		if (modelArmorOuter != null) {
-			modelArmorOuter.setCapsValue(pCapsName, pArg);
-		}
-		return modelArmorInner.setCapsValue(pCapsName, pArg);
+		return setCapsValue(pCapsName, pArg);
 	}
 
 }

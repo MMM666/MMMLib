@@ -23,25 +23,21 @@ public class MMM_RenderItem extends RenderItem {
 		float f2 = MathHelper.sin(((float)entityitem.age + f1) / 10F + entityitem.hoverStart) * 0.1F + 0.1F;
 		float f3 = (((float)entityitem.age + f1) / 20F + entityitem.hoverStart) * 57.29578F;
 		byte byte0 = 1;
-		ItemStack lis = entityitem.func_92059_d();
-		if(lis.stackSize > 1)
-		{
+		ItemStack lis = entityitem.getEntityItem();
+		if (lis.stackSize > 1) {
 			byte0 = 2;
 		}
-		if(lis.stackSize > 5)
-		{
+		if (lis.stackSize > 5) {
 			byte0 = 3;
 		}
-		if(lis.stackSize > 20)
-		{
+		if (lis.stackSize > 20) {
 			byte0 = 4;
 		}
 		GL11.glTranslatef((float)d, (float)d1 + f2, (float)d2);
 		GL11.glEnable(32826 /*GL_RESCALE_NORMAL_EXT*/);
 		GL11.glRotatef(f3, 0.0F, 1.0F, 0.0F);
 		float f4 = 1.0F; //0.25F;
-		for(int j = 0; j < byte0; j++)
-		{
+		for (int j = 0; j < byte0; j++) {
 			GL11.glPushMatrix();
 			if(j > 0)
 			{
