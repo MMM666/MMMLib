@@ -1,4 +1,4 @@
-package net.minecraft.src;
+﻿package net.minecraft.src;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

@@ -1,4 +1,4 @@
-package net.minecraft.src;
+ï»¿package net.minecraft.src;
 
 
 import java.util.HashMap;
@@ -11,12 +11,12 @@ import javax.crypto.spec.PSource;
 import org.lwjgl.opengl.GL11;
 
 /**
- * ©ì‚ÌlŒ^ƒ‚ƒfƒ‹’u‚«Š·‚¦Œn‚Ì‹¤’ÊƒNƒ‰ƒX
+ * è‡ªä½œã®äººå‹ãƒ¢ãƒ‡ãƒ«ç½®ãæ›ãˆç³»ã®å…±é€šã‚¯ãƒ©ã‚¹
  */
 public abstract class MMM_ModelBiped extends ModelBiped implements MMM_IModelCaps {
 
 	/**
-	 * ƒAƒCƒeƒ€•\¦‘Îô
+	 * ã‚¢ã‚¤ãƒ†ãƒ è¡¨ç¤ºå¯¾ç­–
 	 */
 	public boolean isRendering = true;
 	public boolean isWait;
@@ -31,7 +31,7 @@ public abstract class MMM_ModelBiped extends ModelBiped implements MMM_IModelCap
 	
 	
 	/**
-	 * ƒ‚ƒfƒ‹‚ª‚Á‚Ä‚¢‚é‹@”\ŒQ
+	 * ãƒ¢ãƒ‡ãƒ«ãŒæŒã£ã¦ã„ã‚‹æ©Ÿèƒ½ç¾¤
 	 */
 	private final Map<String, Integer> capsmap = new HashMap<String, Integer>() {{
 		put("onGround",			caps_onGround);
@@ -44,19 +44,19 @@ public abstract class MMM_ModelBiped extends ModelBiped implements MMM_IModelCap
 	}};
 
 	/**
-	 * ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Í‘S‚ÄŒp³‚³‚¹‚é‚±‚Æ
+	 * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã¯å…¨ã¦ç¶™æ‰¿ã•ã›ã‚‹ã“ã¨
 	 */
 	public MMM_ModelBiped() {
 		this(0.0F);
 	}
 	/**
-	 * ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Í‘S‚ÄŒp³‚³‚¹‚é‚±‚Æ
+	 * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã¯å…¨ã¦ç¶™æ‰¿ã•ã›ã‚‹ã“ã¨
 	 */
 	public MMM_ModelBiped(float psize) {
 		this(psize, 0.0F);
 	}
 	/**
-	 * ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Í‘S‚ÄŒp³‚³‚¹‚é‚±‚Æ
+	 * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã¯å…¨ã¦ç¶™æ‰¿ã•ã›ã‚‹ã“ã¨
 	 */
 	public MMM_ModelBiped(float psize, float pyoffset) {
 		super();
@@ -66,7 +66,7 @@ public abstract class MMM_ModelBiped extends ModelBiped implements MMM_IModelCap
 		isSneak = false;
 		aimedBow = false;
 
-		// ƒn[ƒhƒ|ƒCƒ“ƒg
+		// ãƒãƒ¼ãƒ‰ãƒã‚¤ãƒ³ãƒˆ
 		Arms = new MMM_ModelRenderer[2];
 		HeadMount = new MMM_ModelRenderer(this, "HeadMount");
 
@@ -74,26 +74,26 @@ public abstract class MMM_ModelBiped extends ModelBiped implements MMM_IModelCap
 	}
 
 	/**
-	 * ƒ‚ƒfƒ‹‚Ì‰Šú‰»ƒR[ƒh
+	 * ãƒ¢ãƒ‡ãƒ«ã®åˆæœŸåŒ–ã‚³ãƒ¼ãƒ‰
 	 */
 	public abstract void initModel(float psize, float pyoffset);
 
 	/**
-	 * ƒA[ƒ}[ƒ‚ƒfƒ‹‚ÌƒTƒCƒY‚ğ•Ô‚·B
-	 * ƒTƒCƒY‚Í“à‘¤‚Ì‚à‚Ì‚©‚çB
+	 * ã‚¢ãƒ¼ãƒãƒ¼ãƒ¢ãƒ‡ãƒ«ã®ã‚µã‚¤ã‚ºã‚’è¿”ã™ã€‚
+	 * ã‚µã‚¤ã‚ºã¯å†…å´ã®ã‚‚ã®ã‹ã‚‰ã€‚
 	 */
 	public abstract float[] getArmorModelsSize();
 
 	/**
-	 * ƒ‚ƒfƒ‹Ø‘Ö‚ÉÀs‚³‚ê‚éƒR[ƒh
+	 * ãƒ¢ãƒ‡ãƒ«åˆ‡æ›¿æ™‚ã«å®Ÿè¡Œã•ã‚Œã‚‹ã‚³ãƒ¼ãƒ‰
 	 */
 	public void changeModel(EntityLiving pentity) {
-		// ƒJƒEƒ“ƒ^Œn‚Ì‰ÁZ’lAƒŠƒ~ƒbƒg’l‚Ìİ’è‚È‚Çs‚¤—\’èB
+		// ã‚«ã‚¦ãƒ³ã‚¿ç³»ã®åŠ ç®—å€¤ã€ãƒªãƒŸãƒƒãƒˆå€¤ã®è¨­å®šãªã©è¡Œã†äºˆå®šã€‚
 
 	}
 
 	/**
-	 * ƒn[ƒhƒ|ƒCƒ“ƒg‚ÉÚ‘±‚³‚ê‚½ƒAƒCƒeƒ€‚ğ•\¦‚·‚é
+	 * ãƒãƒ¼ãƒ‰ãƒã‚¤ãƒ³ãƒˆã«æ¥ç¶šã•ã‚ŒãŸã‚¢ã‚¤ãƒ†ãƒ ã‚’è¡¨ç¤ºã™ã‚‹
 	 */
 	public abstract void renderItems(EntityLiving pEntity, Render pRender);
 
@@ -115,9 +115,9 @@ public abstract class MMM_ModelBiped extends ModelBiped implements MMM_IModelCap
 	}
 
 	/**
-	 * ’Êí‚ÌƒŒƒ“ƒ_ƒŠƒ“ƒO‘O‚ÉŒÄ‚Î‚ê‚éB
+	 * é€šå¸¸ã®ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°å‰ã«å‘¼ã°ã‚Œã‚‹ã€‚
 	 * 
-	 * @return false‚ğ•Ô‚·‚Æ’Êí‚ÌƒŒƒ“ƒ_ƒŠƒ“ƒO‚ğƒXƒLƒbƒv‚·‚éB
+	 * @return falseã‚’è¿”ã™ã¨é€šå¸¸ã®ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°ã‚’ã‚¹ã‚­ãƒƒãƒ—ã™ã‚‹ã€‚
 	 */
 	public boolean preRender(Entity par1Entity, float par2, float par3,
 			float par4, float par5, float par6, float par7) {
@@ -125,19 +125,19 @@ public abstract class MMM_ModelBiped extends ModelBiped implements MMM_IModelCap
 	}
 
 	/**
-	 * ’Êí‚ÌƒŒƒ“ƒ_ƒŠƒ“ƒOŒã‚ÉŒÄ‚ÔB Šî–{“I‚É‘•ü•i‚È‚Ç‚Ì©—¥‰^“®‚µ‚È‚¢ƒp[ƒc‚Ì•`‰æ—pB
+	 * é€šå¸¸ã®ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°å¾Œã«å‘¼ã¶ã€‚ åŸºæœ¬çš„ã«è£…é£¾å“ãªã©ã®è‡ªå¾‹é‹å‹•ã—ãªã„ãƒ‘ãƒ¼ãƒ„ã®æç”»ç”¨ã€‚
 	 */
 	public void renderExtention(Entity par1Entity, float par2, float par3,
 			float par4, float par5, float par6, float par7) {
 	}
 
 	/**
-	 * ƒXƒ^ƒrƒ‰ƒCƒU[‚Ì•`‰æB ©“®‚Å‚ÍŒÄ‚Î‚ê‚È‚¢‚Ì‚Årender“à‚ÅŒÄ‚Ô•K—v‚ª‚ ‚è‚Ü‚·B
+	 * ã‚¹ã‚¿ãƒ“ãƒ©ã‚¤ã‚¶ãƒ¼ã®æç”»ã€‚ è‡ªå‹•ã§ã¯å‘¼ã°ã‚Œãªã„ã®ã§renderå†…ã§å‘¼ã¶å¿…è¦ãŒã‚ã‚Šã¾ã™ã€‚
 	 */
 	protected void renderStabilizer(Entity pEntity,
 			Map<String, MMM_EquippedStabilizer> pmap, float par2, float par3,
 			float par4, float par5, float par6, float par7) {
-		// ƒXƒ^ƒrƒ‰ƒCƒU[‚Ì•`‰æAdoRender‚Ì•û‚ª‚¢‚¢‚©H
+		// ã‚¹ã‚¿ãƒ“ãƒ©ã‚¤ã‚¶ãƒ¼ã®æç”»ã€doRenderã®æ–¹ãŒã„ã„ã‹ï¼Ÿ
 		if (pmap == null || pmap.isEmpty() || render == null)
 			return;
 
@@ -157,40 +157,40 @@ public abstract class MMM_ModelBiped extends ModelBiped implements MMM_IModelCap
 	}
 
 	/**
-	 *  g’·
+	 *  èº«é•·
 	 */
 	public abstract float getHeight();
 	/**
-	 * ‰¡•
+	 * æ¨ªå¹…
 	 */
 	public abstract float getWidth();
 	/**
-	 * ƒ‚ƒfƒ‹‚ÌYƒIƒtƒZƒbƒg
-	 * PF—pB
+	 * ãƒ¢ãƒ‡ãƒ«ã®Yã‚ªãƒ•ã‚»ãƒƒãƒˆ
+	 * PFç”¨ã€‚
 	 */
 	public abstract float getyOffset();
 
 	public boolean isItemHolder() {
-		// ƒAƒCƒeƒ€‚ğ‚Á‚Ä‚¢‚é‚Æ‚«‚Éè‚ğ‘O‚Éo‚·‚©‚Ç‚¤‚©B
+		// ã‚¢ã‚¤ãƒ†ãƒ ã‚’æŒã£ã¦ã„ã‚‹ã¨ãã«æ‰‹ã‚’å‰ã«å‡ºã™ã‹ã©ã†ã‹ã€‚
 		return false;
 	}
 
 	public void showAllParts() {
-		// •\¦‚·‚×‚«‚·‚×‚Ä‚Ì•”•i
+		// è¡¨ç¤ºã™ã¹ãã™ã¹ã¦ã®éƒ¨å“
 	}
 
 	public int showArmorParts(int parts) {
-		// •”ˆÊ‚²‚Æ‚Ì‘•b•\¦
-		// 3:“ª•”
-		// 2:“·•”
-		// 1:‹r•”
-		// 0:‘«•”
-		// –ß‚è’l‚ÍŠî–{ -1
+		// éƒ¨ä½ã”ã¨ã®è£…ç”²è¡¨ç¤º
+		// 3:é ­éƒ¨
+		// 2:èƒ´éƒ¨
+		// 1:è„šéƒ¨
+		// 0:è¶³éƒ¨
+		// æˆ»ã‚Šå€¤ã¯åŸºæœ¬ -1
 		return -1;
 	}
 
 	/**
-	 * ƒ‚ƒfƒ‹–ˆ‚ÌƒXƒ|[ƒ“”»’èB ƒ}ƒ‹ƒ`‰»‚ÅÀs•s”\‚É‚È‚è‚Ü‚µ‚½B
+	 * ãƒ¢ãƒ‡ãƒ«æ¯ã®ã‚¹ãƒãƒ¼ãƒ³åˆ¤å®šã€‚ ãƒãƒ«ãƒåŒ–ã§å®Ÿè¡Œä¸èƒ½ã«ãªã‚Šã¾ã—ãŸã€‚
 	 */
 	@Deprecated
 	public boolean getCanSpawnHere(World pworld, int px, int py, int pz, EntityLiving pentity) {
@@ -277,14 +277,14 @@ public abstract class MMM_ModelBiped extends ModelBiped implements MMM_IModelCap
 	}
 
 	/**
-	 * Renderer•Ó‚Å‚±‚Ì•Ï”‚ğİ’è‚·‚éB
-	 * İ’è’l‚ÍMMM_IModelCaps‚ğŒp³‚µ‚½Entitiy‚Æ‚©‚ğ‘z’èB
+	 * Rendererè¾ºã§ã“ã®å¤‰æ•°ã‚’è¨­å®šã™ã‚‹ã€‚
+	 * è¨­å®šå€¤ã¯MMM_IModelCapsã‚’ç¶™æ‰¿ã—ãŸEntitiyã¨ã‹ã‚’æƒ³å®šã€‚
 	 */
 	public void setModelCaps(MMM_IModelCaps pModelCaps) {
 		modelCaps = pModelCaps;
 	}
 
-	// MathHelperƒgƒ“ƒlƒ‹ŠÖ”ŒQ
+	// MathHelperãƒˆãƒ³ãƒãƒ«é–¢æ•°ç¾¤
 	public static final float mh_sin(float f) {
 		f = f % 6.283185307179586F;
 		f = (f < 0F) ? 360 + f : f;

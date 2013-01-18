@@ -1,9 +1,9 @@
-package net.minecraft.src;
+ï»¿package net.minecraft.src;
 
 import java.lang.reflect.Method;
 
 /**
- * “ÁêƒAƒCƒeƒ€ƒŒƒ“ƒ_ƒ‰—p‚Ì¯•ÊƒCƒ“ƒ^[ƒtƒF[ƒX
+ * ç‰¹æ®Šã‚¢ã‚¤ãƒ†ãƒ ãƒ¬ãƒ³ãƒ€ãƒ©ç”¨ã®è­˜åˆ¥ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹
  *
  */
 public interface MMM_IItemRender {

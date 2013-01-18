@@ -1,4 +1,4 @@
-package net.minecraft.src;
+ï»¿package net.minecraft.src;
 
 import java.io.File;
 import java.net.JarURLConnection;
@@ -18,8 +18,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.server.MinecraftServer;
 
 /**
- * modsƒfƒBƒŒƒNƒgƒŠ‚ÌŠl“¾‚Æminecraft–{‘Ì‚Ìjar‚ğŠl“¾‚µA
- * ‚»‚±‚ÉŠÜ‚Ü‚ê‚éw’è‚³‚ê‚½•¶š—ñ‚ğŠÜ‚Şzip‚ª‚ ‚é‚©‚Ç‚¤‚©‚ğ”»’è‚·‚éB
+ * modsãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®ç²å¾—ã¨minecraftæœ¬ä½“ã®jarã‚’ç²å¾—ã—ã€
+ * ãã“ã«å«ã¾ã‚Œã‚‹æŒ‡å®šã•ã‚ŒãŸæ–‡å­—åˆ—ã‚’å«ã‚€zipãŒã‚ã‚‹ã‹ã©ã†ã‹ã‚’åˆ¤å®šã™ã‚‹ã€‚
  *
  */
 public class MMM_FileManager {
@@ -29,7 +29,7 @@ public class MMM_FileManager {
 	public static File minecraftDir;
 	
 	public static void init() {
-		// ‰Šú‰»
+		// åˆæœŸåŒ–
 		if (MMM_Helper.isClient) {
 			minecraftDir = MMM_Helper.mc.getMinecraftDir();
 		} else {
@@ -37,8 +37,8 @@ public class MMM_FileManager {
 		}
 		
 		
-		// mincraft.jar‚ğæ“¾
-		// ŠJ”­’†—p‚ÌJar“à‚ÉŠÜ‚Ü‚ê‚Ä‚¢‚é‚±‚Æ‚Ì‘Îô
+		// mincraft.jarã‚’å–å¾—
+		// é–‹ç™ºä¸­ç”¨ã®Jarå†…ã«å«ã¾ã‚Œã¦ã„ã‚‹ã“ã¨ã®å¯¾ç­–
 		try {
 			ProtectionDomain ls1 = BaseMod.class.getProtectionDomain();
 			CodeSource ls2 = ls1.getCodeSource();
@@ -77,13 +77,13 @@ public class MMM_FileManager {
 	}
 
 	/**
-	 * MODƒfƒBƒŒƒNƒgƒŠ‚ÉŠÜ‚Ü‚ê‚é‘ÎÛƒtƒ@ƒCƒ‹‚ÌƒIƒuƒWƒFƒNƒg‚ğæ“¾B
-	 * @param pname ŒŸõƒŠƒXƒg–¼ÌAgetFileList()‚Åg‚¤B
-	 * @param pprefix ‚±‚Ì•¶š—ñ‚ÌŠÜ‚Ü‚ê‚éƒtƒ@ƒCƒ‹‚ğ—ñ‹“‚·‚éB
-	 * @return —ñ‹“‚³‚ê‚½ƒtƒ@ƒCƒ‹‚ÌƒŠƒXƒgB
+	 * MODãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã«å«ã¾ã‚Œã‚‹å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å–å¾—ã€‚
+	 * @param pname æ¤œç´¢ãƒªã‚¹ãƒˆåç§°ã€getFileList()ã§ä½¿ã†ã€‚
+	 * @param pprefix ã“ã®æ–‡å­—åˆ—ã®å«ã¾ã‚Œã‚‹ãƒ•ã‚¡ã‚¤ãƒ«ã‚’åˆ—æŒ™ã™ã‚‹ã€‚
+	 * @return åˆ—æŒ™ã•ã‚ŒãŸãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒªã‚¹ãƒˆã€‚
 	 */
 	public static List<File> getModFile(String pname, String pprefix) {
-		// ŒŸõÏ‚İ‚©‚Ç‚¤‚©‚Ì”»’è
+		// æ¤œç´¢æ¸ˆã¿ã‹ã©ã†ã‹ã®åˆ¤å®š
 		List<File> llist;
 		if (fileList.containsKey(pname)) {
 			llist = fileList.get(pname);
@@ -92,7 +92,7 @@ public class MMM_FileManager {
 			fileList.put(pname, llist);
 		}
 		
-		// modsƒfƒBƒŒƒNƒgƒŠ‚ÌŠl“¾
+		// modsãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®ç²å¾—
 		File lmod;
 		if (MMM_Helper.isClient) {
 			lmod = new File(MMM_Helper.mc.getMinecraftDir(), "/mods/");
@@ -101,7 +101,7 @@ public class MMM_FileManager {
 		}
 		
 		mod_MMM_MMMLib.Debug(String.format("getModFile:[%s]:%s", pname, lmod.getAbsolutePath()));
-		// ƒtƒ@ƒCƒ‹EƒfƒBƒŒƒNƒgƒŠ‚ğŒŸõ
+		// ãƒ•ã‚¡ã‚¤ãƒ«ãƒ»ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’æ¤œç´¢
 		try {
 			if (lmod.isDirectory()) {
 				mod_MMM_MMMLib.Debug(String.format("getModFile-get:%d.", lmod.list().length));
@@ -118,7 +118,7 @@ public class MMM_FileManager {
 				}
 				mod_MMM_MMMLib.Debug(String.format("getModFile-files:%d", llist.size()));
 			} else {
-				// ‚Ü‚¸‚ ‚è‚¦‚È‚¢
+				// ã¾ãšã‚ã‚Šãˆãªã„
 				mod_MMM_MMMLib.Debug("getModFile-fail.");
 			}
 			return llist;
@@ -130,9 +130,9 @@ public class MMM_FileManager {
 	}
 
 	/**
-	 * ŒŸõÏ‚İ‚ÌƒŠƒXƒg‚ÉŠÜ‚Ü‚ê‚é—ñ‹“ƒtƒ@ƒCƒ‹‚ğ•Ô‚·B
-	 * @param pname ŒŸõƒŠƒXƒg–¼B
-	 * @return —ñ‹“‚³‚ê‚½ƒtƒ@ƒCƒ‹‚ÌƒŠƒXƒgB
+	 * æ¤œç´¢æ¸ˆã¿ã®ãƒªã‚¹ãƒˆã«å«ã¾ã‚Œã‚‹åˆ—æŒ™ãƒ•ã‚¡ã‚¤ãƒ«ã‚’è¿”ã™ã€‚
+	 * @param pname æ¤œç´¢ãƒªã‚¹ãƒˆåã€‚
+	 * @return åˆ—æŒ™ã•ã‚ŒãŸãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒªã‚¹ãƒˆã€‚
 	 */
 	public static List<File> getFileList(String pname) {
 		return fileList.get(pname);

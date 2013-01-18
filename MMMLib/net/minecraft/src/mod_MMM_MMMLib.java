@@ -1,4 +1,4 @@
-package net.minecraft.src;
+ï»¿package net.minecraft.src;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -23,7 +23,7 @@ public class mod_MMM_MMMLib extends BaseMod {
 	
 	
 	public static void Debug(String pText) {
-		// ƒfƒoƒbƒOƒƒbƒZ[ƒW
+		// ãƒ‡ãƒãƒƒã‚°ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
 		if (isDebugMessage) {
 			System.out.println(String.format("MMMLib-%s", pText));
 		}
@@ -46,7 +46,7 @@ public class mod_MMM_MMMLib extends BaseMod {
 
 	@Override
 	public void load() {
-		// ‰Šú‰»
+		// åˆæœŸåŒ–
 		Debug(MMM_Helper.isClient ? "Client" : "Server");
 		Debug(MMM_Helper.isForge ? "Forge" : "Modloader");
 		MMM_FileManager.init();
@@ -57,22 +57,22 @@ public class mod_MMM_MMMLib extends BaseMod {
 			MMM_EntityDummy.isEnable = true;
 		}
 		
-		// “Æ©ƒpƒPƒbƒg—pƒ`ƒƒƒ“ƒlƒ‹
+		// ç‹¬è‡ªãƒ‘ã‚±ãƒƒãƒˆç”¨ãƒãƒ£ãƒ³ãƒãƒ«
 		ModLoader.registerPacketChannel(this, "MMM|Upd");
 	}
 
 	@Override
 	public void modsLoaded() {
-		// ƒ[ƒh
+		// ãƒ­ãƒ¼ãƒ‰
 		if (MMM_Helper.isClient) {
-			// ƒeƒNƒXƒ`ƒƒƒpƒbƒN‚Ì\’z
+			// ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ‘ãƒƒã‚¯ã®æ§‹ç¯‰
 			MMM_TextureManager.loadTextures();
 			MMM_StabilizerManager.loadStabilizer();
 		} else {
 			MMM_TextureManager.loadTextureIndex();
 		}
 		
-		// ƒeƒNƒXƒ`ƒƒƒCƒ“ƒfƒbƒNƒX‚Ì\’z
+		// ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã®æ§‹ç¯‰
 		Debug("Localmode: InitTextureList.");
 		MMM_TextureManager.initTextureList(true);
 	}
@@ -89,7 +89,7 @@ public class mod_MMM_MMMLib extends BaseMod {
 	@Override
 	public boolean onTickInGame(float var1, Minecraft var2) {
 		if (isDebugView && MMM_Helper.isClient) {
-			// ƒ_ƒ~[ƒ}[ƒJ[‚Ì•\¦—pˆ—
+			// ãƒ€ãƒŸãƒ¼ãƒãƒ¼ã‚«ãƒ¼ã®è¡¨ç¤ºç”¨å‡¦ç†
 			if (var2.theWorld != null && var2.thePlayer != null) {
 				try {
 					for (Iterator<MMM_EntityDummy> li = MMM_EntityDummy.appendList.iterator(); li.hasNext();) {
@@ -102,7 +102,7 @@ public class mod_MMM_MMMLib extends BaseMod {
 			}
 		}
 		
-		// ƒAƒCƒeƒ€ƒŒƒ“ƒ_[‚ğƒI[ƒo[ƒ‰ƒCƒh
+		// ã‚¢ã‚¤ãƒ†ãƒ ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚’ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰
 		if (renderHacking && MMM_Helper.isClient) {
 			MMM_Client.setItemRenderer();
 		}
@@ -112,7 +112,7 @@ public class mod_MMM_MMMLib extends BaseMod {
 
 	@Override
 	public void clientCustomPayload(NetClientHandler var1, Packet250CustomPayload var2) {
-		// ƒNƒ‰ƒCƒAƒ“ƒg‘¤‚Ì“ÁêƒpƒPƒbƒgóM“®ì
+		// ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆå´ã®ç‰¹æ®Šãƒ‘ã‚±ãƒƒãƒˆå—ä¿¡å‹•ä½œ
 		byte lmode = var2.data[0];
 		int leid = 0;
 		Entity lentity = null;
@@ -125,7 +125,7 @@ public class mod_MMM_MMMLib extends BaseMod {
 		
 		switch (lmode) {
 		case MMM_Client_SetTextureIndex:
-			// ƒeƒNƒXƒ`ƒƒ–¼Ì‚ÌƒŠƒNƒGƒXƒg‚É‘Î‚µ‚Ä”Ô†‚ğ•Ô‚·
+			// ãƒ†ã‚¯ã‚¹ãƒãƒ£åç§°ã®ãƒªã‚¯ã‚¨ã‚¹ãƒˆã«å¯¾ã—ã¦ç•ªå·ã‚’è¿”ã™
 			/*
 			 * 0:id
 			 * 1:index
@@ -137,11 +137,11 @@ public class mod_MMM_MMMLib extends BaseMod {
 			MMM_TextureManager.setStringToIndex(li7, ls7);
 			break;
 		case MMM_Client_SetTextureStr:
-			// ƒeƒNƒXƒ`ƒƒ–¼Ì‚ÌƒŠƒNƒGƒXƒg‚É‘Î‚µ‚Ä”Ô†‚ğ•Ô‚·
+			// ãƒ†ã‚¯ã‚¹ãƒãƒ£åç§°ã®ãƒªã‚¯ã‚¨ã‚¹ãƒˆã«å¯¾ã—ã¦ç•ªå·ã‚’è¿”ã™
 			/*
 			 * 0:id
-			 * 1-2:index “o˜^ƒeƒNƒXƒ`ƒƒ”Ô†
-			 * 3-:Str –¼Ì
+			 * 1-2:index ç™»éŒ²ãƒ†ã‚¯ã‚¹ãƒãƒ£ç•ªå·
+			 * 3-:Str åç§°
 			 */
 			int li8 = MMM_Helper.getShort(var2.data, 1);
 			String ls8 = MMM_Helper.getStr(var2.data, 3);
@@ -159,7 +159,7 @@ public class mod_MMM_MMMLib extends BaseMod {
 
 	@Override
 	public void serverCustomPayload(NetServerHandler var1, Packet250CustomPayload var2) {
-		// ƒT[ƒo‘¤‚Ì“®ì
+		// ã‚µãƒ¼ãƒå´ã®å‹•ä½œ
 		byte lmode = var2.data[0];
 		int leid = 0;
 		Entity lentity = null;
@@ -173,10 +173,10 @@ public class mod_MMM_MMMLib extends BaseMod {
 		
 		switch (lmode) {
 		case MMM_Server_GetTextureIndex:
-			// ƒeƒNƒXƒ`ƒƒ–¼Ì‚ÌƒŠƒNƒGƒXƒg‚É‘Î‚µ‚Ä”Ô†‚ğ•Ô‚·
+			// ãƒ†ã‚¯ã‚¹ãƒãƒ£åç§°ã®ãƒªã‚¯ã‚¨ã‚¹ãƒˆã«å¯¾ã—ã¦ç•ªå·ã‚’è¿”ã™
 			/*
 			 * 0:ID
-			 * 1:index —v‹‚©‚¯‚½‚Ì”Ô†
+			 * 1:index è¦æ±‚ã‹ã‘ãŸæ™‚ã®ç•ªå·
 			 * 2-3:contColorBits
 			 * 4-5:wildColorBits
 			 * 6-9:height
@@ -196,10 +196,10 @@ public class mod_MMM_MMMLib extends BaseMod {
 			sendToClient(var1, ldata);
 			break;
 		case MMM_Server_GetTextureStr:
-			// ƒCƒ“ƒfƒbƒNƒX‚©‚çƒeƒNƒXƒ`ƒƒ–¼Ì‚ğ•Ô‚·
+			// ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‹ã‚‰ãƒ†ã‚¯ã‚¹ãƒãƒ£åç§°ã‚’è¿”ã™
 			/*
 			 * 0:ID
-			 * 1-2:index “o˜^ƒeƒNƒXƒ`ƒƒ”Ô†
+			 * 1-2:index ç™»éŒ²ãƒ†ã‚¯ã‚¹ãƒãƒ£ç•ªå·
 			 */
 			int li8 = MMM_Helper.getShort(var2.data, 1);
 			MMM_TextureBoxServer lb8 = MMM_TextureManager.getIndexToString(li8);

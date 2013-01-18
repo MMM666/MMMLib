@@ -1,4 +1,4 @@
-package net.minecraft.src;
+ï»¿package net.minecraft.src;
 
 import java.lang.reflect.Constructor;
 
@@ -51,7 +51,7 @@ public class MMM_Client {
 				e.printStackTrace();
 			}
 		}
-		// GUI‚Ì•\¦‚ğ•Ï‚¦‚é‚É‚ÍíŠÄ‹‚ª•K—vH
+		// GUIã®è¡¨ç¤ºã‚’å¤‰ãˆã‚‹ã«ã¯å¸¸æ™‚ç›£è¦–ãŒå¿…è¦ï¼Ÿ
 	}
 
 

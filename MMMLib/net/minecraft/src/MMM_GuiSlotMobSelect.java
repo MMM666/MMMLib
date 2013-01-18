@@ -1,4 +1,4 @@
-package net.minecraft.src;
+ï»¿package net.minecraft.src;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
@@ -55,22 +55,22 @@ public class MMM_GuiSlotMobSelect extends GuiSlot {
 
 	@Override
 	protected void drawSlot(int var1, int var2, int var3, int var4, Tessellator var5) {
-		// Šî–{ƒXƒƒbƒg‚Ì•`‰æA×‚©‚¢Š‚ÍƒI[ƒi[‘¤‚Å
-        // Entity‚ÌŠm•Û
+		// åŸºæœ¬ã‚¹ãƒ­ãƒƒãƒˆã®æç”»ã€ç´°ã‹ã„æ‰€ã¯ã‚ªãƒ¼ãƒŠãƒ¼å´ã§
+        // Entityã®ç¢ºä¿
 		String s = ownerGui.entityMap.keySet().toArray()[var1].toString();
 		boolean lf = ownerGui.exclusionList.contains(s);
         EntityLiving entityliving = lf ? null : (EntityLiving)ownerGui.entityMap.get(s);
         
-        // “Æ©•`‰æ
+        // ç‹¬è‡ªæç”»
         ownerGui.drawSlot(var1, var2, var3, var4, var5, s, entityliving);
         
-        // œŠO”»’è
+        // é™¤å¤–åˆ¤å®š
         if (lf) {
             ownerGui.drawString(ownerGui.fontRenderer, "NoImage", var2 + 15, var3 + 12, 0xffffff);
             return;
         }
         
-        // ‰¾—…‚Ì•\¦
+        // ä¼½ç¾…ã®è¡¨ç¤º
         GL11.glEnable(32826 /*GL_RESCALE_NORMAL_EXT*/);
         GL11.glEnable(2903 /*GL_COLOR_MATERIAL*/);
         GL11.glPushMatrix();
@@ -101,7 +101,7 @@ public class MMM_GuiSlotMobSelect extends GuiSlot {
         catch (Exception e) {
         	ownerGui.exclusionList.add(s);
         }
-        // ‰e‚¾‚©ƒoƒCƒI[ƒ€‚¾‚©‚Ìˆ—?
+        // å½±ã ã‹ãƒã‚¤ã‚ªãƒ¼ãƒ ã ã‹ã®å‡¦ç†?
         GL13.glMultiTexCoord2f(33985 /*GL_TEXTURE1_ARB*/, 240.0F, 240.0F);
         GL11.glPopMatrix();
         RenderHelper.disableStandardItemLighting();

@@ -1,4 +1,4 @@
-package net.minecraft.src;
+﻿package net.minecraft.src;
 
 import org.lwjgl.opengl.EXTRescaleNormal;
 import org.lwjgl.opengl.GL11;

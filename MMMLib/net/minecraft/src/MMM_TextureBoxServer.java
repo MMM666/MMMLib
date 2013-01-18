@@ -1,4 +1,4 @@
-package net.minecraft.src;
+ï»¿package net.minecraft.src;
 
 public class MMM_TextureBoxServer {
 
@@ -16,7 +16,7 @@ public class MMM_TextureBoxServer {
 	public MMM_TextureBoxServer(byte[] pData) {
 		/*
 		 * 0:ID
-		 * 1:index —v‹‚©‚¯‚½‚Ì”Ô†
+		 * 1:index è¦æ±‚ã‹ã‘ãŸæ™‚ã®ç•ªå·
 		 * 2-3:contColorBits
 		 * 4-5:wildColorBits
 		 * 6-9:height
