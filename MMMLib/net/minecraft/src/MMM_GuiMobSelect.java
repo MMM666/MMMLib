@@ -1,4 +1,4 @@
-ï»¿package net.minecraft.src;
+package net.minecraft.src;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,7 +29,7 @@ public abstract class MMM_GuiMobSelect extends GuiScreen {
 	
 	
 	public void initEntitys(World world, boolean pForce) {
-		// è¡¨ç¤ºç”¨EntityListã®åˆæœŸåŒ–
+		// •\¦—pEntityList‚Ì‰Šú‰»
 		if (entityMapClass.isEmpty()) {
 			try {
 				Map lmap = (Map)ModLoader.getPrivateValue(EntityList.class, null, 1);
@@ -47,7 +47,7 @@ public abstract class MMM_GuiMobSelect extends GuiScreen {
 			int li = 0;
 			Entity lentity = null;
 			try {
-		        // è¡¨ç¤ºç”¨ã®Entityã‚’ä½œã‚‹
+		        // •\¦—p‚ÌEntity‚ğì‚é
 				do {
 					lentity = (EntityLiving)EntityList.createEntityByName(le.getValue(), world);
 				} while (lentity != null && checkEntity(le.getValue(), lentity, li++));
@@ -58,8 +58,8 @@ public abstract class MMM_GuiMobSelect extends GuiScreen {
 	}
 	
 	/**
-	 * æ¸¡ã•ã‚ŒãŸEntityã®ãƒã‚§ãƒƒã‚¯åŠã³åŠ å·¥ã€‚
-	 * trueã‚’è¿”ã™ã¨åŒã˜ã‚¯ãƒ©ã‚¹ã®ã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£ã‚’å†åº¦æ¸¡ã—ã¦ãã‚‹ã€ãã®ã¨ãpIndexã¯ã‚«ã‚¦ãƒ³ãƒˆã‚¢ãƒƒãƒ—ã•ã‚Œã‚‹
+	 * “n‚³‚ê‚½Entity‚Ìƒ`ƒFƒbƒN‹y‚Ñ‰ÁHB
+	 * true‚ğ•Ô‚·‚Æ“¯‚¶ƒNƒ‰ƒX‚ÌƒGƒ“ƒeƒBƒeƒB‚ğÄ“x“n‚µ‚Ä‚­‚éA‚»‚Ì‚Æ‚«pIndex‚ÍƒJƒEƒ“ƒgƒAƒbƒv‚³‚ê‚é
 	 */
 	protected boolean checkEntity(String pName, Entity pEntity, int pIndex) {
 		entityMap.put(pName, pEntity);
@@ -81,12 +81,12 @@ public abstract class MMM_GuiMobSelect extends GuiScreen {
 	}
 	
 	/**
-	 *  ã‚¹ãƒ­ãƒƒãƒˆãŒã‚¯ãƒªãƒƒã‚¯ã•ã‚ŒãŸ
+	 *  ƒXƒƒbƒg‚ªƒNƒŠƒbƒN‚³‚ê‚½
 	 */
 	public abstract void clickSlot(int pIndex);
 	
 	/**
-	 *  ã‚¹ãƒ­ãƒƒãƒˆã®æç”»
+	 *  ƒXƒƒbƒg‚Ì•`‰æ
 	 */
 	public abstract void drawSlot(int pSlotindex, int pX, int pY, int pDrawheight, Tessellator pTessellator, String pName, Entity pEntity);
 	

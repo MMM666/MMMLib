@@ -1,4 +1,4 @@
-﻿package net.minecraft.src;
+package net.minecraft.src;
 
 public class MMM_ModelBiped_Steve extends MMM_ModelBiped {
 

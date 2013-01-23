@@ -1,7 +1,7 @@
-ï»¿package net.minecraft.src;
+package net.minecraft.src;
 
 /**
- * ã‚«ã‚¦ãƒ³ã‚¿ç”¨ã€‚
+ * ƒJƒEƒ“ƒ^—pB
  */
 public class MMM_Counter {
 

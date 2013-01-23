@@ -1,4 +1,4 @@
-ï»¿package net.minecraft.src;
+package net.minecraft.src;
 
 import java.util.Map;
 import java.util.Random;
@@ -6,7 +6,7 @@ import java.util.Random;
 import org.lwjgl.opengl.GL11;
 
 /**
- * ã‚¢ãƒ¼ãƒãƒ¼ã®äºŒé‡æç”»ç”¨ã‚¯ãƒ©ã‚¹ã€‚
+ * ƒA[ƒ}[‚Ì“ñd•`‰æ—pƒNƒ‰ƒXB
  */
 public class MMM_ModelDuo extends ModelBase implements MMM_IModelCaps {
 
@@ -14,18 +14,18 @@ public class MMM_ModelDuo extends ModelBase implements MMM_IModelCaps {
 	public MMM_ModelBiped modelArmorOuter;
 	public MMM_ModelBiped modelArmorInner;
 	/**
-	 * éƒ¨ä½æ¯ã®ã‚¢ãƒ¼ãƒãƒ¼ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®æŒ‡å®šã€‚
-	 * å¤–å´ã€‚
+	 * •”ˆÊ–ˆ‚ÌƒA[ƒ}[ƒeƒNƒXƒ`ƒƒ‚Ìw’èB
+	 * ŠO‘¤B
 	 */
 	public String[] textureOuter;
 	/**
-	 * éƒ¨ä½æ¯ã®ã‚¢ãƒ¼ãƒãƒ¼ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®æŒ‡å®šã€‚
-	 * å†…å´ã€‚
+	 * •”ˆÊ–ˆ‚ÌƒA[ƒ}[ƒeƒNƒXƒ`ƒƒ‚Ìw’èB
+	 * “à‘¤B
 	 */
 	public String[] textureInner;
 	/**
-	 * æç”»ã•ã‚Œã‚‹ã‚¢ãƒ¼ãƒãƒ¼ã®éƒ¨ä½ã€‚
-	 * shouldRenderPassã¨ã‹ã§æŒ‡å®šã™ã‚‹ã€‚
+	 * •`‰æ‚³‚ê‚éƒA[ƒ}[‚Ì•”ˆÊB
+	 * shouldRenderPass‚Æ‚©‚Åw’è‚·‚éB
 	 */
 	public int renderParts;
 	public boolean isAlphablend;
@@ -95,8 +95,8 @@ public class MMM_ModelDuo extends ModelBase implements MMM_IModelCaps {
 	}
 
 	/**
-	 * Rendererè¾ºã§ã“ã®å¤‰æ•°ã‚’è¨­å®šã™ã‚‹ã€‚
-	 * è¨­å®šå€¤ã¯MMM_IModelCapsã‚’ç¶™æ‰¿ã—ãŸEntitiyã¨ã‹ã‚’æƒ³å®šã€‚
+	 * Renderer•Ó‚Å‚±‚Ì•Ï”‚ğİ’è‚·‚éB
+	 * İ’è’l‚ÍMMM_IModelCaps‚ğŒp³‚µ‚½Entitiy‚Æ‚©‚ğ‘z’èB
 	 */
 	public void setModelCaps(MMM_IModelCaps pModelCaps) {
 		modelArmorInner.setModelCaps(pModelCaps);

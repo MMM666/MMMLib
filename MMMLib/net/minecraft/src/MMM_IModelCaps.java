@@ -1,4 +1,4 @@
-ï»¿package net.minecraft.src;
+package net.minecraft.src;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * ãƒ¢ãƒ‡ãƒ«å…±é€šåŒ–ç”¨ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã€‚
+ * ƒ‚ƒfƒ‹‹¤’Ê‰»—pƒCƒ“ƒ^[ƒtƒF[ƒXB
  */
 public interface MMM_IModelCaps {
 
 	/*
-	 * æ©Ÿèƒ½åç§°ç¾¤ã€å–ã‚Šæ•¢ãˆãšæ›¸ã„ã¦ã‚ã‚‹ã‘ã©åˆ¥ã«è¢«ã‚‰ãªã‘ã‚Œã°ä½•ã§ã‚‚è‰¯ã—ã€‚
-	 * ä¸€å¿œäºˆç´„å€¤ã£ã¦ã“ã¨ã§ã€‚
+	 * ‹@”\–¼ÌŒQAæ‚èŠ¸‚¦‚¸‘‚¢‚Ä‚ ‚é‚¯‚Ç•Ê‚É”í‚ç‚È‚¯‚ê‚Î‰½‚Å‚à—Ç‚µB
+	 * ˆê‰—\–ñ’l‚Á‚Ä‚±‚Æ‚ÅB
 	 */
 	// ModelBase
 	public static final int caps_onGround		= 0x0001;
@@ -67,13 +67,13 @@ public interface MMM_IModelCaps {
 	public static final int caps_Actors			= 0x0203;
 
 	/**
-	 * ãƒ¢ãƒ‡ãƒ«ãŒå®Ÿè£…ã—ã¦ã„ã‚‹æ©Ÿèƒ½ã‚’ãƒªã‚¹ãƒˆã«å…¥ã‚Œã¦è¿”ã™ã€‚
+	 * ƒ‚ƒfƒ‹‚ªÀ‘•‚µ‚Ä‚¢‚é‹@”\‚ğƒŠƒXƒg‚É“ü‚ê‚Ä•Ô‚·B
 	 * @return
 	 */
 	public Map<String, Integer> getModelCaps();
 
 	/**
-	 * ç¾åœ¨ã®è¨­å®šå€¤ã‚’èª­ã¿å–ã‚‹ã€‚
+	 * Œ»İ‚Ìİ’è’l‚ğ“Ç‚İæ‚éB
 	 * @param pIndex
 	 * @return
 	 */
@@ -85,7 +85,7 @@ public interface MMM_IModelCaps {
 	public boolean getCapsValueBoolean(int pIndex, Object ... pArg);
 
 	/**
-	 * æ©Ÿèƒ½ç•ªå·ã«å€¤ã‚’è¨­å®šã™ã‚‹ã€‚
+	 * ‹@”\”Ô†‚É’l‚ğİ’è‚·‚éB
 	 * @param pIndex
 	 * @param pArg
 	 * @return

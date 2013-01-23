@@ -1,4 +1,4 @@
-ï»¿package net.minecraft.src;
+package net.minecraft.src;
 
 import java.io.ByteArrayInputStream;
 import java.nio.ByteBuffer;
@@ -34,14 +34,14 @@ public class MMM_Helper {
 	}
 	
 	/**
-	 * ãƒãƒ«ãƒå¯¾å¿œç”¨ã€‚
-	 * ItemStackã«æƒ…å ±æ›´æ–°ã‚’è¡Œã†ã¨ã€ã‚µãƒ¼ãƒãƒ¼å´ã¨ã®å·®ç•°ã‹ã‚‰Slotã®ã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ãƒˆãŒè¡Œã‚ã‚Œã‚‹ã€‚
-	 * ãã®éš›ã€UsingItemã®æ›´æ–°å‡¦ç†ãŒè¡Œã‚ã‚Œãªã„ãŸã‚é•ã†ã‚¢ã‚¤ãƒ†ãƒ ã«æŒæ›¿ãˆã‚‰ã‚ŒãŸã¨åˆ¤å®šã•ã‚Œã‚‹ã€‚
-	 * ã“ã“ã§ã¯æ¯”è¼ƒç”¨ã«ä½¿ã‚ã‚Œã‚‹ã‚¹ã‚¿ãƒƒã‚¯ãƒªã‚¹ãƒˆã‚’å¼·åˆ¶çš„ã«æ›¸æ›ãˆã‚‹äº‹ã«ã‚ˆã‚Šå¯¾å¿œã—ãŸã€‚
+	 * ƒ}ƒ‹ƒ`‘Î‰—pB
+	 * ItemStack‚Éî•ñXV‚ğs‚¤‚ÆAƒT[ƒo[‘¤‚Æ‚Ì·ˆÙ‚©‚çSlot‚ÌƒAƒbƒvƒf[ƒg‚ªs‚í‚ê‚éB
+	 * ‚»‚ÌÛAUsingItem‚ÌXVˆ—‚ªs‚í‚ê‚È‚¢‚½‚ßˆá‚¤ƒAƒCƒeƒ€‚É‘Ö‚¦‚ç‚ê‚½‚Æ”»’è‚³‚ê‚éB
+	 * ‚±‚±‚Å‚Í”äŠr—p‚Ég‚í‚ê‚éƒXƒ^ƒbƒNƒŠƒXƒg‚ğ‹­§“I‚É‘Š·‚¦‚é–‚É‚æ‚è‘Î‰‚µ‚½B
 	 */
 	public static void updateCheckinghSlot(Entity pEntity, ItemStack pItemstack) {
 		if (pEntity instanceof EntityPlayerMP) {
-			// ã‚µãƒ¼ãƒãƒ¼å´ã§ã®ã¿å‡¦ç†
+			// ƒT[ƒo[‘¤‚Å‚Ì‚İˆ—
 			EntityPlayerMP lep = (EntityPlayerMP)pEntity;
 			Container lctr = lep.openContainer;
 			for (int li = 0; li < lctr.inventorySlots.size(); li++) {
@@ -55,7 +55,7 @@ public class MMM_Helper {
 	}
 	
 	/**
-	 * Forgeç”¨è¿½åŠ ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®è¨­å®š
+	 * Forge—p’Ç‰ÁƒeƒNƒXƒ`ƒƒ‚Ìİ’è
 	 */
 	public static void setForgeIcon(Object pobject) {
 		if (isForge) {
@@ -67,7 +67,7 @@ public class MMM_Helper {
 	}
 
 	/**
-	 * Forgeç”¨ã‚¯ãƒ©ã‚¹ç²å¾—ã€‚
+	 * Forge—pƒNƒ‰ƒXŠl“¾B
 	 */
 	public static Class getEntityClass(BaseMod pMod, String pName) {
 		if (isForge) {
@@ -77,7 +77,7 @@ public class MMM_Helper {
 	}
 
 	/**
-	 * åå‰ã‹ã‚‰ã‚¯ãƒ©ã‚¹ã‚’ç²å¾—ã™ã‚‹
+	 * –¼‘O‚©‚çƒNƒ‰ƒX‚ğŠl“¾‚·‚é
 	 */
 	public static Class getNameOfClass(String pName) {
 		if (fpackage != null) {
@@ -93,7 +93,7 @@ public class MMM_Helper {
 	}
 
 	/**
-	 * é€ä¿¡ç”¨ãƒ‡ãƒ¼ã‚¿ã®ã‚»ãƒƒãƒˆ
+	 * ‘—M—pƒf[ƒ^‚ÌƒZƒbƒg
 	 */
 	public static void setValue(byte[] pData, int pIndex, int pVal, int pSize) {
 		for (int li = 0; li < pSize; li++) {
@@ -145,9 +145,9 @@ public class MMM_Helper {
 		}
 	}
 
-	// çŠ¶æ³åˆ¤æ–­è¦é–¢æ•°ç¾¤
+	// ó‹µ”»’f—vŠÖ”ŒQ
 	protected static boolean canBlockBeSeen(Entity pEntity, int x, int y, int z, boolean toTop, boolean do1, boolean do2) {
-		// ãƒ–ãƒ­ãƒƒã‚¯ã®å¯è¦–åˆ¤å®š
+		// ƒuƒƒbƒN‚Ì‰Â‹”»’è
 		Vec3 vec3d = Vec3.createVectorHelper(pEntity.posX, pEntity.posY + pEntity.getEyeHeight(), pEntity.posZ);
 		Vec3 vec3d1 = Vec3.createVectorHelper((double)x + 0.5D, (double)y + (toTop ? 0.9D : 0.5D), (double)z + 0.5D);
 		
@@ -166,10 +166,10 @@ public class MMM_Helper {
 	}
 
 	public static boolean setPathToTile(EntityLiving pEntity, TileEntity pTarget, boolean flag) {
-		// Tileã¾ã§ã®ãƒ‘ã‚¹ã‚’ä½œã‚‹
+		// Tile‚Ü‚Å‚ÌƒpƒX‚ğì‚é
 		PathNavigate lpn = pEntity.getNavigator();
 		float lspeed = 0.3F;
-		// å‘ãã«åˆã‚ã›ã¦è·é›¢ã‚’èª¿æ•´
+		// Œü‚«‚É‡‚í‚¹‚Ä‹——£‚ğ’²®
 		int i = (pTarget.yCoord == MathHelper.floor_double(pEntity.posY) && flag) ? 2 : 1;
 		switch (pEntity.worldObj.getBlockMetadata(pTarget.xCoord, pTarget.yCoord, pTarget.zCoord)) {
 		case 3:
@@ -186,7 +186,7 @@ public class MMM_Helper {
 	}
 
 	/**
-	 * Modloaderç’°å¢ƒä¸‹ã§ç©ºã„ã¦ã„ã‚‹EntityIDã‚’è¿”ã™ã€‚
+	 * ModloaderŠÂ‹«‰º‚Å‹ó‚¢‚Ä‚¢‚éEntityID‚ğ•Ô‚·B
 	 */
 	public static int getNextEntityID() {
 		try {
@@ -203,7 +203,7 @@ public class MMM_Helper {
 	}
 
 	/**
-	 * Entityã‚’è¿”ã™ã€‚
+	 * Entity‚ğ•Ô‚·B
 	 */
 	public static Entity getEntity(byte[] pData, int pIndex, World pWorld) {
 		return pWorld.getEntityByID(MMM_Helper.getInt(pData, pIndex));

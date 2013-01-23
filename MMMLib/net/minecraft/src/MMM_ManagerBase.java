@@ -1,4 +1,4 @@
-ï»¿package net.minecraft.src;
+package net.minecraft.src;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,15 +14,15 @@ public abstract class MMM_ManagerBase {
 
 	protected abstract String getPreFix();
 	/**
-	 * è¿½åŠ å‡¦ç†ã®æœ¬ä½“
+	 * ’Ç‰Áˆ—‚Ì–{‘Ì
 	 */
 	protected abstract boolean append(Class pclass);
 
 
 	protected void load() {
-		// ãƒ­ãƒ¼ãƒ‰
+		// ƒ[ƒh
 		
-		// é–‹ç™ºç”¨
+		// ŠJ”­—p
 		Package lpackage = mod_MMM_MMMLib.class.getPackage();
 		String ls = "";
 		if (lpackage != null) {
@@ -31,10 +31,10 @@ public abstract class MMM_ManagerBase {
 		File lf1 = new File(MMM_FileManager.minecraftJar, ls);
 		
 		if (lf1.isDirectory()) {
-			// ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®è§£æ
+			// ƒfƒBƒŒƒNƒgƒŠ‚Ì‰ğÍ
 			decodeDirectory(lf1);
 		} else {
-			// Zipã®è§£æ
+			// Zip‚Ì‰ğÍ
 			decodeZip(lf1);
 		}
 		
@@ -43,10 +43,10 @@ public abstract class MMM_ManagerBase {
 		for (Entry<String, List<File>> le : MMM_FileManager.fileList.entrySet()) {
 			for (File lf : le.getValue()) {
 				if (lf.isDirectory()) {
-					// ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®è§£æ
+					// ƒfƒBƒŒƒNƒgƒŠ‚Ì‰ğÍ
 					decodeDirectory(lf);
 				} else {
-					// Zipã®è§£æ
+					// Zip‚Ì‰ğÍ
 					decodeZip(lf);
 				}
 			}
@@ -54,12 +54,12 @@ public abstract class MMM_ManagerBase {
 	}
 
 	private void decodeDirectory(File pfile) {
-		// ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå†…ã®ã‚¯ãƒ©ã‚¹ã‚’æ¤œç´¢
+		// ƒfƒBƒŒƒNƒgƒŠ“à‚ÌƒNƒ‰ƒX‚ğŒŸõ
 		for (File lf : pfile.listFiles()) {
 			if (lf.isFile()) {
 				String lname = lf.getName();
 				if (lname.indexOf(getPreFix()) > 0 && lname.endsWith(".class")) {
-					// å¯¾è±¡ã‚¯ãƒ©ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«ãªã®ã§ãƒ­ãƒ¼ãƒ‰
+					// ‘ÎÛƒNƒ‰ƒXƒtƒ@ƒCƒ‹‚È‚Ì‚Åƒ[ƒh
 					loadClass(lf.getName());
 				}
 			}
@@ -67,7 +67,7 @@ public abstract class MMM_ManagerBase {
 	}
 
 	private void decodeZip(File pfile) {
-		// zipãƒ•ã‚¡ã‚¤ãƒ«ã‚’è§£æ
+		// zipƒtƒ@ƒCƒ‹‚ğ‰ğÍ
 		try {
 			FileInputStream fileinputstream = new FileInputStream(pfile);
 			ZipInputStream zipinputstream = new ZipInputStream(fileinputstream);
@@ -96,7 +96,7 @@ public abstract class MMM_ManagerBase {
 	}
 
 	private void loadClass(String pname) {
-		// å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ã‚¯ãƒ©ã‚¹ã¨ã—ã¦ãƒ­ãƒ¼ãƒ‰
+		// ‘ÎÛƒtƒ@ƒCƒ‹‚ğƒNƒ‰ƒX‚Æ‚µ‚Äƒ[ƒh
 		try {
 			ClassLoader lclassLoader = mod_MMM_MMMLib.class.getClassLoader();
 			Package lpackage = mod_MMM_MMMLib.class.getPackage();

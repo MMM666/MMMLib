@@ -1,5 +1,6 @@
-ï»¿package net.minecraft.src;
+package net.minecraft.src;
 
+import static net.minecraft.src.mod_MMM_MMMLib.*;
 import java.lang.reflect.Constructor;
 
 import net.minecraft.client.Minecraft;
@@ -51,8 +52,69 @@ public class MMM_Client {
 				e.printStackTrace();
 			}
 		}
-		// GUIã®è¡¨ç¤ºã‚’å¤‰ãˆã‚‹ã«ã¯å¸¸æ™‚ç›£è¦–ãŒå¿…è¦ï¼Ÿ
+		// GUI‚Ì•\¦‚ğ•Ï‚¦‚é‚É‚ÍíŠÄ‹‚ª•K—vH
 	}
 
+	public static void clientCustomPayload(NetClientHandler var1, Packet250CustomPayload var2) {
+		// ƒNƒ‰ƒCƒAƒ“ƒg‘¤‚Ì“ÁêƒpƒPƒbƒgóM“®ì
+		byte lmode = var2.data[0];
+		int leid = 0;
+		Entity lentity = null;
+		if ((lmode & 0x80) != 0) {
+			leid = MMM_Helper.getInt(var2.data, 1);
+			lentity = MMM_Helper.getEntity(var2.data, 1, MMM_Helper.mc.theWorld);
+			if (lentity == null) return;
+		}
+		Debug(String.format("MMM|Upd Clt Call[%2x:%d].", lmode, leid));
+		
+		switch (lmode) {
+		case MMM_Client_SetTextureIndex:
+			// ƒeƒNƒXƒ`ƒƒ–¼Ì‚É‘Î‰‚·‚éƒT[ƒo[‘¤‚Æ“¯‚¶ƒCƒ“ƒfƒbƒNƒX‚ğİ’è‚·‚é
+			/*
+			 * 0:id
+			 * 1:index
+			 * 2-5:TextureIndex
+			 */
+			int li7 = MMM_Helper.getShort(var2.data, 2);
+			String ls7 = MMM_TextureManager.getRequestString(var2.data[1]);
+			Debug(String.format("%d = %d : %s", li7, var2.data[1], ls7 == null ? "NULL" : ls7));
+			MMM_TextureManager.setStringToIndex(li7, ls7);
+			break;
+		case MMM_Client_SetTextureStr:
+			// ƒCƒ“ƒfƒbƒNƒX‚É‘Î‰‚·‚éƒeƒNƒXƒ`ƒƒ–¼Ì‚ğ“o˜^‚·‚éAå‚ÉƒT[ƒo[‘¤‚Ì‚İ‚É–¼Ì“o˜^‚ª‚ ‚éê‡‚Ég—pB
+			/*
+			 * 0:id
+			 * 1-2:index “o˜^ƒeƒNƒXƒ`ƒƒ”Ô†
+			 * 3-:Str –¼Ì
+			 */
+			int li8 = MMM_Helper.getShort(var2.data, 1);
+			String ls8 = MMM_Helper.getStr(var2.data, 3);
+			Debug(String.format("%d = %s", li8, ls8 == null ? "NULL" : ls8));
+			MMM_TextureManager.setStringToIndex(li8, ls8);
+			break;
+			
+		}
+	}
+
+	public static void clientConnect(NetClientHandler var1) {
+		if (MMM_Helper.mc.isIntegratedServerRunning()) {
+//			Debug("Localmode: InitTextureList.");
+//			MMM_TextureManager.initTextureList(true);
+		} else {
+			Debug("Remortmode: ClearTextureList.");
+			MMM_TextureManager.initTextureList(false);
+		}
+	}
+
+	public static void clientDisconnect(NetClientHandler var1) {
+//		super.clientDisconnect(var1);
+		Debug("Localmode: InitTextureList.");
+		MMM_TextureManager.initTextureList(true);
+	}
+
+	public static void sendToServer(byte[] pData) {
+		ModLoader.clientSendPacket(new Packet250CustomPayload("MMM|Upd", pData));
+		Debug(String.format("MMM|Upd:%2x:NOEntity", pData[0]));
+	}
 
 }

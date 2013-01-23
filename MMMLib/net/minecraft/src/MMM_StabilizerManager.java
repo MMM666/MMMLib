@@ -1,4 +1,4 @@
-ï»¿package net.minecraft.src;
+package net.minecraft.src;
 
 import java.util.Map;
 import java.util.Map.Entry;
@@ -7,7 +7,7 @@ import java.util.TreeMap;
 import net.minecraft.client.Minecraft;
 
 /**
- * è¿½åŠ ãƒ‘ãƒ¼ãƒ„ãŸã‚‹ã‚¹ã‚¿ãƒ“ãƒ©ã‚¤ã‚¶ãƒ¼ã‚’ç®¡ç†ã™ã‚‹
+ * ’Ç‰Áƒp[ƒc‚½‚éƒXƒ^ƒrƒ‰ƒCƒU[‚ğŠÇ—‚·‚é
  */
 public class MMM_StabilizerManager extends MMM_ManagerBase {
 
@@ -16,7 +16,7 @@ public class MMM_StabilizerManager extends MMM_ManagerBase {
 	
 	
 	public static void init() {
-		// ç‰¹å®šåç§°ã‚’ãƒ—ãƒªãƒ•ã‚£ãƒƒã‚¯ã‚¹ã«æŒã¤modãƒ•ã‚¡ã‚¤ã‚’ã‚’ç²å¾—
+		// “Á’è–¼Ì‚ğƒvƒŠƒtƒBƒbƒNƒX‚É‚Âmodƒtƒ@ƒC‚ğ‚ğŠl“¾
 		MMM_FileManager.getModFile("Stabilizer", preFix);
 	}
 
@@ -46,7 +46,7 @@ public class MMM_StabilizerManager extends MMM_ManagerBase {
 	}
 
 	/**
-	 * æŒ‡å®šã•ã‚ŒãŸåç§°ã®ã‚¹ã‚¿ãƒ“ãƒ©ã‚¤ã‚¶ãƒ¼ãƒ¢ãƒ‡ãƒ«ã‚’è¿”ã™ã€‚
+	 * w’è‚³‚ê‚½–¼Ì‚ÌƒXƒ^ƒrƒ‰ƒCƒU[ƒ‚ƒfƒ‹‚ğ•Ô‚·B
 	 */
 	public static MMM_EquippedStabilizer getStabilizer(String pname, String pequippoint) {
 		if (!stabilizerList.containsKey(pname)) {
@@ -62,7 +62,7 @@ public class MMM_StabilizerManager extends MMM_ManagerBase {
 	}
 
 	/**
-	 * å®Ÿè£…å ´æ‰€ã®ã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ãƒˆ
+	 * À‘•êŠ‚ÌƒAƒbƒvƒf[ƒg
 	 */
 	public static void updateEquippedPoint(Map<String, MMM_EquippedStabilizer> pMap, ModelBase pModel) {
 		for (Entry<String, MMM_EquippedStabilizer> le : pMap.entrySet()) {
