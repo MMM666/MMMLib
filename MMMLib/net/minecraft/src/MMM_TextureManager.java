@@ -283,9 +283,16 @@ public class MMM_TextureManager {
 				MMM_TextureBoxServer lbox = new MMM_TextureBoxServer();
 				lbox.contractColor	= lte.getContractColorBits();
 				lbox.wildColor		= lte.getWildColorBits();
-				lbox.modelHeight	= lte.models[0].getHeight();
-				lbox.modelWidth		= lte.models[0].getWidth();
-				lbox.modelYOffset	= lte.models[0].getyOffset();
+				if (lte.models != null && lte.models[0] != null) {
+					lbox.modelHeight	= lte.models[0].getHeight();
+					lbox.modelWidth		= lte.models[0].getWidth();
+					lbox.modelYOffset	= lte.models[0].getyOffset();
+				} else {
+					// TODO:これ一時的に０入れてるけど、なんかデフォルトのモデルを設定したほうが良いかしら？
+					lbox.modelHeight	= 0F;
+					lbox.modelWidth		= 0F;
+					lbox.modelYOffset	= 0F;
+				}
 				lbox.textureName	= lte.packegeName;
 				textureServer.put(li++, lbox);
 			}
