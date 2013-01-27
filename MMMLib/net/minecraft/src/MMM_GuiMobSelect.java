@@ -47,7 +47,7 @@ public abstract class MMM_GuiMobSelect extends GuiScreen {
 			int li = 0;
 			Entity lentity = null;
 			try {
-		        // 表示用のEntityを作る
+				// 表示用のEntityを作る
 				do {
 					lentity = (EntityLiving)EntityList.createEntityByName(le.getValue(), world);
 				} while (lentity != null && checkEntity(le.getValue(), lentity, li++));
@@ -56,7 +56,7 @@ public abstract class MMM_GuiMobSelect extends GuiScreen {
 			}
 		}
 	}
-	
+
 	/**
 	 * 渡されたEntityのチェック及び加工。
 	 * trueを返すと同じクラスのエンティティを再度渡してくる、そのときpIndexはカウントアップされる
@@ -65,26 +65,26 @@ public abstract class MMM_GuiMobSelect extends GuiScreen {
 		entityMap.put(pName, pEntity);
 		return false;
 	}
-	
+
 	@Override
 	public void initGui() {
-        selectPanel = new MMM_GuiSlotMobSelect(mc, this);
-        selectPanel.registerScrollButtons(controlList, 3, 4);
+		selectPanel = new MMM_GuiSlotMobSelect(mc, this);
+		selectPanel.registerScrollButtons(controlList, 3, 4);
 	}
-	
+
 	@Override
 	public void drawScreen(int px, int py, float pf) {
-        drawDefaultBackground();
-        selectPanel.drawScreen(px, py, pf);
-        drawCenteredString(fontRenderer, StatCollector.translateToLocal(screenTitle), width / 2, 20, 0xffffff);
-        super.drawScreen(px, py, pf);
+		drawDefaultBackground();
+		selectPanel.drawScreen(px, py, pf);
+		drawCenteredString(fontRenderer, StatCollector.translateToLocal(screenTitle), width / 2, 20, 0xffffff);
+		super.drawScreen(px, py, pf);
 	}
-	
+
 	/**
 	 *  スロットがクリックされた
 	 */
 	public abstract void clickSlot(int pIndex);
-	
+
 	/**
 	 *  スロットの描画
 	 */
