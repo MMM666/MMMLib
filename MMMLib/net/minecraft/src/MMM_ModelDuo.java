@@ -43,7 +43,9 @@ public class MMM_ModelDuo extends ModelBase implements MMM_IModelCaps {
 		if (modelArmorOuter != null) {
 			modelArmorOuter.setLivingAnimations(par1EntityLiving, par2, par3, par4);
 		}
-		modelArmorInner.setLivingAnimations(par1EntityLiving, par2, par3, par4);
+		if (modelArmorInner != null) {
+			modelArmorInner.setLivingAnimations(par1EntityLiving, par2, par3, par4);
+		}
 		isAlphablend = true;
 	}
 
@@ -61,11 +63,19 @@ public class MMM_ModelDuo extends ModelBase implements MMM_IModelCaps {
 			renderLiving.loadTexture(textureOuter[renderParts]);
 			modelArmorOuter.render(par1Entity, par2, par3, par4, par5, par6, par7);
 		}
-		if (textureInner != null) {
-			renderLiving.loadTexture(textureInner[renderParts]);
+		if (modelArmorInner != null) {
+			if (textureInner != null) {
+				renderLiving.loadTexture(textureInner[renderParts]);
+			}
+			modelArmorInner.render(par1Entity, par2, par3, par4, par5, par6, par7);
 		}
-		modelArmorInner.render(par1Entity, par2, par3, par4, par5, par6, par7);
 		isAlphablend = false;
+	}
+
+	public void renderItems(EntityLiving pEntity, Render pRender) {
+		if (modelArmorInner != null) {
+			modelArmorInner.renderItems(pEntity, pRender);
+		}
 	}
 
 	@Override
@@ -84,14 +94,18 @@ public class MMM_ModelDuo extends ModelBase implements MMM_IModelCaps {
 		if (modelArmorOuter != null) {
 			modelArmorOuter.setRotationAngles(par1, par2, par3, par4, par5, par6, par7Entity);
 		}
-		modelArmorInner.setRotationAngles(par1, par2, par3, par4, par5, par6, par7Entity);
+		if (modelArmorInner != null) {
+			modelArmorInner.setRotationAngles(par1, par2, par3, par4, par5, par6, par7Entity);
+		}
 	}
 
 	public void showArmorParts(int pIndex) {
 		if (modelArmorOuter != null) {
 			modelArmorOuter.showArmorParts(pIndex);
 		}
-		modelArmorInner.showArmorParts(pIndex);
+		if (modelArmorInner != null) {
+			modelArmorInner.showArmorParts(pIndex);
+		}
 	}
 
 	/**
@@ -99,7 +113,9 @@ public class MMM_ModelDuo extends ModelBase implements MMM_IModelCaps {
 	 * ê›íËílÇÕMMM_IModelCapsÇåpè≥ÇµÇΩEntitiyÇ∆Ç©ÇëzíËÅB
 	 */
 	public void setModelCaps(MMM_IModelCaps pModelCaps) {
-		modelArmorInner.setModelCaps(pModelCaps);
+		if (modelArmorInner != null) {
+			modelArmorInner.setModelCaps(pModelCaps);
+		}
 		if (modelArmorOuter != null) {
 			modelArmorOuter.setModelCaps(pModelCaps);
 		}
@@ -110,32 +126,32 @@ public class MMM_ModelDuo extends ModelBase implements MMM_IModelCaps {
 
 	@Override
 	public Map<String, Integer> getModelCaps() {
-		return modelArmorInner.getModelCaps();
+		return modelArmorInner == null ? null : modelArmorInner.getModelCaps();
 	}
 
 	@Override
 	public Object getCapsValue(int pIndex, Object ... pArg) {
-		return modelArmorInner.getCapsValue(pIndex, pArg);
+		return modelArmorInner == null ? null : modelArmorInner.getCapsValue(pIndex, pArg);
 	}
 	@Override
 	public Object getCapsValue(String pCapsName, Object ... pArg) {
-		return modelArmorInner.getCapsValue(pCapsName, pArg);
+		return modelArmorInner == null ? null : modelArmorInner.getCapsValue(pCapsName, pArg);
 	}
 	@Override
 	public int getCapsValueInt(int pIndex, Object ... pArg) {
-		return modelArmorInner.getCapsValueInt(pIndex, pArg);
+		return modelArmorInner == null ? 0 : modelArmorInner.getCapsValueInt(pIndex, pArg);
 	}
 	@Override
 	public float getCapsValueFloat(int pIndex, Object ... pArg) {
-		return modelArmorInner.getCapsValueFloat(pIndex, pArg);
+		return modelArmorInner == null ? 0F : modelArmorInner.getCapsValueFloat(pIndex, pArg);
 	}
 	@Override
 	public double getCapsValueDouble(int pIndex, Object ... pArg) {
-		return modelArmorInner.getCapsValueDouble(pIndex, pArg);
+		return modelArmorInner == null ? 0D : modelArmorInner.getCapsValueDouble(pIndex, pArg);
 	}
 	@Override
 	public boolean getCapsValueBoolean(int pIndex, Object ... pArg) {
-		return modelArmorInner.getCapsValueBoolean(pIndex, pArg);
+		return modelArmorInner == null ? false : modelArmorInner.getCapsValueBoolean(pIndex, pArg);
 	}
 
 	@Override
@@ -146,11 +162,29 @@ public class MMM_ModelDuo extends ModelBase implements MMM_IModelCaps {
 		if (modelArmorOuter != null) {
 			modelArmorOuter.setCapsValue(pIndex, pArg);
 		}
-		return modelArmorInner.setCapsValue(pIndex, pArg);
+		if (modelArmorInner != null) {
+			return modelArmorInner.setCapsValue(pIndex, pArg);
+		}
+		return false;
 	}
 	@Override
 	public boolean setCapsValue(String pCapsName, Object... pArg) {
 		return setCapsValue(pCapsName, pArg);
+	}
+
+	public void setRender(Render pRender) {
+		if (modelArmorInner != null) {
+			modelArmorInner.render = pRender;
+		}
+		if (modelArmorOuter != null) {
+			modelArmorOuter.render = pRender;
+		}
+	}
+
+	public void setArmorRendering(boolean pFlag) {
+		if (modelArmorInner != null) {
+			modelArmorInner.isRendering = pFlag;
+		}
 	}
 
 }
