@@ -74,7 +74,23 @@ public abstract class MMM_ModelBiped extends ModelBiped implements MMM_IModelCap
 		Arms = new MMM_ModelRenderer[2];
 		HeadMount = new MMM_ModelRenderer(this, "HeadMount");
 
+		boxList.clear();
 		initModel(psize, pyoffset);
+		checkParents();
+	}
+
+	protected void checkParents() {
+		for (int li = 0; li < boxList.size(); li++) {
+			ModelRenderer lmr = (ModelRenderer)boxList.get(li);
+			if (lmr.childModels != null) {
+				for (int lj = 0; lj < lmr.childModels.size(); lj++) {
+					ModelRenderer lmc = (ModelRenderer)lmr.childModels.get(lj);
+					if (lmc instanceof MMM_ModelRenderer) {
+						((MMM_ModelRenderer)lmc).pearent = lmr;
+					}
+				}
+			}
+		}
 	}
 
 	/**
@@ -159,6 +175,28 @@ public abstract class MMM_ModelBiped extends ModelBiped implements MMM_IModelCap
 		}
 		GL11.glPopMatrix();
 	}
+
+	/**
+	 * ランダムでパーツを返す。
+	 */
+	@Override
+	public ModelRenderer func_85181_a(Random par1Random) {
+		// 膝に矢を受けてしまってな・・・
+		int li = par1Random.nextInt(this.boxList.size());
+		ModelRenderer lmr = (ModelRenderer)this.boxList.get(li);
+		for (int lj = 0; lj < boxList.size(); lj++) {
+			if (!lmr.cubeList.isEmpty()) {
+				break;
+			}
+			// 箱がない
+			if (++li >= boxList.size()) {
+				li = 0;
+			}
+			lmr = (ModelRenderer)this.boxList.get(li);
+		}
+		return lmr;
+	}
+
 
 	/**
 	 *  身長

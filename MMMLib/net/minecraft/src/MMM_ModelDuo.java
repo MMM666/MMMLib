@@ -63,11 +63,15 @@ public class MMM_ModelDuo extends ModelBase implements MMM_IModelCaps {
 			renderLiving.loadTexture(textureOuter[renderParts]);
 			modelArmorOuter.render(par1Entity, par2, par3, par4, par5, par6, par7);
 		}
-		if (modelArmorInner != null) {
+		while (modelArmorInner != null) {
 			if (textureInner != null) {
+				if (textureInner[renderParts] == null) {
+					break;
+				}
 				renderLiving.loadTexture(textureInner[renderParts]);
 			}
 			modelArmorInner.render(par1Entity, par2, par3, par4, par5, par6, par7);
+			break;
 		}
 		isAlphablend = false;
 	}

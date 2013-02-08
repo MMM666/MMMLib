@@ -44,6 +44,8 @@ public class MMM_ModelRenderer extends ModelRenderer {
 	public float scaleX;
 	public float scaleY;
 	public float scaleZ;
+	
+	public ModelRenderer pearent;
 
 
 
@@ -63,6 +65,8 @@ public class MMM_ModelRenderer extends ModelRenderer {
 		scaleX = 1.0F;
 		scaleY = 1.0F;
 		scaleZ = 1.0F;
+		
+		pearent = null;
 	}
 
 	public MMM_ModelRenderer(ModelBase pModelBase, int px, int py) {
@@ -406,18 +410,22 @@ public class MMM_ModelRenderer extends ModelRenderer {
 		if (isHidden) {
 			return;
 		}
-
+		
 		if (!showModel) {
 			return;
 		}
-
+		
 		if (!compiled) {
 			compileDisplayList(par1);
 		}
-
+		
+		if (pearent != null) {
+			pearent.postRender(par1);
+		}
+		
 		if (rotateAngleX != 0.0F || rotateAngleY != 0.0F || rotateAngleZ != 0.0F) {
 			GL11.glTranslatef(rotationPointX * par1, rotationPointY * par1, rotationPointZ * par1);
-
+			
 			setRotation();
 		} else if (rotationPointX != 0.0F || rotationPointY != 0.0F || rotationPointZ != 0.0F) {
 			GL11.glTranslatef(rotationPointX * par1, rotationPointY * par1, rotationPointZ * par1);

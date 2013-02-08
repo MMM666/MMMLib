@@ -1,6 +1,7 @@
 package net.minecraft.src;
 
 import java.io.ByteArrayInputStream;
+import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
@@ -208,6 +209,45 @@ public class MMM_Helper {
 	public static Entity getEntity(byte[] pData, int pIndex, World pWorld) {
 		return pWorld.getEntityByID(MMM_Helper.getInt(pData, pIndex));
 	}
-	
+
+	/**
+	 * 変数「avatar」から値を取り出し戻り値として返す。
+	 * avatarが存在しない場合は元の値を返す。
+	 * avatarはEntityLiving互換。
+	 */
+	public static Entity getAvatarEntity(Entity pEntity){
+		// littleMaid用コードここから
+		try {
+			// 射手の情報をEntityLittleMaidAvatarからEntityLittleMaidへ置き換える
+			Field field = pEntity.getClass().getField("avatar");
+			pEntity = (EntityLiving)field.get(pEntity);
+		}
+		catch (NoSuchFieldException e) {
+		}
+		catch (Exception e) {
+		}
+		// ここまで
+		return pEntity;
+	}
+
+	/**
+	 * 変数「maidAvatar」から値を取り出し戻り値として返す。
+	 * maidAvatarが存在しない場合は元の値を返す。
+	 * maidAvatarはEntityPlayer互換。
+	 */
+	public static Entity getAvatarPlayer(Entity entity) {
+		// メイドさんチェック
+		try {
+			Field field = entity.getClass().getField("maidAvatar");
+			entity = (Entity)field.get(entity);
+		}
+		catch (NoSuchFieldException e) {
+		}
+		catch (Exception e) {
+		}
+		return entity;
+	}
+
+
 
 }

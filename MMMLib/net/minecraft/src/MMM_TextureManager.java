@@ -115,6 +115,15 @@ public class MMM_TextureManager {
 		return null;
 	}
 
+	public static MMM_TextureBoxServer getTextureBoxServer(String pName) {
+		for (Entry<Integer, MMM_TextureBoxServer> le : textureServer.entrySet()) {
+			if (le.getValue().textureName.equals(pName)) {
+				return le.getValue();
+			}
+		}
+		return null;
+	}
+
 	private static void getArmorPrefix() {
 		// アーマーファイルのプリフィックスを獲得
 		try {
@@ -706,15 +715,26 @@ public class MMM_TextureManager {
 				return li;
 			}
 			if (li > -1) {
+				// リクエスト可能
+				byte ldata[];
 				MMM_TextureBox lbox = MMM_TextureManager.getTextureBox(pname);
-				byte ldata[] = new byte[18 + pname.getBytes().length];
-				ldata[0] = mod_MMM_MMMLib.MMM_Server_GetTextureIndex;
-				ldata[1] = (byte)li;
-				MMM_Helper.setInt(ldata, 2, lbox.getWildColorBits());
-				MMM_Helper.setInt(ldata, 6, Float.floatToIntBits(lbox.models[0].getHeight()));
-				MMM_Helper.setInt(ldata, 10, Float.floatToIntBits(lbox.models[0].getWidth()));
-				MMM_Helper.setInt(ldata, 14, Float.floatToIntBits(lbox.models[0].getyOffset()));
-				MMM_Helper.setStr(ldata, 18, pname);
+				if (lbox != null) {
+					// モデルのステータスを書き込み
+					ldata = new byte[18 + pname.getBytes().length];
+					ldata[0] = mod_MMM_MMMLib.MMM_Server_SetTextureIndex;
+					ldata[1] = (byte)li;
+					MMM_Helper.setInt(ldata, 2, lbox.getWildColorBits());
+					MMM_Helper.setInt(ldata, 6, Float.floatToIntBits(lbox.models[0].getHeight()));
+					MMM_Helper.setInt(ldata, 10, Float.floatToIntBits(lbox.models[0].getWidth()));
+					MMM_Helper.setInt(ldata, 14, Float.floatToIntBits(lbox.models[0].getyOffset()));
+					MMM_Helper.setStr(ldata, 18, pname);
+				} else {
+					// 登録テクスチャがないのでサーバーに確認をする
+					ldata = new byte[2 + pname.getBytes().length];
+					ldata[0] = mod_MMM_MMMLib.MMM_Server_GetTextureIndex;
+					ldata[1] = (byte)li;
+					MMM_Helper.setStr(ldata, 2, pname);
+				}
 				MMM_Client.sendToServer(ldata);
 				mod_MMM_MMMLib.Debug("GetTextureIndex");
 			}

@@ -1,5 +1,6 @@
 package net.minecraft.src;
 
+import java.awt.event.TextEvent;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -9,6 +10,7 @@ import net.minecraft.client.Minecraft;
 public class mod_MMM_MMMLib extends BaseMod {
 
 	public static final int MMM_Server_GetTextureIndex	= 0x00;
+	public static final int MMM_Server_SetTextureIndex	= 0x02;
 	public static final int MMM_Server_GetTextureStr	= 0x01;
 	public static final int MMM_Client_SetTextureIndex	= 0x00;
 	public static final int MMM_Client_SetTextureStr	= 0x01;
@@ -126,6 +128,24 @@ public class mod_MMM_MMMLib extends BaseMod {
 		
 		switch (lmode) {
 		case MMM_Server_GetTextureIndex:
+			// テクスチャ名称のリクエストに対して番号を返す
+			/*
+			 * 0:ID
+			 * 1:index 要求かけた時の番号
+			 * 2-:Str
+			 */
+			String lsgti = MMM_Helper.getStr(var2.data, 2);
+			int ligti = MMM_TextureManager.getStringToIndex(lsgti);
+			Debug(String.format("%s : %d = %d", lsgti, var2.data[1], ligti));
+			ldata = new byte[] {
+					MMM_Client_SetTextureIndex,
+					var2.data[1],
+					0, 0
+			};
+			MMM_Helper.setShort(ldata, 2, ligti);
+			sendToClient(var1, ldata);
+			break;
+		case MMM_Server_SetTextureIndex:
 			// テクスチャ名称のリクエストに対して番号を返す
 			/*
 			 * 0:ID
