@@ -38,7 +38,7 @@ public class mod_MMM_MMMLib extends BaseMod {
 
 	@Override
 	public String getVersion() {
-		return "1.4.7-3";
+		return "1.4.7-4";
 	}
 	
 	@Override
@@ -135,7 +135,11 @@ public class mod_MMM_MMMLib extends BaseMod {
 			 * 2-:Str
 			 */
 			String lsgti = MMM_Helper.getStr(var2.data, 2);
-			int ligti = MMM_TextureManager.getStringToIndex(lsgti);
+			int ligti = 0;
+			Entry<Integer, MMM_TextureBoxServer> legti = MMM_TextureManager.getTextureBoxServer(lsgti);
+			if (legti != null) {
+				ligti = MMM_TextureManager.getTextureBoxServer(lsgti).getKey();
+			}
 			Debug(String.format("%s : %d = %d", lsgti, var2.data[1], ligti));
 			ldata = new byte[] {
 					MMM_Client_SetTextureIndex,

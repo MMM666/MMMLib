@@ -115,10 +115,10 @@ public class MMM_TextureManager {
 		return null;
 	}
 
-	public static MMM_TextureBoxServer getTextureBoxServer(String pName) {
+	public static Entry<Integer, MMM_TextureBoxServer> getTextureBoxServer(String pName) {
 		for (Entry<Integer, MMM_TextureBoxServer> le : textureServer.entrySet()) {
 			if (le.getValue().textureName.equals(pName)) {
-				return le.getValue();
+				return le;
 			}
 		}
 		return null;
@@ -699,6 +699,7 @@ public class MMM_TextureManager {
 	
 	/**
 	 * 渡されたテクスチャパックの名称に関連付けされたインデックスを返す。
+	 * @return -1:現在サーバーへ問い合わせ中
 	 */
 	public static int getStringToIndex(String pname) {
 		for (Entry<Integer, MMM_TextureBoxServer> le : textureServer.entrySet()) {
@@ -708,37 +709,41 @@ public class MMM_TextureManager {
 			}
 		}
 		if (MMM_Helper.isClient) {
-			// クライアントで未確認名称があった場合はサーバーへ問い合わせを行う。
-			int li = getRequestIndex(pname);
-			if (li < 0) {
-				// リクエスト中、もしくは空きがない。
-				return li;
-			}
-			if (li > -1) {
-				// リクエスト可能
-				byte ldata[];
-				MMM_TextureBox lbox = MMM_TextureManager.getTextureBox(pname);
-				if (lbox != null) {
-					// モデルのステータスを書き込み
-					ldata = new byte[18 + pname.getBytes().length];
-					ldata[0] = mod_MMM_MMMLib.MMM_Server_SetTextureIndex;
-					ldata[1] = (byte)li;
-					MMM_Helper.setInt(ldata, 2, lbox.getWildColorBits());
-					MMM_Helper.setInt(ldata, 6, Float.floatToIntBits(lbox.models[0].getHeight()));
-					MMM_Helper.setInt(ldata, 10, Float.floatToIntBits(lbox.models[0].getWidth()));
-					MMM_Helper.setInt(ldata, 14, Float.floatToIntBits(lbox.models[0].getyOffset()));
-					MMM_Helper.setStr(ldata, 18, pname);
-				} else {
-					// 登録テクスチャがないのでサーバーに確認をする
-					ldata = new byte[2 + pname.getBytes().length];
-					ldata[0] = mod_MMM_MMMLib.MMM_Server_GetTextureIndex;
-					ldata[1] = (byte)li;
-					MMM_Helper.setStr(ldata, 2, pname);
+			if (MMM_Client.isIntegratedServerRunning()) {
+				return 0;
+			} else {
+				// クライアントで未確認名称があった場合はサーバーへ問い合わせを行う。
+				int li = getRequestIndex(pname);
+				if (li < 0) {
+					// リクエスト中、もしくは空きがない。
+					return -1;
 				}
-				MMM_Client.sendToServer(ldata);
-				mod_MMM_MMMLib.Debug("GetTextureIndex");
+				if (li > -1) {
+					// リクエスト可能
+					byte ldata[];
+					MMM_TextureBox lbox = MMM_TextureManager.getTextureBox(pname);
+					if (lbox != null) {
+						// モデルのステータスを書き込み
+						ldata = new byte[18 + pname.getBytes().length];
+						ldata[0] = mod_MMM_MMMLib.MMM_Server_SetTextureIndex;
+						ldata[1] = (byte)li;
+						MMM_Helper.setInt(ldata, 2, lbox.getWildColorBits());
+						MMM_Helper.setInt(ldata, 6, Float.floatToIntBits(lbox.models[0].getHeight()));
+						MMM_Helper.setInt(ldata, 10, Float.floatToIntBits(lbox.models[0].getWidth()));
+						MMM_Helper.setInt(ldata, 14, Float.floatToIntBits(lbox.models[0].getyOffset()));
+						MMM_Helper.setStr(ldata, 18, pname);
+					} else {
+						// 登録テクスチャがないのでサーバーに確認をする
+						ldata = new byte[2 + pname.getBytes().length];
+						ldata[0] = mod_MMM_MMMLib.MMM_Server_GetTextureIndex;
+						ldata[1] = (byte)li;
+						MMM_Helper.setStr(ldata, 2, pname);
+					}
+					MMM_Client.sendToServer(ldata);
+					mod_MMM_MMMLib.Debug("GetTextureIndex");
+				}
+				return -1;
 			}
-			return li;
 		} else {
 			// サーバー側で未確認名称があった場合はデフォルトを返す。
 			return 0;
@@ -772,6 +777,7 @@ public class MMM_TextureManager {
 		return lbox == null ? null : lbox.textureName;
 	}
 	public static MMM_TextureBoxServer getIndexToBox(int pIndex) {
+		pIndex = (short)pIndex;
 		if (pIndex < 0) {
 			// マイナス値は有り得ない。
 			return null;

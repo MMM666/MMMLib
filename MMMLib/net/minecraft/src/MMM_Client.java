@@ -1,6 +1,7 @@
 package net.minecraft.src;
 
 import static net.minecraft.src.mod_MMM_MMMLib.*;
+
 import java.lang.reflect.Constructor;
 
 import net.minecraft.client.Minecraft;
@@ -115,6 +116,10 @@ public class MMM_Client {
 	public static void sendToServer(byte[] pData) {
 		ModLoader.clientSendPacket(new Packet250CustomPayload("MMM|Upd", pData));
 		Debug(String.format("MMM|Upd:%2x:NOEntity", pData[0]));
+	}
+
+	public static boolean isIntegratedServerRunning() {
+		return MMM_Helper.mc.isIntegratedServerRunning();
 	}
 
 }
