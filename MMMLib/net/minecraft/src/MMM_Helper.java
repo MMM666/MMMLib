@@ -248,6 +248,42 @@ public class MMM_Helper {
 		return entity;
 	}
 
-
+	/**
+	 * プレーヤのインベントリからアイテムを減らす
+	 */
+	protected static ItemStack decPlayerInventory(EntityPlayer par1EntityPlayer, int par2Index, int par3DecCount) {
+		if (par1EntityPlayer == null) {
+			return null;
+		}
+		
+		if (par2Index == -1) {
+			par2Index = par1EntityPlayer.inventory.currentItem;
+		}
+		ItemStack itemstack1 = par1EntityPlayer.inventory.getStackInSlot(par2Index);
+		if (itemstack1 == null) {
+			return null;
+		}
+		
+		if (!par1EntityPlayer.capabilities.isCreativeMode) {
+			// クリエイティブだと減らない
+			itemstack1.stackSize -= par3DecCount;
+		}
+		
+		if (itemstack1.getItem() instanceof ItemPotion) {
+			if(itemstack1.stackSize <= 0) {
+				par1EntityPlayer.inventory.setInventorySlotContents(par1EntityPlayer.inventory.currentItem, new ItemStack(Item.glassBottle, par3DecCount));
+				return null;
+			} else {
+				par1EntityPlayer.inventory.addItemStackToInventory(new ItemStack(Item.glassBottle, par3DecCount));
+			}
+		} else {
+			if (itemstack1.stackSize <= 0) {
+				par1EntityPlayer.inventory.setInventorySlotContents(par2Index, null);
+				return null;
+			}
+		}
+		
+		return itemstack1;
+	}
 
 }

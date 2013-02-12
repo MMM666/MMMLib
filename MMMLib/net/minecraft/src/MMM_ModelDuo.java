@@ -59,9 +59,17 @@ public class MMM_ModelDuo extends ModelBase implements MMM_IModelCaps {
 				GL11.glDisable(GL11.GL_BLEND);
 			}
 		}
-		if (modelArmorOuter != null) {
-			renderLiving.loadTexture(textureOuter[renderParts]);
+		// このへんは出来ればスッキリさせたい、処理速度的な意味で。
+		// 可能な限りテクスチャ設定時におかしな値が入らないようにする。
+		while (modelArmorOuter != null) {
+			if (textureOuter != null) {
+				if (textureOuter[renderParts] == null) {
+					break;
+				}
+				renderLiving.loadTexture(textureOuter[renderParts]);
+			}
 			modelArmorOuter.render(par1Entity, par2, par3, par4, par5, par6, par7);
+			break;
 		}
 		while (modelArmorInner != null) {
 			if (textureInner != null) {

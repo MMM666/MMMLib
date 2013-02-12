@@ -646,7 +646,14 @@ public class MMM_TextureManager {
 		if (textureServer.isEmpty()) {
 			return "default";
 		} else {
-			return ((MMM_TextureBoxServer)textureServer.values().toArray()[pRand.nextInt(textureServer.size())]).textureName;
+			// 野生色があるものをリストアップ
+			List<MMM_TextureBoxServer> llist = new ArrayList<MMM_TextureBoxServer>();
+			for (Entry<Integer, MMM_TextureBoxServer> le : textureServer.entrySet()) {
+				if (le.getValue().wildColor > 0) {
+					llist.add(le.getValue());
+				}
+			}
+			return llist.get(pRand.nextInt(llist.size())).textureName;
 		}
 	}
 
@@ -661,8 +668,8 @@ public class MMM_TextureManager {
 		for (int li = 0; li < 16; li++) {
 			if ((lcolor & 0x01) > 0) {
 				llist.add(li);
-				lcolor = lcolor >>> 1;
 			}
+			lcolor = lcolor >>> 1;
 		}
 		
 		if (llist.size() > 0) {
