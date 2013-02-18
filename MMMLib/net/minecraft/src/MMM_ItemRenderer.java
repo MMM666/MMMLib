@@ -24,8 +24,8 @@ public class MMM_ItemRenderer extends ItemRenderer implements MMM_IItemRenderer 
 
 	public void renderItem(EntityLiving entityliving, ItemStack itemstack, int i) {
 		Item litem = itemstack.getItem();
-		if (litem instanceof MMM_IItemRender) {
-			MMM_IItemRender lii = (MMM_IItemRender)litem;
+		if (MMM_ItemRenderManager.isEXRender(litem)) {
+			MMM_ItemRenderManager lii = MMM_ItemRenderManager.getEXRender(litem);
 			String ltex = lii.getRenderTexture();
 			if (ltex != null) {
 				this.mc.renderEngine.bindTexture(this.mc.renderEngine.getTexture(ltex));
@@ -89,8 +89,8 @@ public class MMM_ItemRenderer extends ItemRenderer implements MMM_IItemRenderer 
 		
 		if (itemToRender != null) {
 			Item litem = itemToRender.getItem();
-			if (litem instanceof MMM_IItemRender) {
-				if (((MMM_IItemRender)litem).renderItemInFirstPerson(f)) {
+			if (MMM_ItemRenderManager.isEXRender(litem)) {
+				if (MMM_ItemRenderManager.getEXRender(litem).renderItemInFirstPerson(f)) {
 					return;
 				}
 			}

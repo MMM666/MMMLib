@@ -104,14 +104,14 @@ public class MMM_Helper {
 	}
 	
 	public static void setInt(byte[] pData, int pIndex, int pVal) {
-		pData[pIndex++]	= (byte)(pVal & 0xff);
-		pData[pIndex++]	= (byte)((pVal >>> 8) & 0xff);
-		pData[pIndex++]	= (byte)((pVal >>> 16) & 0xff);
-		pData[pIndex]	= (byte)((pVal >>> 24) & 0xff);
+		pData[pIndex + 3]	= (byte)(pVal & 0xff);
+		pData[pIndex + 2]	= (byte)((pVal >>> 8) & 0xff);
+		pData[pIndex + 1]	= (byte)((pVal >>> 16) & 0xff);
+		pData[pIndex + 0]	= (byte)((pVal >>> 24) & 0xff);
 	}
 	
 	public static int getInt(byte[] pData, int pIndex) {
-		return (pData[pIndex] & 0xff) | ((pData[pIndex + 1] & 0xff) << 8) | ((pData[pIndex + 2] & 0xff) << 16) | ((pData[pIndex + 3] & 0xff) << 24);
+		return (pData[pIndex + 3] & 0xff) | ((pData[pIndex + 2] & 0xff) << 8) | ((pData[pIndex + 1] & 0xff) << 16) | ((pData[pIndex + 0] & 0xff) << 24);
 	}
 
 	public static void setFloat(byte[] pData, int pIndex, float pVal) {

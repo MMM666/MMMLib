@@ -83,7 +83,13 @@ public abstract class MMM_GuiMobSelect extends GuiScreen {
 	/**
 	 *  スロットがクリックされた
 	 */
-	public abstract void clickSlot(int pIndex);
+	public void clickSlot(int pIndex, boolean pDoubleClick, String pName, EntityLiving pEntity) {
+		if (pDoubleClick) {
+			clickSlot(pIndex);
+		}
+	}
+	@Deprecated
+	public void clickSlot(int pIndex) {};
 
 	/**
 	 *  スロットの描画
