@@ -72,7 +72,7 @@ public class MMM_TextureBox {
 	}
 
 	/**
-	 * 野生色の有無をビット配列にして返す
+	 * 契約色の有無をビット配列にして返す
 	 */
 	public int getContractColorBits() {
 		int li = 0;
@@ -89,7 +89,7 @@ public class MMM_TextureBox {
 	public int getWildColorBits() {
 		int li = 0;
 		for (Integer i : textures.keySet()) {
-			if (i >= 0x30 && i <= 0x3f) {
+			if (i >= MMM_TextureManager.tx_wild && i <= (MMM_TextureManager.tx_wild + 0x0f)) {
 				li |= 1 << (i & 0x0f);
 			}
 		}
@@ -98,6 +98,10 @@ public class MMM_TextureBox {
 	
 	public boolean hasColor(int pIndex) {
 		return textures.containsKey(pIndex);
+	}
+
+	public boolean hasColor(int pIndex, boolean pContract) {
+		return textures.containsKey(pIndex + (pContract ? 0 : MMM_TextureManager.tx_wild));
 	}
 
 	public boolean hasArmor() {

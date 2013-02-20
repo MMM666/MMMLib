@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Random;
 
+import org.lwjgl.opengl.EXTRescaleNormal;
 import org.lwjgl.opengl.GL11;
 
 public class MMM_RenderItem extends RenderItem {
@@ -16,7 +17,7 @@ public class MMM_RenderItem extends RenderItem {
 		random = new Random();
 	}
 	
-	public boolean doRenderEXItem(EntityItem entityitem, double d, double d1, double d2, float f, float f1, Method pMethod) {
+	public boolean doRenderEXItem(EntityItem entityitem, double d, double d1, double d2, float f, float f1) {
 		boolean lflag = false;
 		random.setSeed(187L);
 		GL11.glPushMatrix();
@@ -34,24 +35,23 @@ public class MMM_RenderItem extends RenderItem {
 			byte0 = 4;
 		}
 		GL11.glTranslatef((float)d, (float)d1 + f2, (float)d2);
-		GL11.glEnable(32826 /*GL_RESCALE_NORMAL_EXT*/);
+		GL11.glEnable(EXTRescaleNormal.GL_RESCALE_NORMAL_EXT);
 		GL11.glRotatef(f3, 0.0F, 1.0F, 0.0F);
 		float f4 = 1.0F; //0.25F;
 		for (int j = 0; j < byte0; j++) {
 			GL11.glPushMatrix();
-			if(j > 0)
-			{
+			if (j > 0) {
 				float f5 = ((random.nextFloat() * 2.0F - 1.0F) * 0.2F) / f4;
 				float f7 = ((random.nextFloat() * 2.0F - 1.0F) * 0.2F) / f4;
 				float f9 = ((random.nextFloat() * 2.0F - 1.0F) * 0.2F) / f4;
 				GL11.glTranslatef(f5, f7, f9);
 			}
-			
-			try {
-				lflag = (Boolean)pMethod.invoke(lis.getItem(), 0, lis, entityitem);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			lflag = MMM_ItemRenderManager.getEXRender(lis.getItem()).renderItem(null, lis, 0);
+//			try {
+//				lflag = (Boolean)pMethod.invoke(lis.getItem(), 0, lis, entityitem);
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
 			GL11.glPopMatrix();
 		}
 		
@@ -63,15 +63,17 @@ public class MMM_RenderItem extends RenderItem {
 	public void doRender(Entity entity, double d, double d1, double d2, float f, float f1) {
 		if (entity instanceof EntityItem) {
 			EntityItem ei = (EntityItem)entity;
-			try {
-				Method lmethod = ei.getClass().getMethod("renderItem", int.class, ItemStack.class, EntityLiving.class);
-				if (lmethod != null) {
-					if (doRenderEXItem(ei, d, d1, d2, f, f1, lmethod)) {
-						return;
-					}
+			if (MMM_ItemRenderManager.isEXRender(ei.getEntityItem().getItem())) {
+				if (doRenderEXItem(ei, d, d1, d2, f, f1)) {
+					return;
 				}
-			} catch (Exception e) {
 			}
+//			try {
+//				Method lmethod = ei.getClass().getMethod("renderItem", int.class, ItemStack.class, EntityLiving.class);
+//				if (lmethod != null) {
+//				}
+//			} catch (Exception e) {
+//			}
 		}
 		
 		super.doRender(entity, d, d1, d2, f, f1);

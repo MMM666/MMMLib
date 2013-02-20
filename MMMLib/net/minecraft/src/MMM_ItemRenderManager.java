@@ -39,7 +39,7 @@ public class MMM_ItemRenderManager {
 			} catch (Exception e) {
 			}
 			try {
-				lrenderItemInFirstPerson = lc.getMethod("renderItemInFirstPerson", float.class);
+				lrenderItemInFirstPerson = lc.getMethod("renderItemInFirstPerson", float.class, MMM_IItemRenderer.class);
 			} catch (Exception e) {
 			}
 			try {
@@ -69,10 +69,10 @@ public class MMM_ItemRenderManager {
 		return false;
 	}
 
-	public boolean renderItemInFirstPerson(float pDelta) {
+	public boolean renderItemInFirstPerson(float pDelta, MMM_IItemRenderer pItemRenderer) {
 		if (frenderItemInFirstPerson != null) {
 			try {
-				return (Boolean)frenderItemInFirstPerson.invoke(fobject, pDelta);
+				return (Boolean)frenderItemInFirstPerson.invoke(fobject, pDelta, pItemRenderer);
 			} catch (Exception e) {
 			}
 		}

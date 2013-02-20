@@ -77,6 +77,11 @@ public class mod_MMM_MMMLib extends BaseMod {
 		// テクスチャインデックスの構築
 		Debug("Localmode: InitTextureList.");
 		MMM_TextureManager.initTextureList(true);
+		// アーマープリフィックスを設定
+		try {
+			ModLoader.setPrivateValue(RenderBiped.class, null, 4, ModLoader.getPrivateValue(RenderPlayer.class, null, 3));
+		} catch (Exception e) {
+		}
 	}
 
 	@Override

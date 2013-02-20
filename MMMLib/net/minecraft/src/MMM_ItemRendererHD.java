@@ -22,6 +22,26 @@ public class MMM_ItemRendererHD extends ItemRendererHD implements MMM_IItemRende
 		mc = minecraft;
 	}
 
+	@Override
+	public Minecraft getMC() {
+		return mc;
+	}
+
+	@Override
+	public ItemStack getItemToRender() {
+		return itemToRender;
+	}
+
+	@Override
+	public float getEquippedProgress() {
+		return equippedProgress;
+	}
+
+	@Override
+	public float getPrevEquippedProgress() {
+		return prevEquippedProgress;
+	}
+
 	public void renderItem(EntityLiving entityliving, ItemStack itemstack, int i) {
 		Item litem = itemstack.getItem();
 		if (MMM_ItemRenderManager.isEXRender(litem)) {
@@ -92,7 +112,7 @@ public class MMM_ItemRendererHD extends ItemRendererHD implements MMM_IItemRende
 			if (MMM_ItemRenderManager.isEXRender(litem)) {
 				MMM_ItemRenderManager lim = MMM_ItemRenderManager.getEXRender(litem);
 				
-				if (MMM_ItemRenderManager.getEXRender(litem).renderItemInFirstPerson(f)) {
+				if (MMM_ItemRenderManager.getEXRender(litem).renderItemInFirstPerson(f, this)) {
 					return;
 				}
 			}
