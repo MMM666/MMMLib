@@ -1,6 +1,7 @@
 package net.minecraft.src;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 import org.lwjgl.opengl.GL13;
 
 import net.minecraft.client.Minecraft;
@@ -68,10 +69,11 @@ public class MMM_GuiSlotMobSelect extends GuiSlot {
 					var2 + 15, var3 + 12, 0xffffff);
 			return;
 		}
+		entityliving.setWorld(mc.theWorld);
 		
 		// 伽羅の表示
-		GL11.glEnable(32826 /* GL_RESCALE_NORMAL_EXT */);
-		GL11.glEnable(2903 /* GL_COLOR_MATERIAL */);
+//		GL11.glEnable(32826 /* GL_RESCALE_NORMAL_EXT */);
+		GL11.glEnable(GL11.GL_COLOR_MATERIAL);
 		GL11.glPushMatrix();
 		float f1 = 15F;
 		if (entityliving.height > 2F) {
@@ -101,10 +103,17 @@ public class MMM_GuiSlotMobSelect extends GuiSlot {
 			ownerGui.exclusionList.add(s);
 		}
 		// 影だかバイオームだかの処理?
-		GL13.glMultiTexCoord2f(33985 /* GL_TEXTURE1_ARB */, 240.0F, 240.0F);
 		GL11.glPopMatrix();
 		RenderHelper.disableStandardItemLighting();
-		GL11.glDisable(32826 /* GL_RESCALE_NORMAL_EXT */);
+		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+		OpenGlHelper.setActiveTexture(OpenGlHelper.lightmapTexUnit);
+		GL11.glDisable(GL11.GL_TEXTURE_2D);
+		OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
+		
+//		GL13.glMultiTexCoord2f(33985 /* GL_TEXTURE1_ARB */, 240.0F, 240.0F);
+//		GL11.glPopMatrix();
+//		RenderHelper.disableStandardItemLighting();
+//		GL11.glDisable(32826 /* GL_RESCALE_NORMAL_EXT */);
 	}
 
 }

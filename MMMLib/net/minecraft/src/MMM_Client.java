@@ -36,6 +36,7 @@ public class MMM_Client {
 
 	public static void setItemRenderer() {
 		if (!(MMM_Helper.mc.entityRenderer.itemRenderer instanceof MMM_IItemRenderer)) {
+			mod_MMM_MMMLib.Debug("replace entityRenderer.itemRenderer.");
 			getItemRendererClass();
 			try {
 				Object lo = itemRendererConstructor.newInstance(MMM_Helper.mc);
@@ -45,6 +46,7 @@ public class MMM_Client {
 			}
 		}
 		if (!(RenderManager.instance.itemRenderer instanceof MMM_IItemRenderer)) {
+			mod_MMM_MMMLib.Debug("replace RenderManager.itemRenderer.");
 			getItemRendererClass();
 			try {
 				Object lo = itemRendererConstructor.newInstance(MMM_Helper.mc);
@@ -120,6 +122,14 @@ public class MMM_Client {
 
 	public static boolean isIntegratedServerRunning() {
 		return MMM_Helper.mc.isIntegratedServerRunning();
+	}
+
+	public static void setArmorPrefix() {
+		// アーマープリフィックスを設定
+		try {
+			ModLoader.setPrivateValue(RenderBiped.class, null, 4, ModLoader.getPrivateValue(RenderPlayer.class, null, 3));
+		} catch (Exception e) {
+		}
 	}
 
 }

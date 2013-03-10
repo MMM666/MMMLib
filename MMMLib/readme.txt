@@ -1,4 +1,4 @@
-MMMのMOD用ライブラリ MMMLib 1.4.7 Rev5
+MMMのMOD用ライブラリ MMMLib 1.4.7 Rev6
 
 拙作のMODで使用されるライブラリです。
 とりあえず一緒に入れておいて下さい。
@@ -30,14 +30,16 @@ MMMのMOD用ライブラリ MMMLib 1.4.7 Rev5
 
 
 変更点
+	20130310.1	1.4.7 Rev6 修正
+				アイテムの特殊表示周りを調整。
+
+
+
+
 	20130212.1	1.4.7 Rev5 修正
-			decPlayerInventoryをこちらへ移動。
-			MMM_ModelDuoのテクスチャ判定を固く。
-			野生色の獲得処理をブラッシュアップ。
-
-
-
-
+				decPlayerInventoryをこちらへ移動。
+				MMM_ModelDuoのテクスチャ判定を固く。
+				野生色の獲得処理をブラッシュアップ。
 	20130210.1	1.4.7 Rev4 修正
 				Figure用スライダーをこっちに。
 				avatar関係の処理を移植。

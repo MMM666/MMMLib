@@ -16,18 +16,18 @@ public abstract class MMM_GuiMobSelect extends GuiScreen {
 	protected GuiSlot selectPanel;
 
 
-	
+
 	public MMM_GuiMobSelect(World pWorld) {
 		entityMap = new TreeMap<String, Entity>();
 		initEntitys(pWorld, true);
 	}
-	
+
 	public MMM_GuiMobSelect(World pWorld, Map<String, Entity> pMap) {
 		entityMap = pMap;
 		initEntitys(pWorld, false);
 	}
-	
-	
+
+
 	public void initEntitys(World world, boolean pForce) {
 		// ï\é¶ópEntityListÇÃèâä˙âª
 		if (entityMapClass.isEmpty()) {
@@ -39,7 +39,7 @@ public abstract class MMM_GuiMobSelect extends GuiScreen {
 				mod_MMM_MMMLib.Debug("EntityClassMap copy failed.");
 			}
 		}
-
+		
 		if (entityMap == null) return;
 		if (!pForce && !entityMap.isEmpty()) return;
 		

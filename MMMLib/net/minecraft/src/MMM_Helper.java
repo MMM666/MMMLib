@@ -59,7 +59,7 @@ public class MMM_Helper {
 	 * Forge用追加テクスチャの設定
 	 */
 	public static void setForgeIcon(Object pobject) {
-		if (isForge) {
+		if (isForge && isClient) {
 			try {
 				pobject.getClass().getMethod("setTextureFile", String.class).invoke(pobject, "/gui/mmmforge.png");
 			} catch (Exception e) {

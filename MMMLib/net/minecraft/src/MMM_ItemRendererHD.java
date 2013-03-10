@@ -42,6 +42,7 @@ public class MMM_ItemRendererHD extends ItemRendererHD implements MMM_IItemRende
 		return prevEquippedProgress;
 	}
 
+	@Override
 	public void renderItem(EntityLiving entityliving, ItemStack itemstack, int i) {
 		Item litem = itemstack.getItem();
 		if (MMM_ItemRenderManager.isEXRender(litem)) {
@@ -94,6 +95,7 @@ public class MMM_ItemRendererHD extends ItemRendererHD implements MMM_IItemRende
 		super.renderItem(entityliving, itemstack, i);
 	}
 
+	@Override
 	public void renderItemInFirstPerson(float f) {
 		itemToRender = null;
 		equippedProgress = 0.0F;
