@@ -91,8 +91,8 @@ public class MMM_ModelDuo extends ModelBase implements MMM_IModelCaps {
 	}
 
 	@Override
-	public ModelRenderer func_85181_a(Random par1Random) {
-		return modelArmorInner.func_85181_a(par1Random);
+	public ModelRenderer getRandomModelBox(Random par1Random) {
+		return modelArmorInner.getRandomModelBox(par1Random);
 	}
 
 	@Override

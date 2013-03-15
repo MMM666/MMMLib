@@ -180,7 +180,7 @@ public abstract class MMM_ModelBiped extends ModelBiped implements MMM_IModelCap
 	 * ランダムでパーツを返す。
 	 */
 	@Override
-	public ModelRenderer func_85181_a(Random par1Random) {
+	public ModelRenderer getRandomModelBox(Random par1Random) {
 		// 膝に矢を受けてしまってな・・・
 		int li = par1Random.nextInt(this.boxList.size());
 		ModelRenderer lmr = (ModelRenderer)this.boxList.get(li);

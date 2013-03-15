@@ -69,7 +69,7 @@ public abstract class MMM_GuiMobSelect extends GuiScreen {
 	@Override
 	public void initGui() {
 		selectPanel = new MMM_GuiSlotMobSelect(mc, this);
-		selectPanel.registerScrollButtons(controlList, 3, 4);
+		selectPanel.registerScrollButtons(buttonList, 3, 4);
 	}
 
 	@Override
@@ -83,13 +83,7 @@ public abstract class MMM_GuiMobSelect extends GuiScreen {
 	/**
 	 *  スロットがクリックされた
 	 */
-	public void clickSlot(int pIndex, boolean pDoubleClick, String pName, EntityLiving pEntity) {
-		if (pDoubleClick) {
-			clickSlot(pIndex);
-		}
-	}
-	@Deprecated
-	public void clickSlot(int pIndex) {};
+	public abstract void clickSlot(int pIndex, boolean pDoubleClick, String pName, EntityLiving pEntity);
 
 	/**
 	 *  スロットの描画
