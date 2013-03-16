@@ -56,21 +56,9 @@ public class MMM_Helper {
 	}
 	
 	/**
-	 * Forge用追加テクスチャの設定
-	 */
-	public static void setForgeIcon(Object pobject) {
-		if (isForge && isClient) {
-			try {
-				pobject.getClass().getMethod("setTextureFile", String.class).invoke(pobject, "/gui/mmmforge.png");
-			} catch (Exception e) {
-			}
-		}
-	}
-
-	/**
 	 * Forge用クラス獲得。
 	 */
-	public static Class getEntityClass(BaseMod pMod, String pName) {
+	public static Class getForgeClass(BaseMod pMod, String pName) {
 		if (isForge) {
 			pName = pName.concat("_Forge");
 		}
