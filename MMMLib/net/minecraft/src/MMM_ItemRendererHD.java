@@ -49,13 +49,14 @@ public class MMM_ItemRendererHD extends ItemRendererHD implements MMM_IItemRende
 			MMM_ItemRenderManager lii = MMM_ItemRenderManager.getEXRender(litem);
 			String ltex = lii.getRenderTexture();
 			if (ltex != null) {
-				this.mc.renderEngine.func_98187_b(ltex);
+				mc.renderEngine.bindTexture(ltex);
 			}
 			if (lii.renderItem(entityliving, itemstack, i)) {
 				if (itemstack != null && itemstack.hasEffect() && i == 0) {
+					// ƒGƒ“ƒ`ƒƒƒ“ƒg
 //					float var19 = (float)(Minecraft.getSystemTime() % 3000L) / 3000.0F * 8.0F;
 					float var19 = (float)(Minecraft.getSystemTime() % 65536L) / 3000.0F * 8.0F;
-					this.mc.renderEngine.func_98187_b("%blur%/misc/glint.png");
+					mc.renderEngine.bindTexture("%blur%/misc/glint.png");
 					GL11.glEnable(GL11.GL_BLEND);
 					float var20 = 0.5F;
 					GL11.glColor4f(var20, var20, var20, 1.0F);

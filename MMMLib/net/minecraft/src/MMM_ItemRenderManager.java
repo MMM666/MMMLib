@@ -6,6 +6,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.minecraft.client.Minecraft;
+
+import org.lwjgl.opengl.GL11;
+
 public class MMM_ItemRenderManager {
 
 	protected static Map<Object, MMM_ItemRenderManager> classList = new HashMap<Object, MMM_ItemRenderManager>();
@@ -15,13 +19,16 @@ public class MMM_ItemRenderManager {
 	private Method frenderItem;
 	private Method frenderItemInFirstPerson;
 	private Method fgetRenderTexture;
+	private Method frenderItemWorld;
 
 
-	public MMM_ItemRenderManager(Object pObject, Method prenderItem, Method prenderItemInFirstPerson, Method pgetRenderTexture) {
+	private MMM_ItemRenderManager(Object pObject, Method prenderItem, Method prenderItemInFirstPerson,
+			Method pgetRenderTexture, Method prenderItemWorld) {
 		fobject = pObject;
 		frenderItem = prenderItem;
 		frenderItemInFirstPerson = prenderItemInFirstPerson;
 		fgetRenderTexture = pgetRenderTexture;
+		frenderItemWorld = prenderItemWorld;
 	}
 
 	public static boolean isEXRender(Item pItem) {
@@ -32,6 +39,7 @@ public class MMM_ItemRenderManager {
 			Method lrenderItem = null;
 			Method lrenderItemInFirstPerson = null;
 			Method lgetRenderTexture = null;
+			Method lrenderItemWorld = null;
 			Class lc = pItem.getClass();
 			
 			try {
@@ -46,9 +54,14 @@ public class MMM_ItemRenderManager {
 				lgetRenderTexture = lc.getMethod("getRenderTexture");
 			} catch (Exception e) {
 			}
+			try {
+				lrenderItemWorld = lc.getMethod("isRenderItemWorld");
+			} catch (Exception e) {
+			}
 			if (lrenderItem != null || lrenderItemInFirstPerson != null || lgetRenderTexture != null) {
 				classList.put(pItem, new MMM_ItemRenderManager(pItem,
-						lrenderItem, lrenderItemInFirstPerson, lgetRenderTexture));
+						lrenderItem, lrenderItemInFirstPerson,
+						lgetRenderTexture, lrenderItemWorld));
 				return true;
 			}
 		}
@@ -58,6 +71,8 @@ public class MMM_ItemRenderManager {
 	public static MMM_ItemRenderManager getEXRender(Item pItem) {
 		return classList.get(pItem);
 	}
+
+
 
 	public boolean renderItem(EntityLiving pEntity, ItemStack pItemstack, int pIndex) {
 		if (frenderItem != null) {
@@ -87,6 +102,16 @@ public class MMM_ItemRenderManager {
 			}
 		}
 		return null;
+	}
+
+	public boolean isRenderItemWorld() {
+		if (frenderItemWorld != null) {
+			try {
+				return (Boolean)frenderItemWorld.invoke(fobject);
+			} catch (Exception e) {
+			}
+		}
+		return false;
 	}
 
 }

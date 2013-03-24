@@ -18,13 +18,21 @@ public class MMM_RenderItem extends RenderItem {
 	}
 	
 	public boolean doRenderEXItem(EntityItem entityitem, double d, double d1, double d2, float f, float f1) {
-		boolean lflag = false;
+		ItemStack lis = entityitem.getEntityItem();
+		MMM_ItemRenderManager lirm = MMM_ItemRenderManager.getEXRender(lis.getItem());
+		if (!lirm.isRenderItemWorld()) return false;
+		
+		// テクスチャ
+		String ltex = lirm.getRenderTexture();
+		if (ltex != null) {
+			MMM_Helper.mc.renderEngine.bindTexture(ltex);
+		}
+		// 描画
 		random.setSeed(187L);
 		GL11.glPushMatrix();
 		float f2 = MathHelper.sin(((float)entityitem.age + f1) / 10F + entityitem.hoverStart) * 0.1F + 0.1F;
 		float f3 = (((float)entityitem.age + f1) / 20F + entityitem.hoverStart) * 57.29578F;
 		byte byte0 = 1;
-		ItemStack lis = entityitem.getEntityItem();
 		if (lis.stackSize > 1) {
 			byte0 = 2;
 		}
@@ -46,17 +54,12 @@ public class MMM_RenderItem extends RenderItem {
 				float f9 = ((random.nextFloat() * 2.0F - 1.0F) * 0.2F) / f4;
 				GL11.glTranslatef(f5, f7, f9);
 			}
-			lflag = MMM_ItemRenderManager.getEXRender(lis.getItem()).renderItem(null, lis, 0);
-//			try {
-//				lflag = (Boolean)pMethod.invoke(lis.getItem(), 0, lis, entityitem);
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			}
+			lirm.renderItem(null, lis, 0);
 			GL11.glPopMatrix();
 		}
 		
 		GL11.glPopMatrix();
-		return lflag;
+		return true;
 	}
 
 	@Override
@@ -68,12 +71,6 @@ public class MMM_RenderItem extends RenderItem {
 					return;
 				}
 			}
-//			try {
-//				Method lmethod = ei.getClass().getMethod("renderItem", int.class, ItemStack.class, EntityLiving.class);
-//				if (lmethod != null) {
-//				}
-//			} catch (Exception e) {
-//			}
 		}
 		
 		super.doRender(entity, d, d1, d2, f, f1);

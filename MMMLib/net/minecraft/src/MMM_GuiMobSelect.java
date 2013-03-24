@@ -1,5 +1,6 @@
 package net.minecraft.src;
 
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -44,6 +45,7 @@ public abstract class MMM_GuiMobSelect extends GuiScreen {
 		if (!pForce && !entityMap.isEmpty()) return;
 		
 		for (Map.Entry<Class, String> le : entityMapClass.entrySet()) {
+			if (Modifier.isAbstract(le.getKey().getModifiers())) continue;
 			int li = 0;
 			Entity lentity = null;
 			try {

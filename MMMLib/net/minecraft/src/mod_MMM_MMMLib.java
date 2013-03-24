@@ -22,6 +22,8 @@ public class mod_MMM_MMMLib extends BaseMod {
 	public static boolean isDebugMessage = true;
 	@MLProp(info = "Override RenderItem.")
 	public static boolean renderHacking = true;
+	@MLProp(info = "starting auto assigned ID.")
+	public static int startVehicleEntityID = 2048;
 	
 	
 	public static void Debug(String pText) {
@@ -43,7 +45,7 @@ public class mod_MMM_MMMLib extends BaseMod {
 
 	@Override
 	public String getVersion() {
-		return "1.5.0-1";
+		return "1.5.1-1";
 	}
 	
 	@Override
