@@ -1,5 +1,6 @@
 package net.minecraft.src;
 
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 import org.lwjgl.opengl.GL13;
@@ -8,12 +9,11 @@ import net.minecraft.client.Minecraft;
 
 public class MMM_GuiSlotMobSelect extends GuiSlot {
 
-	protected float pointerX;
-	protected float pointerY;
 	protected int selected;
-
 	protected Minecraft mc;
 	public MMM_GuiMobSelect ownerGui;
+
+
 
 	public MMM_GuiSlotMobSelect(Minecraft pMinecraft, MMM_GuiMobSelect pOwner) {
 		super(pMinecraft, pOwner.width, pOwner.height, 32, pOwner.height - 52, 36);
@@ -48,8 +48,6 @@ public class MMM_GuiSlotMobSelect extends GuiSlot {
 	@Override
 	public void drawScreen(int par1, int par2, float par3) {
 		super.drawScreen(par1, par2, par3);
-		pointerX = par1;
-		pointerY = par2;
 	}
 
 	@Override
@@ -83,8 +81,8 @@ public class MMM_GuiSlotMobSelect extends GuiSlot {
 		GL11.glTranslatef(lxp, var3 + 30F, 50F + f1);
 		GL11.glScalef(-f1, f1, f1);
 		GL11.glRotatef(180F, 0.0F, 0.0F, 1.0F);
-		float f5 = lxp - pointerX;
-		float f6 = (float) ((var3 + 30) - 10) - pointerY;
+		float f5 = lxp - mouseX;
+		float f6 = (float) ((var3 + 30) - 10) - mouseY;
 		GL11.glRotatef(135F, 0.0F, 1.0F, 0.0F);
 		RenderHelper.enableStandardItemLighting();
 		GL11.glRotatef(-135F, 0.0F, 1.0F, 0.0F);

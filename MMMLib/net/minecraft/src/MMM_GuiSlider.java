@@ -6,14 +6,25 @@ import org.lwjgl.opengl.GL11;
 
 public class MMM_GuiSlider extends GuiButton {
 
+	public String prefixStr;
 	public float sliderValue;
 	public boolean dragging;
+	public String strFormat = "%s : %.2f";
+	public float sliderMultiply = 1.0F;
+	public float sliderOffset = 0.0F;
 
 	public MMM_GuiSlider(int i, int j, int k, String s, float f) {
-		super(i, j, k, 100, 20, s);
+		super(i, j, k, 100, 20, "");
 		sliderValue = 1.0F;
 		dragging = false;
 		sliderValue = f;
+		prefixStr = s;
+	}
+
+	public MMM_GuiSlider(int i, int j, int k, String s, float f, float m, float o) {
+		this(i, j, k, s, f);
+		sliderMultiply = m;
+		sliderOffset = o;
 	}
 
 	protected int getHoverState(boolean flag) {
@@ -32,7 +43,7 @@ public class MMM_GuiSlider extends GuiButton {
 			if (sliderValue > 1.0F) {
 				sliderValue = 1.0F;
 			}
-			displayString = String.format("%.2f", getSliderValue());
+			setDisplayString();
 		}
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		drawTexturedModalRect(xPosition + (int) (sliderValue * (float) (width - 8)),
@@ -50,7 +61,7 @@ public class MMM_GuiSlider extends GuiButton {
 			if (sliderValue > 1.0F) {
 				sliderValue = 1.0F;
 			}
-			displayString = String.format("%.2f", getSliderValue());
+			setDisplayString();
 			dragging = true;
 			return true;
 		} else {
@@ -63,7 +74,17 @@ public class MMM_GuiSlider extends GuiButton {
 	}
 
 	public float getSliderValue() {
-		return sliderValue * 360F - 180F;
+		return sliderValue * sliderMultiply + sliderOffset;
+	}
+
+	public MMM_GuiSlider setDisplayString() {
+		displayString = String.format(strFormat, prefixStr, getSliderValue());
+		return this;
+	}
+
+	public MMM_GuiSlider setStrFormat(String s) {
+		strFormat = s;
+		return this;
 	}
 
 }
