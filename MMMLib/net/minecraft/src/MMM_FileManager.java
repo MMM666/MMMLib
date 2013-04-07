@@ -47,7 +47,7 @@ public class MMM_FileManager {
 			minecraftJar = new File(ls4);
 //			minecraftJar = new File(BaseMod.class.getProtectionDomain().getCodeSource().getLocation().toURI());
 //			mod_MMM_MMMLib.Debug(String.format("getMincraftFile-file:%s", minecraftJar.getName()));
-			mod_MMM_MMMLib.Debug(String.format("getMinecraftFile-file:%s", minecraftJar.getAbsolutePath()));
+			mod_MMM_MMMLib.Debug("getMinecraftFile-file:%s", minecraftJar.getAbsolutePath());
 		} catch (Exception exception) {
 			mod_MMM_MMMLib.Debug("getMinecraftFile-Exception.");
 		}
@@ -59,7 +59,7 @@ public class MMM_FileManager {
 				JarURLConnection lclc1 = (JarURLConnection)lclu1.openConnection();
 				JarFile lclj1 = lclc1.getJarFile();
 				minecraftJar = new File(lclj1.getName());
-				mod_MMM_MMMLib.Debug(String.format("getMinecraftFile-file:%s", lclj1.getName()));
+				mod_MMM_MMMLib.Debug("getMinecraftFile-file:%s", lclj1.getName());
 			} catch (Exception exception) {
 				mod_MMM_MMMLib.Debug("getMinecraftFile-Exception.");
 			}
@@ -71,7 +71,7 @@ public class MMM_FileManager {
 				ls = ls.substring(0, li);
 			}
 			minecraftJar = new File(ls);
-			mod_MMM_MMMLib.Debug(String.format("getMinecraftFile-file:%s", ls));
+			mod_MMM_MMMLib.Debug("getMinecraftFile-file:%s", ls);
 		}
 		
 	}
@@ -100,23 +100,23 @@ public class MMM_FileManager {
 			lmod = MinecraftServer.getServer().getFile("mods/");
 		}
 		
-		mod_MMM_MMMLib.Debug(String.format("getModFile:[%s]:%s", pname, lmod.getAbsolutePath()));
+		mod_MMM_MMMLib.Debug("getModFile:[%s]:%s", pname, lmod.getAbsolutePath());
 		// ファイル・ディレクトリを検索
 		try {
 			if (lmod.isDirectory()) {
-				mod_MMM_MMMLib.Debug(String.format("getModFile-get:%d.", lmod.list().length));
+				mod_MMM_MMMLib.Debug("getModFile-get:%d.", lmod.list().length);
 				for (File t : lmod.listFiles()) {
 					if (t.getName().indexOf(pprefix) != -1) {
 						if (t.getName().endsWith(".zip")) {
 							llist.add(t);
-							mod_MMM_MMMLib.Debug(String.format("getModFile-file:%s", t.getName()));
+							mod_MMM_MMMLib.Debug("getModFile-file:%s", t.getName());
 						} else if (t.isDirectory()) {
 							llist.add(t);
-							mod_MMM_MMMLib.Debug(String.format("getModFile-file:%s", t.getName()));
+							mod_MMM_MMMLib.Debug("getModFile-file:%s", t.getName());
 						}
 					}
 				}
-				mod_MMM_MMMLib.Debug(String.format("getModFile-files:%d", llist.size()));
+				mod_MMM_MMMLib.Debug("getModFile-files:%d", llist.size());
 			} else {
 				// まずありえない
 				mod_MMM_MMMLib.Debug("getModFile-fail.");

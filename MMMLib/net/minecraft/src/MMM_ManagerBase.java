@@ -90,7 +90,7 @@ public abstract class MMM_ManagerBase {
 			fileinputstream.close();
 		}
 		catch (Exception exception) {
-			mod_MMM_MMMLib.Debug(String.format("add%sZip-Exception.", getPreFix()));
+			mod_MMM_MMMLib.Debug("add%sZip-Exception.", getPreFix());
 		}
 		
 	}
@@ -112,9 +112,9 @@ public abstract class MMM_ManagerBase {
 				return;
 			}
 			if (append(lclass)) {
-				mod_MMM_MMMLib.Debug(String.format("get%sClass-done: %s", getPreFix(), lclassname));
+				mod_MMM_MMMLib.Debug("get%sClass-done: %s", getPreFix(), lclassname);
 			} else {
-				mod_MMM_MMMLib.Debug(String.format(String.format("get%sClass-fail: %s", getPreFix(), lclassname)));
+				mod_MMM_MMMLib.Debug("get%sClass-fail: %s", getPreFix(), lclassname);
 			}
 			/*
             if (!(MMM_ModelStabilizerBase.class).isAssignableFrom(lclass) || Modifier.isAbstract(lclass.getModifiers())) {
@@ -128,10 +128,10 @@ public abstract class MMM_ManagerBase {
             */
 		}
 		catch (Exception exception) {
-			mod_MMM_MMMLib.Debug(String.format("get%sClass-Exception.", getPreFix()));
+			mod_MMM_MMMLib.Debug("get%sClass-Exception.", getPreFix());
 		}
 		catch (Error error) {
-			mod_MMM_MMMLib.Debug(String.format("get%sClass-Error: %s", getPreFix(), pname));
+			mod_MMM_MMMLib.Debug("get%sClass-Error: %s", getPreFix(), pname);
 		}
 		
 	}

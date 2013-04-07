@@ -1,5 +1,7 @@
 package net.minecraft.src;
 
+import javax.print.attribute.standard.PDLOverrideSupported;
+
 /**
  * カウンタ用。
  */
@@ -18,15 +20,15 @@ public class MMM_Counter {
 	public MMM_Counter(int pSetValue, int pMaxValue, int pDelayValue) {
 		fSetValue = pSetValue;
 		fMaxValue = pMaxValue;
-		fDelayValue = pDelayValue;		
-		fCounter = 0;
+		fDelayValue = pDelayValue;
+		fCounter = pDelayValue;
 	}
 
 
 	public void setCountValue(int pSetValue, int pMaxValue, int pDelayValue) {
 		fSetValue = pSetValue;
 		fMaxValue = pMaxValue;
-		fDelayValue = pDelayValue;		
+		fDelayValue = pDelayValue;
 	}
 
 	public void setValue(int pValue) {
@@ -60,7 +62,11 @@ public class MMM_Counter {
 	}
 
 	public void updateClient(boolean pFlag) {
-		fCounter = pFlag ? fMaxValue : 0;
+		if (pFlag) {
+			fCounter = fMaxValue;
+		} else if (fCounter > 0) {
+			fCounter = 0;
+		}
 	}
 
 }

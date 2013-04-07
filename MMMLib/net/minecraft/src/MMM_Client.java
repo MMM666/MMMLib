@@ -68,7 +68,7 @@ public class MMM_Client {
 			lentity = MMM_Helper.getEntity(var2.data, 1, MMM_Helper.mc.theWorld);
 			if (lentity == null) return;
 		}
-		Debug(String.format("MMM|Upd Clt Call[%2x:%d].", lmode, leid));
+		Debug("MMM|Upd Clt Call[%2x:%d].", lmode, leid);
 		
 		switch (lmode) {
 		case MMM_Client_SetTextureIndex:
@@ -80,7 +80,7 @@ public class MMM_Client {
 			 */
 			int li7 = MMM_Helper.getShort(var2.data, 2);
 			String ls7 = MMM_TextureManager.getRequestString(var2.data[1]);
-			Debug(String.format("%d = %d : %s", li7, var2.data[1], ls7 == null ? "NULL" : ls7));
+			Debug("%d = %d : %s", li7, var2.data[1], ls7 == null ? "NULL" : ls7);
 			MMM_TextureManager.setStringToIndex(li7, ls7);
 			break;
 		case MMM_Client_SetTextureStr:
@@ -92,7 +92,7 @@ public class MMM_Client {
 			 */
 			int li8 = MMM_Helper.getShort(var2.data, 1);
 			String ls8 = MMM_Helper.getStr(var2.data, 3);
-			Debug(String.format("%d = %s", li8, ls8 == null ? "NULL" : ls8));
+			Debug("%d = %s", li8, ls8 == null ? "NULL" : ls8);
 			MMM_TextureManager.setStringToIndex(li8, ls8);
 			break;
 			
@@ -117,7 +117,7 @@ public class MMM_Client {
 
 	public static void sendToServer(byte[] pData) {
 		ModLoader.clientSendPacket(new Packet250CustomPayload("MMM|Upd", pData));
-		Debug(String.format("MMM|Upd:%2x:NOEntity", pData[0]));
+		Debug("MMM|Upd:%2x:NOEntity", pData[0]);
 	}
 
 	public static boolean isIntegratedServerRunning() {

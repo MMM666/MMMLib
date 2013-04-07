@@ -7,6 +7,9 @@ import org.lwjgl.opengl.GL13;
 
 import net.minecraft.client.Minecraft;
 
+/**
+ * 要らなくなった臭い
+ */
 public class MMM_ItemRendererHD extends ItemRendererHD implements MMM_IItemRenderer {
 
 	// プライベート変数を使えるように

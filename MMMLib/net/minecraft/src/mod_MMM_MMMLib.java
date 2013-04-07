@@ -23,16 +23,11 @@ public class mod_MMM_MMMLib extends BaseMod {
 	@MLProp(info = "Override RenderItem.")
 	public static boolean renderHacking = true;
 	@MLProp(info = "starting auto assigned ID.")
-	public static int startVehicleEntityID = 2048;
+	public static int startVehicleEntityID = 2176;
 	
 	
-	public static void Debug(String pText) {
-		// デバッグメッセージ
-		if (isDebugMessage) {
-			System.out.println(String.format("MMMLib-%s", pText));
-		}
-	}
 	public static void Debug(String pText, Object... pVals) {
+		// デバッグメッセージ
 		if (isDebugMessage) {
 			System.out.println(String.format("MMMLib-" + pText, pVals));
 		}
@@ -45,7 +40,7 @@ public class mod_MMM_MMMLib extends BaseMod {
 
 	@Override
 	public String getVersion() {
-		return "1.5.1-2";
+		return "1.5.1-3";
 	}
 	
 	@Override
@@ -131,7 +126,7 @@ public class mod_MMM_MMMLib extends BaseMod {
 			lentity = MMM_Helper.getEntity(var2.data, 1, var1.playerEntity.worldObj);
 			if (lentity == null) return;
 		}
-		Debug(String.format("MMM|Upd Srv Call[%2x:%d].", lmode, leid));
+		Debug("MMM|Upd Srv Call[%2x:%d].", lmode, leid);
 		byte[] ldata;
 		
 		switch (lmode) {
@@ -148,7 +143,7 @@ public class mod_MMM_MMMLib extends BaseMod {
 			if (legti != null) {
 				ligti = MMM_TextureManager.getTextureBoxServer(lsgti).getKey();
 			}
-			Debug(String.format("%s : %d = %d", lsgti, var2.data[1], ligti));
+			Debug("%s : %d = %d", lsgti, var2.data[1], ligti);
 			ldata = new byte[] {
 					MMM_Client_SetTextureIndex,
 					var2.data[1],
@@ -171,7 +166,7 @@ public class mod_MMM_MMMLib extends BaseMod {
 			 */
 			MMM_TextureBoxServer lbox = new MMM_TextureBoxServer(var2.data);
 			int li = MMM_TextureManager.setTextureBoxToIndex(lbox);
-			Debug(String.format("%d = %d : %04x : %s", li, var2.data[1], lbox.wildColor, lbox.textureName == null ? "NULL" : lbox.textureName));
+			Debug("%d = %d : %04x : %s", li, var2.data[1], lbox.wildColor, lbox.textureName == null ? "NULL" : lbox.textureName);
 			ldata = new byte[] {
 					MMM_Client_SetTextureIndex,
 					var2.data[1],
@@ -188,7 +183,7 @@ public class mod_MMM_MMMLib extends BaseMod {
 			 */
 			int li8 = MMM_Helper.getShort(var2.data, 1);
 			MMM_TextureBoxServer lb8 = MMM_TextureManager.getIndexToBox(li8);
-			Debug(String.format("%d : %s", li8, lb8.textureName == null ? "NULL" : lb8.textureName));
+			Debug("%d : %s", li8, lb8.textureName == null ? "NULL" : lb8.textureName);
 			ldata = new byte[3 + lb8.textureName.getBytes().length];
 			ldata[0] = MMM_Client_SetTextureStr;
 			ldata[1] = var2.data[1];

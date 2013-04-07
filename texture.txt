@@ -1,0 +1,43 @@
+
+クライアントからテクスチャ名に応じたサーバーインデックスを獲得する。
+getTextureIndex
+setTextureIndex
+
+
+サーバーからクライアントへテクスチャを設定する。
+datawatcher等でテクスチャインデックスを設定する。
+
+textureIndex = DataWatcher->textureIndex
+
+テクスチャの変更は２つのintで判定する。
+DataWatcher->textureIndex != localTextureIndex
+の場合に変更判定が発生し続ける。
+
+
+// 判定で番号登録がなければテクスチャ情報を獲得しに行く
+ClientTextureManager>isTexture(textureIndex) {
+textureStr = ClientTextureManager->getTexture(textureIndex)
+localTextureIndex = textureIndex
+} else {
+ClientTextureManager->getTextureBoxFromServer(textureIndex)
+}
+
+
+
+
+
+Client_setTextureStr
+
+
+
+
+
+
+
+
+
+
+
+
+
+

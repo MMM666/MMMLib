@@ -157,7 +157,7 @@ public class MMM_TextureManager {
 		}
 		
 		for (String[] lss : searchPrefix) {
-			mod_MMM_MMMLib.Debug(String.format("getTexture[%s].", lss[0]));
+			mod_MMM_MMMLib.Debug("getTexture[%s].", lss[0]);
 			// jar内のテクスチャを追加
 			if (MMM_FileManager.minecraftJar == null) {
 				mod_MMM_MMMLib.Debug("getTexture-append-jar-file not founded.");
@@ -175,7 +175,7 @@ public class MMM_TextureManager {
 					// zip
 					lflag = addTexturesZip(lf, lss);
 				}
-				mod_MMM_MMMLib.Debug(String.format("getTexture-append-%s-%s.", lf.getName(), lflag ? "done" : "fail"));
+				mod_MMM_MMMLib.Debug("getTexture-append-%s-%s.", lf.getName(), lflag ? "done" : "fail");
 			}
 		}
 /*		
@@ -334,7 +334,7 @@ public class MMM_TextureManager {
 					lclass = Class.forName(cn);
 				}
 				if (!(MMM_ModelBiped.class).isAssignableFrom(lclass) || Modifier.isAbstract(lclass.getModifiers())) {
-					mod_MMM_MMMLib.Debug(String.format("getModelClass-fail."));
+					mod_MMM_MMMLib.Debug("getModelClass-fail.");
 					return;
 				}
 				MMM_ModelBiped mlm[] = new MMM_ModelBiped[3];
@@ -345,14 +345,14 @@ public class MMM_TextureManager {
 				mlm[2] = cm.newInstance(lsize[1]);
 				modelMap.put(pn, mlm);
 //				mod_littleMaidMob.Debug(String.format("getModelClass-%s", mlm[0].getClass().getName()));
-				mod_MMM_MMMLib.Debug(String.format("getModelClass-%s:%s", pn, cn));
+				mod_MMM_MMMLib.Debug("getModelClass-%s:%s", pn, cn);
 				
 			}
 			catch (Exception exception) {
-				mod_MMM_MMMLib.Debug(String.format("getModelClass-Exception: %s", fname));
+				mod_MMM_MMMLib.Debug("getModelClass-Exception: %s", fname);
 			}
 			catch (Error error) {
-				mod_MMM_MMMLib.Debug(String.format("getModelClass-Error: ".concat(fname)));
+				mod_MMM_MMMLib.Debug("getModelClass-Error: %s", fname);
 			}
 		}
 	}
@@ -387,7 +387,7 @@ public class MMM_TextureManager {
 					if (lts == null) {
 						lts = new MMM_TextureBox(pn, pSearch);
 						textures.add(lts);
-						mod_MMM_MMMLib.Debug(String.format("getTextureName-append-texturePack-%s", pn));
+						mod_MMM_MMMLib.Debug("getTextureName-append-texturePack-%s", pn);
 //						mod_MMM_MMMLib.Debug(String.format("getTextureName-append-armorPack-%s", pn));
 					}
 					if (j >= 0x40 && j <= 0x5f) {
@@ -476,7 +476,7 @@ public class MMM_TextureManager {
 			{
 				String s = package1.getName().replace('.', File.separatorChar);
 				file = new File(file, s);
-				mod_MMM_MMMLib.Debug(String.format("addTextureJar-file-Packege:%s", s));
+				mod_MMM_MMMLib.Debug("addTextureJar-file-Packege:%s", s);
 			} else {
 				mod_MMM_MMMLib.Debug("addTextureJar-file-null.");
 			}
