@@ -76,10 +76,21 @@ public abstract class MMM_GuiMobSelect extends GuiScreen {
 
 	@Override
 	public void drawScreen(int px, int py, float pf) {
+		float lhealthScale = BossStatus.healthScale;
+		int lstatusBarLength = BossStatus.statusBarLength;
+		String lbossName = BossStatus.bossName;
+		boolean lfield_82825_d = BossStatus.field_82825_d;
+		
 		drawDefaultBackground();
 		selectPanel.drawScreen(px, py, pf);
 		drawCenteredString(fontRenderer, StatCollector.translateToLocal(screenTitle), width / 2, 20, 0xffffff);
 		super.drawScreen(px, py, pf);
+		
+		// GUIで表示した分のボスのステータスを表示しない
+		BossStatus.healthScale = lhealthScale;
+		BossStatus.statusBarLength = lstatusBarLength;
+		BossStatus.bossName = lbossName;
+		BossStatus.field_82825_d = lfield_82825_d;
 	}
 
 	/**

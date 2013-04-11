@@ -9,6 +9,8 @@ import net.minecraft.client.Minecraft;
 
 public class mod_MMM_MMMLib extends BaseMod {
 
+	public static final String Revision = "4";
+	
 	public static final int MMM_Server_GetTextureIndex	= 0x00;
 	public static final int MMM_Server_SetTextureIndex	= 0x02;
 	public static final int MMM_Server_GetTextureStr	= 0x01;
@@ -24,8 +26,9 @@ public class mod_MMM_MMMLib extends BaseMod {
 	public static boolean renderHacking = true;
 	@MLProp(info = "starting auto assigned ID.")
 	public static int startVehicleEntityID = 2176;
-	
-	
+
+
+
 	public static void Debug(String pText, Object... pVals) {
 		// デバッグメッセージ
 		if (isDebugMessage) {
@@ -40,7 +43,7 @@ public class mod_MMM_MMMLib extends BaseMod {
 
 	@Override
 	public String getVersion() {
-		return "1.5.1-3";
+		return "1.5.1-" + Revision;
 	}
 	
 	@Override

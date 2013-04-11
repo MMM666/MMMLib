@@ -6,6 +6,8 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import net.minecraft.client.Minecraft;
 
@@ -278,6 +280,33 @@ public class MMM_Helper {
 		}
 		
 		return itemstack1;
+	}
+
+	protected static float convRevision(String pRev) {
+		Pattern lp = Pattern.compile("(\\d+)(\\w*)");
+		Matcher lm = lp.matcher(pRev);
+		float lf = 0;
+		if (lm.find()) {
+			lf = Integer.valueOf(lm.group(1));
+			if (!lm.group(2).isEmpty()) {
+				lf += (float)(lm.group(2).charAt(0) - 96) * 0.01;
+			}
+		}
+		return lf;
+	}
+	protected static float convRevision() {
+		return convRevision(mod_MMM_MMMLib.Revision);
+	}
+
+	/**
+	 * 指定されたリビジョンよりも古ければ例外を投げてストップ
+	 */
+	public static void checkRevision(String pRev) {
+		if (convRevision() < convRevision(pRev)) {
+			// 適合バージョンではないのでストップ
+			ModLoader.getLogger().warning("you must check MMMLib revision.");
+			throw new RuntimeException("The revision of MMMLib is old.");
+		}
 	}
 
 }

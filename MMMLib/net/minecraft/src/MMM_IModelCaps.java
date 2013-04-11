@@ -7,6 +7,8 @@ import java.util.Map;
 
 /**
  * モデル共通化用インターフェース。
+ * 形式指定の値読み出しはModelCapsHelperを使うこと。
+ * TODO:次バージョンで色々消すこと。
  */
 public interface MMM_IModelCaps {
 
@@ -78,10 +80,15 @@ public interface MMM_IModelCaps {
 	 * @return
 	 */
 	public Object getCapsValue(int pIndex, Object ... pArg);
+	@Deprecated
 	public Object getCapsValue(String pCapsName, Object ... pArg);
+	@Deprecated
 	public int getCapsValueInt(int pIndex, Object ... pArg);
+	@Deprecated
 	public float getCapsValueFloat(int pIndex, Object ... pArg);
+	@Deprecated
 	public double getCapsValueDouble(int pIndex, Object ... pArg);
+	@Deprecated
 	public boolean getCapsValueBoolean(int pIndex, Object ... pArg);
 
 	/**
@@ -91,6 +98,7 @@ public interface MMM_IModelCaps {
 	 * @return
 	 */
 	public boolean setCapsValue(int pIndex, Object ... pArg);
+	@Deprecated
 	public boolean setCapsValue(String pCapsName, Object ... pArg);
 
 }
