@@ -2,6 +2,7 @@ package net.minecraft.src;
 
 import java.io.ByteArrayInputStream;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,7 @@ public class MMM_Helper {
 	public static final String packegeBase;
 	public static final boolean isForge = ModLoader.isModLoaded("Forge");
 	public static final Minecraft mc;
+	public static Method methGetSmeltingResultForge = null;
 	
 	static {
 		fpackage = ModLoader.class.getPackage();
@@ -33,6 +35,12 @@ public class MMM_Helper {
 		}
 		mc = lm;
 		isClient = mc != null;
+		if (isForge) {
+			try {
+				methGetSmeltingResultForge = FurnaceRecipes.class.getMethod("getExperience", ItemStack.class);
+			} catch (Exception e) {
+			}
+		}
 		
 	}
 	
@@ -309,4 +317,16 @@ public class MMM_Helper {
 		}
 	}
 
+	/**
+	 * Forge対策用のメソッド
+	 */
+	public static ItemStack getSmeltingResult(ItemStack pItemstack) {
+		if (methGetSmeltingResultForge != null) {
+			try {
+				return (ItemStack)methGetSmeltingResultForge.invoke(FurnaceRecipes.smelting(), pItemstack);
+			}catch (Exception e) {
+			}
+		}
+		return FurnaceRecipes.smelting().getSmeltingResult(pItemstack.itemID);
+	}
 }
