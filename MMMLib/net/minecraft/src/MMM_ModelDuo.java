@@ -11,8 +11,8 @@ import org.lwjgl.opengl.GL11;
 public class MMM_ModelDuo extends ModelBase implements MMM_IModelCaps {
 
 	public RenderLiving renderLiving;
-	public MMM_ModelBiped modelArmorOuter;
-	public MMM_ModelBiped modelArmorInner;
+	public MMM_ModelMultiBase modelArmorOuter;
+	public MMM_ModelMultiBase modelArmorInner;
 	/**
 	 * 部位毎のアーマーテクスチャの指定。
 	 * 外側。
@@ -40,11 +40,11 @@ public class MMM_ModelDuo extends ModelBase implements MMM_IModelCaps {
 
 	@Override
 	public void setLivingAnimations(EntityLiving par1EntityLiving, float par2, float par3, float par4) {
-		if (modelArmorOuter != null) {
-			modelArmorOuter.setLivingAnimations(par1EntityLiving, par2, par3, par4);
-		}
 		if (modelArmorInner != null) {
-			modelArmorInner.setLivingAnimations(par1EntityLiving, par2, par3, par4);
+			modelArmorInner.setLivingAnimationsMM(par2, par3, par4);
+		}
+		if (modelArmorOuter != null) {
+			modelArmorOuter.setLivingAnimationsMM(par2, par3, par4);
 		}
 		isAlphablend = true;
 	}
@@ -59,18 +59,6 @@ public class MMM_ModelDuo extends ModelBase implements MMM_IModelCaps {
 				GL11.glDisable(GL11.GL_BLEND);
 			}
 		}
-		// このへんは出来ればスッキリさせたい、処理速度的な意味で。
-		// 可能な限りテクスチャ設定時におかしな値が入らないようにする。
-		while (modelArmorOuter != null) {
-			if (textureOuter != null) {
-				if (textureOuter[renderParts] == null) {
-					break;
-				}
-				renderLiving.loadTexture(textureOuter[renderParts]);
-			}
-			modelArmorOuter.render(par1Entity, par2, par3, par4, par5, par6, par7);
-			break;
-		}
 		while (modelArmorInner != null) {
 			if (textureInner != null) {
 				if (textureInner[renderParts] == null) {
@@ -78,7 +66,17 @@ public class MMM_ModelDuo extends ModelBase implements MMM_IModelCaps {
 				}
 				renderLiving.loadTexture(textureInner[renderParts]);
 			}
-			modelArmorInner.render(par1Entity, par2, par3, par4, par5, par6, par7);
+			modelArmorInner.renderMM(par2, par3, par4, par5, par6, par7);
+			break;
+		}
+		while (modelArmorOuter != null) {
+			if (textureOuter != null) {
+				if (textureOuter[renderParts] == null) {
+					break;
+				}
+				renderLiving.loadTexture(textureOuter[renderParts]);
+			}
+			modelArmorOuter.renderMM(par2, par3, par4, par5, par6, par7);
 			break;
 		}
 		isAlphablend = false;
@@ -86,37 +84,37 @@ public class MMM_ModelDuo extends ModelBase implements MMM_IModelCaps {
 
 	public void renderItems(EntityLiving pEntity, Render pRender) {
 		if (modelArmorInner != null) {
-			modelArmorInner.renderItems(pEntity, pRender);
+			modelArmorInner.renderItems();
 		}
 	}
 
 	@Override
 	public ModelRenderer getRandomModelBox(Random par1Random) {
-		return modelArmorInner.getRandomModelBox(par1Random);
+		return modelArmorInner.getRandomModelBoxMM(par1Random);
 	}
 
 	@Override
 	public TextureOffset getTextureOffset(String par1Str) {
-		return modelArmorInner.getTextureOffset(par1Str);
+		return modelArmorInner.getTextureOffsetMM(par1Str);
 	}
 
 	@Override
 	public void setRotationAngles(float par1, float par2, float par3,
 			float par4, float par5, float par6, Entity par7Entity) {
-		if (modelArmorOuter != null) {
-			modelArmorOuter.setRotationAngles(par1, par2, par3, par4, par5, par6, par7Entity);
-		}
 		if (modelArmorInner != null) {
-			modelArmorInner.setRotationAngles(par1, par2, par3, par4, par5, par6, par7Entity);
+			modelArmorInner.setRotationAnglesMM(par1, par2, par3, par4, par5, par6);
+		}
+		if (modelArmorOuter != null) {
+			modelArmorOuter.setRotationAnglesMM(par1, par2, par3, par4, par5, par6);
 		}
 	}
 
 	public void showArmorParts(int pIndex) {
-		if (modelArmorOuter != null) {
-			modelArmorOuter.showArmorParts(pIndex);
-		}
 		if (modelArmorInner != null) {
 			modelArmorInner.showArmorParts(pIndex);
+		}
+		if (modelArmorOuter != null) {
+			modelArmorOuter.showArmorParts(pIndex);
 		}
 	}
 
@@ -145,43 +143,19 @@ public class MMM_ModelDuo extends ModelBase implements MMM_IModelCaps {
 	public Object getCapsValue(int pIndex, Object ... pArg) {
 		return modelArmorInner == null ? null : modelArmorInner.getCapsValue(pIndex, pArg);
 	}
-	@Override
-	public Object getCapsValue(String pCapsName, Object ... pArg) {
-		return modelArmorInner == null ? null : modelArmorInner.getCapsValue(pCapsName, pArg);
-	}
-	@Override
-	public int getCapsValueInt(int pIndex, Object ... pArg) {
-		return modelArmorInner == null ? 0 : modelArmorInner.getCapsValueInt(pIndex, pArg);
-	}
-	@Override
-	public float getCapsValueFloat(int pIndex, Object ... pArg) {
-		return modelArmorInner == null ? 0F : modelArmorInner.getCapsValueFloat(pIndex, pArg);
-	}
-	@Override
-	public double getCapsValueDouble(int pIndex, Object ... pArg) {
-		return modelArmorInner == null ? 0D : modelArmorInner.getCapsValueDouble(pIndex, pArg);
-	}
-	@Override
-	public boolean getCapsValueBoolean(int pIndex, Object ... pArg) {
-		return modelArmorInner == null ? false : modelArmorInner.getCapsValueBoolean(pIndex, pArg);
-	}
 
 	@Override
 	public boolean setCapsValue(int pIndex, Object... pArg) {
 		if (capsLink != null) {
 			capsLink.setCapsValue(pIndex, pArg);
 		}
-		if (modelArmorOuter != null) {
-			modelArmorOuter.setCapsValue(pIndex, pArg);
-		}
 		if (modelArmorInner != null) {
 			return modelArmorInner.setCapsValue(pIndex, pArg);
 		}
+		if (modelArmorOuter != null) {
+			modelArmorOuter.setCapsValue(pIndex, pArg);
+		}
 		return false;
-	}
-	@Override
-	public boolean setCapsValue(String pCapsName, Object... pArg) {
-		return setCapsValue(pCapsName, pArg);
 	}
 
 	public void setRender(Render pRender) {

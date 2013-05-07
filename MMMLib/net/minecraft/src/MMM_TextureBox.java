@@ -13,7 +13,7 @@ public class MMM_TextureBox {
 	public Map<Integer, String> textures;
 	public Map<String, Map<Integer, String>> armors;
 	public String modelName;
-	public MMM_ModelBiped[] models;
+	public MMM_ModelMultiBase[] models;
 	/**
 	 * pName, pTextureDir, pClassPrefix
 	 */
@@ -108,7 +108,7 @@ public class MMM_TextureBox {
 		return !armors.isEmpty();
 	}
 
-	public void setModels(String pName, MMM_ModelBiped[] pModels) {
+	public void setModels(String pName, MMM_ModelMultiBase[] pModels) {
 		modelName = pName;
 		models = pModels;
 	}

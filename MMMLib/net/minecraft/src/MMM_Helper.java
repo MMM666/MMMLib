@@ -1,12 +1,15 @@
 package net.minecraft.src;
 
+import static net.minecraft.src.mod_MMM_MMMLib.Debug;
 import java.io.ByteArrayInputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,6 +23,7 @@ public class MMM_Helper {
 	public static final boolean isForge = ModLoader.isModLoaded("Forge");
 	public static final Minecraft mc;
 	public static Method methGetSmeltingResultForge = null;
+	protected static final Map<Class, Class>replaceEntitys = new HashMap<Class, Class>();
 	
 	static {
 		fpackage = ModLoader.class.getPackage();
@@ -329,4 +333,84 @@ public class MMM_Helper {
 		}
 		return FurnaceRecipes.smelting().getSmeltingResult(pItemstack.itemID);
 	}
+
+	/**
+	 * EntityListに登録されていいるEntityを置き換える。
+	 */
+	public static void replaceEntityList(Class pSrcClass, Class pDestClass) {
+		// EntityList登録情報を置き換え
+		try {
+			// stringToClassMapping
+			Map lmap;
+			int lint;
+			String ls;
+			lmap = (Map)ModLoader.getPrivateValue(EntityList.class, null, 0);
+			for (Entry<String, Class> le : ((Map<String, Class>)lmap).entrySet()) {
+				if (le.getValue() == pSrcClass) {
+					le.setValue(pDestClass);
+				}
+			}
+			// classToStringMapping
+			lmap = (Map)ModLoader.getPrivateValue(EntityList.class, null, 1);
+			if (lmap.containsKey(pSrcClass)) {
+				ls = (String)lmap.get(pSrcClass);
+				lmap.remove(pSrcClass);
+				lmap.put(pDestClass, ls);
+			}
+			// IDtoClassMapping
+			lmap = (Map)ModLoader.getPrivateValue(EntityList.class, null, 2);
+			for (Entry<Integer, Class> le : ((Map<Integer, Class>)lmap).entrySet()) {
+				if (le.getValue() == pSrcClass) {
+					le.setValue(pDestClass);
+				}
+			}
+			// classToIDMapping
+			lmap = (Map)ModLoader.getPrivateValue(EntityList.class, null, 3);
+			if (lmap.containsKey(pSrcClass)) {
+				lint = (Integer)lmap.get(pSrcClass);
+				lmap.remove(pSrcClass);
+				lmap.put(pDestClass, lint);
+			}
+			replaceEntitys.put(pSrcClass, pDestClass);
+			Debug("Replace %s -> %s", pSrcClass.getSimpleName(), pDestClass.getSimpleName());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private static void replaceCreatureList(List<SpawnListEntry> pMobs) {
+		if (pMobs == null) return;
+		for (Entry<Class, Class> le : replaceEntitys.entrySet()) {
+			for (int j = 0; j < pMobs.size(); j++) {
+				if (pMobs.get(j).entityClass == le.getKey()) {
+					pMobs.get(j).entityClass = le.getValue();
+					Debug("ReplaceCreatureList: %s -> %s", le.getKey().getSimpleName(), le.getValue().getSimpleName());
+				}
+			}
+		}
+	}
+
+	/**
+	 * バイオームの設定Entityを置き換えられたEntityへ置き換える。
+	 * 基本的にMMMLib以外からは呼ばれない。
+	 */
+	protected static void replaceBaiomeSpawn() {
+		// バイオームの発生処理をのっとる
+		if (replaceEntitys.isEmpty()) return;
+		for (int i = 0; i < BiomeGenBase.biomeList.length; i++) {
+			if (BiomeGenBase.biomeList[i] == null) continue;
+			List<SpawnListEntry> mobs;
+			Debug("ReplaceBaiomeSpawn:%s", BiomeGenBase.biomeList[i].biomeName);
+			Debug("[Creature]");
+			replaceCreatureList(BiomeGenBase.biomeList[i].spawnableCreatureList);
+			Debug("[WaterCreature]");
+			replaceCreatureList(BiomeGenBase.biomeList[i].spawnableWaterCreatureList);
+			Debug("[CaveCreature]");
+			replaceCreatureList(BiomeGenBase.biomeList[i].spawnableCaveCreatureList);
+			Debug("[Monster]");
+			replaceCreatureList(BiomeGenBase.biomeList[i].spawnableMonsterList);
+		}
+	}
+
+	
 }

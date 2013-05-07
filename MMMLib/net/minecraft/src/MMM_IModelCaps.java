@@ -25,6 +25,9 @@ public interface MMM_IModelCaps {
 	public static final int caps_heldItemRight	= 0x0011;
 	public static final int caps_isSneak		= 0x0012;
 	public static final int caps_aimedBow		= 0x0013;
+	// EntityCaps
+	public static final int caps_Entity			= 0x0020;
+	public static final int caps_health			= 0x0021;
 	// littleMaid
 	public static final int caps_isRendering	= 0x0100;
 	public static final int caps_isBloodsuck	= 0x0101;
@@ -80,16 +83,6 @@ public interface MMM_IModelCaps {
 	 * @return
 	 */
 	public Object getCapsValue(int pIndex, Object ... pArg);
-	@Deprecated
-	public Object getCapsValue(String pCapsName, Object ... pArg);
-	@Deprecated
-	public int getCapsValueInt(int pIndex, Object ... pArg);
-	@Deprecated
-	public float getCapsValueFloat(int pIndex, Object ... pArg);
-	@Deprecated
-	public double getCapsValueDouble(int pIndex, Object ... pArg);
-	@Deprecated
-	public boolean getCapsValueBoolean(int pIndex, Object ... pArg);
 
 	/**
 	 * 機能番号に値を設定する。
@@ -98,7 +91,5 @@ public interface MMM_IModelCaps {
 	 * @return
 	 */
 	public boolean setCapsValue(int pIndex, Object ... pArg);
-	@Deprecated
-	public boolean setCapsValue(String pCapsName, Object ... pArg);
 
 }

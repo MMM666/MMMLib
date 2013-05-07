@@ -1,8 +1,8 @@
 package net.minecraft.src;
 
+import static net.minecraft.src.MMM_IModelCaps.*;
+import java.lang.reflect.Constructor;
 import java.nio.FloatBuffer;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
@@ -71,7 +71,7 @@ public class MMM_ModelRenderer extends ModelRenderer {
 
 	public MMM_ModelRenderer(ModelBase pModelBase, int px, int py) {
 		this(pModelBase, null);
-		setTextureOffset(px, py);
+		setTextureOffsetMM(px, py);
 	}
 
 	public MMM_ModelRenderer(ModelBase pModelBase) {
@@ -93,40 +93,160 @@ public class MMM_ModelRenderer extends ModelRenderer {
 	}
 
 
+	public void addChildMM(MMM_ModelRenderer pModelRenderer) {
+		addChild(pModelRenderer);
+	}
 	@Override
-	public MMM_ModelRenderer setTextureOffset(int i, int j) {
-		super.setTextureOffset(i, j);
-		textureOffsetX = i;
-		textureOffsetY = j;
-		return this;
+	@Deprecated
+	public void addChild(ModelRenderer par1ModelRenderer) {
+		super.addChild(par1ModelRenderer);
 	}
 
-	public MMM_ModelRenderer addPlate(String s, float f, float f1, float f2, int i, int j, int k) {
-		s = (new StringBuilder()).append(boxName).append(".").append(s).toString();
-		TextureOffset textureoffset = baseModel.getTextureOffset(s);
-		setTextureOffset(textureoffset.textureOffsetX, textureoffset.textureOffsetY);
-		cubeList.add((new MMM_ModelPlate(this, textureOffsetX, textureOffsetY,
-				f, f1, f2, i, j, k, 0.0F)).func_78244_a(s));
+	public MMM_ModelRenderer setTextureOffsetMM(int pOffsetX, int pOffsetY) {
+		setTextureOffset(pOffsetX, pOffsetY);
+		textureOffsetX = pOffsetX;
+		textureOffsetY = pOffsetY;
 		return this;
 	}
-
-	public MMM_ModelRenderer addPlate(float f, float f1, float f2, int i, int j, int k) {
-		cubeList.add(new MMM_ModelPlate(this, textureOffsetX, textureOffsetY,
-				f, f1, f2, i, j, k, 0.0F));
-		return this;
+	@Override
+	@Deprecated
+	public ModelRenderer setTextureOffset(int par1, int par2) {
+		return super.setTextureOffset(par1, par2);
 	}
 
-	public MMM_ModelRenderer addPlate(float f, float f1, float f2, int i, int j, int k, float f3) {
-		cubeList.add(new MMM_ModelPlate(this, textureOffsetX, textureOffsetY,
-				f, f1, f2, i, j, k, f3));
+	public MMM_ModelRenderer setTextureSizeMM(int pWidth, int pHeight) {
+		setTextureSize(pWidth, pHeight);
 		return this;
+	}
+	@Override
+	@Deprecated
+	public ModelRenderer setTextureSize(int par1, int par2) {
+		return super.setTextureSize(par1, par2);
+	}
+
+	public MMM_ModelRenderer setRotationPointMM(float f, float f1, float f2) {
+		setRotationPoint(f, f1, f2);
+		return this;
+	}
+	@Override
+	@Deprecated
+	public void setRotationPoint(float par1, float par2, float par3) {
+		super.setRotationPoint(par1, par2, par3);
 	}
 
 	/**
 	 * ModelBox継承の独自オブジェクト追加用
 	 */
-	public MMM_ModelRenderer addCubeList(ModelBox pModelBox) {
-		cubeList.add(pModelBox);
+	public MMM_ModelRenderer addCubeList(MMM_ModelBoxBase pModelBoxBase) {
+		cubeList.add(pModelBoxBase);
+		return this;
+	}
+
+	protected MMM_ModelBoxBase getModelBoxBase(Class pModelBoxBase, Object ... pArg) {
+		try {
+			Constructor<MMM_ModelBoxBase> lconstructor =
+					pModelBoxBase.getConstructor(MMM_ModelRenderer.class, Object[].class);
+			return lconstructor.newInstance(this, pArg);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	protected Object[] getArg(Object ... pArg) {
+		Object lobject[] = new Object[pArg.length + 2];
+		lobject[0] = textureOffsetX;
+		lobject[1] = textureOffsetY;
+		for (int li = 0; li < pArg.length; li++) {
+			lobject[2 + li] = pArg[li];
+		}
+		return lobject;
+	}
+
+	public MMM_ModelRenderer addParts(Class pModelBoxBase, String pName, Object ... pArg) {
+		pName = (new StringBuilder()).append(boxName).append(".").append(pName).toString();
+		TextureOffset ltextureoffset = baseModel.getTextureOffset(pName);
+		setTextureOffset(ltextureoffset.textureOffsetX, ltextureoffset.textureOffsetY);
+		addCubeList(getModelBoxBase(pModelBoxBase, getArg(pArg)).setBoxNameMM(pName));
+		return this;
+	}
+
+	public MMM_ModelRenderer addParts(Class pModelBoxBase, Object ... pArg) {
+		addCubeList(getModelBoxBase(pModelBoxBase, getArg(pArg)));
+		return this;
+	}
+
+	/**
+	 * 自分でテクスチャの座標を指定する時に使います。
+	 * コンストラクタへそのまま値を渡します。
+	 */
+	public MMM_ModelRenderer addPartsTexture(Class pModelBoxBase, String pName, Object ... pArg) {
+		pName = (new StringBuilder()).append(boxName).append(".").append(pName).toString();
+		addCubeList(getModelBoxBase(pModelBoxBase, pArg).setBoxNameMM(pName));
+		return this;
+	}
+
+	/**
+	 * 自分でテクスチャの座標を指定する時に使います。
+	 * コンストラクタへそのまま値を渡します。
+	 */
+	public MMM_ModelRenderer addPartsTexture(Class pModelBoxBase, Object ... pArg) {
+		addCubeList(getModelBoxBase(pModelBoxBase, pArg));
+		return this;
+	}
+
+
+	public MMM_ModelRenderer addBoxMM(float pX, float pY, float pZ,
+			int pWidth, int pHeight, int pDepth, float pSizeAdjust) {
+		addParts(MMM_ModelBox.class, pX, pY, pZ, pWidth, pHeight, pDepth, pSizeAdjust);
+		return this;
+	}
+	@Override
+	@Deprecated
+	public ModelRenderer addBox(float par1, float par2, float par3, int par4,
+			int par5, int par6) {
+		return super.addBox(par1, par2, par3, par4, par5, par6);
+	}
+
+	public MMM_ModelRenderer addBoxMM(float pX, float pY, float pZ,
+			int pWidth, int pHeight, int pDepth) {
+		addParts(MMM_ModelBox.class, pX, pY, pZ, pWidth, pHeight, pDepth, 0.0F);
+		return this;
+	}
+	@Override
+	@Deprecated
+	public void addBox(float par1, float par2, float par3, int par4, int par5,
+			int par6, float par7) {
+		super.addBox(par1, par2, par3, par4, par5, par6, par7);
+	}
+
+	public MMM_ModelRenderer addBoxMM(String pName, float pX, float pY, float pZ,
+			int pWidth, int pHeight, int pDepth) {
+		addParts(MMM_ModelBox.class, pName, pX, pY, pZ, pWidth, pHeight, pDepth, 0.0F);
+		return this;
+	}
+	@Override
+	@Deprecated
+	public ModelRenderer addBox(String par1Str, float par2, float par3,
+			float par4, int par5, int par6, int par7) {
+		return super.addBox(par1Str, par2, par3, par4, par5, par6, par7);
+	}
+
+	public MMM_ModelRenderer addPlate(float pX, float pY, float pZ,
+			int pWidth, int pHeight, int pFacePlane) {
+		addParts(MMM_ModelPlate.class, pX, pY, pZ, pWidth, pHeight, pFacePlane, 0.0F);
+		return this;
+	}
+
+	public MMM_ModelRenderer addPlate(float pX, float pY, float pZ,
+			int pWidth, int pHeight, int pFacePlane, float pSizeAdjust) {
+		addParts(MMM_ModelPlate.class, pX, pY, pZ, pWidth, pHeight, pFacePlane, pSizeAdjust);
+		return this;
+	}
+
+	public MMM_ModelRenderer addPlate(String pName, float pX, float pY, float pZ,
+			int pWidth, int pHeight, int pFacePlane) {
+		addParts(MMM_ModelPlate.class, pName, pX, pY, pZ, pWidth, pHeight, pFacePlane, 0.0F);
 		return this;
 	}
 
@@ -142,6 +262,24 @@ public class MMM_ModelRenderer extends ModelRenderer {
 	public MMM_ModelRenderer setItemStack(ItemStack pItemStack) {
 		itemstack = pItemStack;
 		return this;
+	}
+
+	// TODO:このあたりは要修正
+	public boolean renderItems(MMM_ModelMultiBase pModelMulti, boolean pRealBlock, int pIndex) {
+		ItemStack[] litemstacks = (ItemStack[])MMM_ModelCapsHelper.getCapsValue(pModelMulti.entityCaps, caps_Items);
+		if (litemstacks == null) return false;
+		EnumAction[] lactions = (EnumAction[])MMM_ModelCapsHelper.getCapsValue(pModelMulti.entityCaps, caps_Actions);
+		EntityLiving lentity = (EntityLiving)pModelMulti.entityCaps.getCapsValue(caps_Entity);
+		
+		renderItems(lentity, pModelMulti.render, pRealBlock, lactions[pIndex], litemstacks[pIndex]);
+		return true;
+	}
+
+	public void renderItemsHead(MMM_ModelMultiBase pModelMulti) {
+		ItemStack lis = (ItemStack)pModelMulti.entityCaps.getCapsValue(caps_HeadMount);
+		EntityLiving lentity = (EntityLiving)pModelMulti.entityCaps.getCapsValue(caps_Entity);
+		
+		renderItems(lentity, pModelMulti.render, true, null, lis);
 	}
 
 	public void renderItems(EntityLiving pEntityLiving, Render pRender,
@@ -326,10 +464,10 @@ public class MMM_ModelRenderer extends ModelRenderer {
 		}
 	}
 
-	protected void renderObject(float par1, EntityLiving pEntityLiving) {
+	protected void renderObject(float par1) {
 		// レンダリング、あと子供も
 		GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, matrix);
-		if (!(baseModel instanceof MMM_ModelBiped) || ((MMM_ModelBiped) baseModel).isRendering) {
+		if (!(baseModel instanceof MMM_ModelMultiBase) || ((MMM_ModelMultiBase)baseModel).isRendering) {
 			GL11.glPushMatrix();
 			GL11.glScalef(scaleX, scaleY, scaleZ);
 			GL11.glCallList(displayList);
@@ -338,18 +476,19 @@ public class MMM_ModelRenderer extends ModelRenderer {
 		
 		if (childModels != null) {
 			for (int li = 0; li < childModels.size(); li++) {
-				((MMM_ModelRenderer) childModels.get(li)).render(par1, pEntityLiving);
+				((MMM_ModelRenderer) childModels.get(li)).renderMM(par1);
 			}
 		}
 	}
 
 	@Override
+	@Deprecated
 	public void render(float par1) {
-		render(par1, null);
+		renderMM(par1);
 	}
 
 	// TODO:アップデート時はここをチェックすること
-	public void render(float par1, EntityLiving pEntityLiving) {
+	public void renderMM(float par1) {
 		if (isHidden) {
 			return;
 		}
@@ -367,17 +506,17 @@ public class MMM_ModelRenderer extends ModelRenderer {
 			GL11.glTranslatef(rotationPointX * par1, rotationPointY * par1, rotationPointZ * par1);
 			
 			setRotation();
-			renderObject(par1, pEntityLiving);
+			renderObject(par1);
 			
 			GL11.glPopMatrix();
 		} else if (rotationPointX != 0.0F || rotationPointY != 0.0F || rotationPointZ != 0.0F) {
 			GL11.glTranslatef(rotationPointX * par1, rotationPointY * par1, rotationPointZ * par1);
 
-			renderObject(par1, pEntityLiving);
+			renderObject(par1);
 
 			GL11.glTranslatef(-rotationPointX * par1, -rotationPointY * par1, -rotationPointZ * par1);
 		} else {
-			renderObject(par1, pEntityLiving);
+			renderObject(par1);
 		}
 	}
 
@@ -483,31 +622,6 @@ public class MMM_ModelRenderer extends ModelRenderer {
 		if (isInvertX) {
 			GL11.glScalef(-1F, 1F, 1F);
 		}
-		return this;
-	}
-
-	@Override
-	public MMM_ModelRenderer addBox(String par1Str, float par2, float par3,
-			float par4, int par5, int par6, int par7) {
-		super.addBox(par1Str, par2, par3, par4, par5, par6, par7);
-		return this;
-	}
-
-	@Override
-	public MMM_ModelRenderer addBox(float par1, float par2, float par3,
-			int par4, int par5, int par6) {
-		super.addBox(par1, par2, par3, par4, par5, par6);
-		return this;
-	}
-
-	@Override
-	public void addBox(float par1, float par2, float par3, int par4, int par5,
-			int par6, float par7) {
-		super.addBox(par1, par2, par3, par4, par5, par6, par7);
-	}
-
-	public MMM_ModelRenderer setRotationPointLM(float f, float f1, float f2) {
-		setRotationPoint(f, f1, f2);
 		return this;
 	}
 

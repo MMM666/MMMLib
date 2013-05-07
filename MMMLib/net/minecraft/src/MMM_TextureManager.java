@@ -52,9 +52,9 @@ public class MMM_TextureManager {
 	public static final int tx_armor1		= 0x40; //64;
 	public static final int tx_armor2		= 0x50; //80;
 	public static List<MMM_TextureBox> textures = new ArrayList<MMM_TextureBox>();
-	private static Map<String, MMM_ModelBiped[]> modelMap = new TreeMap<String, MMM_ModelBiped[]>();
+	private static Map<String, MMM_ModelMultiBase[]> modelMap = new TreeMap<String, MMM_ModelMultiBase[]>();
 	public static String[] armorFilenamePrefix;
-	public static MMM_ModelBiped[] defaultModel;
+	public static MMM_ModelMultiBase[] defaultModel;
 	/**
 	 * サーバー・クライアント間でテクスチャパックの名称リストの同期を取るのに使う。
 	 * うまいこと作れば、クライアント側にだけテクスチャパックを入れれば、サーバには不要になるはず。
@@ -83,8 +83,10 @@ public class MMM_TextureManager {
 
 
 	public static void init() {
+		MMM_FileManager.getModFile("MMMLib", "MMMLib");
 		MMM_FileManager.getModFile("littleMaidMob", "littleMaidMob");
 		addSearch("littleMaidMob", "/mob/littleMaid/", "ModelLittleMaid_");
+//		addSearch("littleMaidMob", "/mob/littleMaid/", "ModelLittleMaid_");
 	}
 
 	public static String[] getSearch(String pName) {
@@ -333,12 +335,12 @@ public class MMM_TextureManager {
 				} else {
 					lclass = Class.forName(cn);
 				}
-				if (!(MMM_ModelBiped.class).isAssignableFrom(lclass) || Modifier.isAbstract(lclass.getModifiers())) {
+				if (!(MMM_ModelMultiBase.class).isAssignableFrom(lclass) || Modifier.isAbstract(lclass.getModifiers())) {
 					mod_MMM_MMMLib.Debug("getModelClass-fail.");
 					return;
 				}
-				MMM_ModelBiped mlm[] = new MMM_ModelBiped[3];
-				Constructor<MMM_ModelBiped> cm = lclass.getConstructor(float.class);
+				MMM_ModelMultiBase mlm[] = new MMM_ModelMultiBase[3];
+				Constructor<MMM_ModelMultiBase> cm = lclass.getConstructor(float.class);
 				mlm[0] = cm.newInstance(0.0F);
 				float[] lsize = mlm[0].getArmorModelsSize();
 				mlm[1] = cm.newInstance(lsize[0]);
@@ -463,7 +465,8 @@ public class MMM_TextureManager {
 			
 			for (File t : file.listFiles()) {
 				if (t.isDirectory() && t.getName().equalsIgnoreCase("mob")) {
-					if (addTexturesDir(file, pSearch)) {
+//					if (addTexturesDir(file, pSearch)) {
+					if (addTexturesDir(t, pSearch)) {
 						mod_MMM_MMMLib.Debug("getTexture-append-jar-done.");
 					} else {
 						mod_MMM_MMMLib.Debug("getTexture-append-jar-fail.");

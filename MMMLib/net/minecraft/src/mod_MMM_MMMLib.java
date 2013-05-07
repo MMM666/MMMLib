@@ -9,7 +9,7 @@ import net.minecraft.client.Minecraft;
 
 public class mod_MMM_MMMLib extends BaseMod {
 
-	public static final String Revision = "5";
+	public static final String Revision = "1";
 	
 	public static final int MMM_Server_GetTextureIndex	= 0x00;
 	public static final int MMM_Server_SetTextureIndex	= 0x02;
@@ -43,7 +43,7 @@ public class mod_MMM_MMMLib extends BaseMod {
 
 	@Override
 	public String getVersion() {
-		return "1.5.1-" + Revision;
+		return "1.5.2-" + Revision;
 	}
 	
 	@Override
@@ -70,6 +70,9 @@ public class mod_MMM_MMMLib extends BaseMod {
 
 	@Override
 	public void modsLoaded() {
+		// バイオームに設定されたスポーン情報を置き換え。
+		MMM_Helper.replaceBaiomeSpawn();
+		
 		// ロード
 		if (MMM_Helper.isClient) {
 			// テクスチャパックの構築
