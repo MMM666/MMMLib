@@ -149,11 +149,11 @@ public class MMM_ModelDuo extends ModelBase implements MMM_IModelCaps {
 		if (capsLink != null) {
 			capsLink.setCapsValue(pIndex, pArg);
 		}
-		if (modelArmorInner != null) {
-			return modelArmorInner.setCapsValue(pIndex, pArg);
-		}
 		if (modelArmorOuter != null) {
 			modelArmorOuter.setCapsValue(pIndex, pArg);
+		}
+		if (modelArmorInner != null) {
+			return modelArmorInner.setCapsValue(pIndex, pArg);
 		}
 		return false;
 	}

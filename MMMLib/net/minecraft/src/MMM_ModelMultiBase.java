@@ -266,7 +266,7 @@ public abstract class MMM_ModelMultiBase
 	/**
 	 * モデルの初期化コード
 	 */
-	public abstract void initModel(float psize, float pyoffset);
+	public void initModel(float psize, float pyoffset) {};
 
 	/**
 	 * アーマーモデルのサイズを返す。

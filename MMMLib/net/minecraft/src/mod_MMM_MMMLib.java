@@ -9,7 +9,7 @@ import net.minecraft.client.Minecraft;
 
 public class mod_MMM_MMMLib extends BaseMod {
 
-	public static final String Revision = "1";
+	public static final String Revision = "2";
 	
 	public static final int MMM_Server_GetTextureIndex	= 0x00;
 	public static final int MMM_Server_SetTextureIndex	= 0x02;

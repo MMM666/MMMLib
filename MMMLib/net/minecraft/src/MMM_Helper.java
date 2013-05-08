@@ -47,7 +47,14 @@ public class MMM_Helper {
 		}
 		
 	}
-	
+
+	/**
+	 * 現在の実行環境がローカルかどうかを判定する。
+	 */
+	public static boolean isLocalPlay() {
+		return isClient && mc.isIntegratedServerRunning();
+	}
+
 	/**
 	 * マルチ対応用。
 	 * ItemStackに情報更新を行うと、サーバー側との差異からSlotのアップデートが行われる。

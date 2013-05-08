@@ -75,8 +75,8 @@ public class MMM_ModelLittleMaid extends MMM_ModelMultiBase {
 		
 		
 		bipedHead = new MMM_ModelRenderer(this, 0, 0);
-		bipedHead.setTextureOffsetMM(0, 0).addBoxMM(-4F, -8F, -4F, 8, 8, 8, psize);			// Head
-		bipedHead.setTextureOffsetMM(24, 0).addBoxMM(-4F, 0F, 1F, 8, 4, 3, psize);			// Hire
+		bipedHead.setTextureOffsetMM( 0,  0).addBoxMM(-4F, -8F, -4F, 8, 8, 8, psize);			// Head
+		bipedHead.setTextureOffsetMM(24,  0).addBoxMM(-4F, 0F, 1F, 8, 4, 3, psize);			// Hire
 		bipedHead.setTextureOffsetMM(24, 18).addBoxMM(-5F, -7F, 0.2F, 1, 3, 3, psize);		// ChignonR
 		bipedHead.setTextureOffsetMM(24, 18).addBoxMM(4F, -7F, 0.2F, 1, 3, 3, psize);		// ChignonL
 		bipedHead.setTextureOffsetMM(52, 10).addBoxMM(-2F, -7.2F, 4F, 4, 4, 2, psize);		// ChignonB
