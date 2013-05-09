@@ -33,7 +33,7 @@ public class MMM_ModelRenderer extends ModelRenderer {
 	protected int textureOffsetY;
 	protected boolean compiled;
 	protected int displayList;
-	protected ModelBase baseModel;
+	protected MMM_ModelBase baseModel;
 
 	public int rotatePriority;
 	public ItemStack itemstack;
@@ -49,7 +49,7 @@ public class MMM_ModelRenderer extends ModelRenderer {
 
 
 
-	public MMM_ModelRenderer(ModelBase pModelBase, String pName) {
+	public MMM_ModelRenderer(MMM_ModelBase pModelBase, String pName) {
 		super(pModelBase, pName);
 		
 		compiled = false;
@@ -69,23 +69,23 @@ public class MMM_ModelRenderer extends ModelRenderer {
 		pearent = null;
 	}
 
-	public MMM_ModelRenderer(ModelBase pModelBase, int px, int py) {
+	public MMM_ModelRenderer(MMM_ModelBase pModelBase, int px, int py) {
 		this(pModelBase, null);
 		setTextureOffsetMM(px, py);
 	}
 
-	public MMM_ModelRenderer(ModelBase pModelBase) {
+	public MMM_ModelRenderer(MMM_ModelBase pModelBase) {
 		this(pModelBase, null);
 	}
 
-	public MMM_ModelRenderer(ModelBase pModelBase, int px, int py, float pScaleX, float pScaleY, float pScaleZ) {
+	public MMM_ModelRenderer(MMM_ModelBase pModelBase, int px, int py, float pScaleX, float pScaleY, float pScaleZ) {
 		this(pModelBase, px, py);
 		this.scaleX = pScaleX;
 		this.scaleY = pScaleY;
 		this.scaleZ = pScaleZ;
 	}
 
-	public MMM_ModelRenderer(ModelBase pModelBase, float pScaleX, float pScaleY, float pScaleZ) {
+	public MMM_ModelRenderer(MMM_ModelBase pModelBase, float pScaleX, float pScaleY, float pScaleZ) {
 		this(pModelBase);
 		this.scaleX = pScaleX;
 		this.scaleY = pScaleY;
@@ -94,16 +94,16 @@ public class MMM_ModelRenderer extends ModelRenderer {
 
 
 	public void addChildMM(MMM_ModelRenderer pModelRenderer) {
-		addChild(pModelRenderer);
+		super.addChild(pModelRenderer);
 	}
 	@Override
 	@Deprecated
 	public void addChild(ModelRenderer par1ModelRenderer) {
-		super.addChild(par1ModelRenderer);
+		addChildMM((MMM_ModelRenderer)par1ModelRenderer);
 	}
 
 	public MMM_ModelRenderer setTextureOffsetMM(int pOffsetX, int pOffsetY) {
-		setTextureOffset(pOffsetX, pOffsetY);
+		super.setTextureOffset(pOffsetX, pOffsetY);
 		textureOffsetX = pOffsetX;
 		textureOffsetY = pOffsetY;
 		return this;
@@ -111,27 +111,27 @@ public class MMM_ModelRenderer extends ModelRenderer {
 	@Override
 	@Deprecated
 	public ModelRenderer setTextureOffset(int par1, int par2) {
-		return super.setTextureOffset(par1, par2);
+		return setTextureOffsetMM(par1, par2);
 	}
 
 	public MMM_ModelRenderer setTextureSizeMM(int pWidth, int pHeight) {
-		setTextureSize(pWidth, pHeight);
+		super.setTextureSize(pWidth, pHeight);
 		return this;
 	}
 	@Override
 	@Deprecated
 	public ModelRenderer setTextureSize(int par1, int par2) {
-		return super.setTextureSize(par1, par2);
+		return setTextureSizeMM(par1, par2);
 	}
 
 	public MMM_ModelRenderer setRotationPointMM(float f, float f1, float f2) {
-		setRotationPoint(f, f1, f2);
+		super.setRotationPoint(f, f1, f2);
 		return this;
 	}
 	@Override
 	@Deprecated
 	public void setRotationPoint(float par1, float par2, float par3) {
-		super.setRotationPoint(par1, par2, par3);
+		setRotationPointMM(par1, par2, par3);
 	}
 
 	/**
@@ -203,9 +203,9 @@ public class MMM_ModelRenderer extends ModelRenderer {
 	}
 	@Override
 	@Deprecated
-	public ModelRenderer addBox(float par1, float par2, float par3, int par4,
-			int par5, int par6) {
-		return super.addBox(par1, par2, par3, par4, par5, par6);
+	public ModelRenderer addBox(float par1, float par2, float par3,
+			int par4, int par5, int par6) {
+		return addBoxMM(par1, par2, par3, par4, par5, par6);
 	}
 
 	public MMM_ModelRenderer addBoxMM(float pX, float pY, float pZ,
@@ -215,9 +215,9 @@ public class MMM_ModelRenderer extends ModelRenderer {
 	}
 	@Override
 	@Deprecated
-	public void addBox(float par1, float par2, float par3, int par4, int par5,
-			int par6, float par7) {
-		super.addBox(par1, par2, par3, par4, par5, par6, par7);
+	public void addBox(float par1, float par2, float par3,
+			int par4, int par5, int par6, float par7) {
+		addBoxMM(par1, par2, par3, par4, par5, par6, par7);
 	}
 
 	public MMM_ModelRenderer addBoxMM(String pName, float pX, float pY, float pZ,
@@ -227,9 +227,9 @@ public class MMM_ModelRenderer extends ModelRenderer {
 	}
 	@Override
 	@Deprecated
-	public ModelRenderer addBox(String par1Str, float par2, float par3,
-			float par4, int par5, int par6, int par7) {
-		return super.addBox(par1Str, par2, par3, par4, par5, par6, par7);
+	public ModelRenderer addBox(String par1Str, float par2, float par3, float par4,
+			int par5, int par6, int par7) {
+		return addBoxMM(par1Str, par2, par3, par4, par5, par6, par7);
 	}
 
 	public MMM_ModelRenderer addPlate(float pX, float pY, float pZ,
@@ -259,6 +259,7 @@ public class MMM_ModelRenderer extends ModelRenderer {
 		childModels.clear();
 	}
 
+	@Deprecated
 	public MMM_ModelRenderer setItemStack(ItemStack pItemStack) {
 		itemstack = pItemStack;
 		return this;
@@ -282,13 +283,13 @@ public class MMM_ModelRenderer extends ModelRenderer {
 		renderItems(lentity, pModelMulti.render, true, null, lis);
 	}
 
-	public void renderItems(EntityLiving pEntityLiving, Render pRender,
+	protected void renderItems(EntityLiving pEntityLiving, Render pRender,
 			boolean pRealBlock, EnumAction pAction, ItemStack pItemStack) {
 		itemstack = pItemStack;
 		renderItems(pEntityLiving, pRender, pRealBlock, pAction);
 	}
 
-	public void renderItems(EntityLiving pEntityLiving, Render pRender, boolean pRealBlock, EnumAction pAction) {
+	protected void renderItems(EntityLiving pEntityLiving, Render pRender, boolean pRealBlock, EnumAction pAction) {
 		if (itemstack == null) return;
 		
 		// アイテムのレンダリング
@@ -387,11 +388,18 @@ public class MMM_ModelRenderer extends ModelRenderer {
 		GL11.glPopMatrix();
 	}
 
+	/**
+	 *  回転変換を行う順序を指定。
+	 * @param pValue
+	 * Rot???を指定する
+	 */
 	public void setRotatePriority(int pValue) {
-		// 回転変換を行う順序、rot???を指定する
 		rotatePriority = pValue;
 	}
 
+	/**
+	 * 内部実行用、座標変換部
+	 */
 	protected void setRotation() {
 		// 変換順位の設定
 		switch (rotatePriority) {
@@ -464,6 +472,9 @@ public class MMM_ModelRenderer extends ModelRenderer {
 		}
 	}
 
+	/**
+	 * 内部実行用、レンダリング部分。
+	 */
 	protected void renderObject(float par1) {
 		// レンダリング、あと子供も
 		GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, matrix);
@@ -481,18 +492,12 @@ public class MMM_ModelRenderer extends ModelRenderer {
 		}
 	}
 
-	@Override
-	@Deprecated
-	public void render(float par1) {
-		renderMM(par1);
-	}
-
 	// TODO:アップデート時はここをチェックすること
 	public void renderMM(float par1) {
 		if (isHidden) {
 			return;
 		}
-
+		
 		if (!showModel) {
 			return;
 		}
@@ -511,41 +516,49 @@ public class MMM_ModelRenderer extends ModelRenderer {
 			GL11.glPopMatrix();
 		} else if (rotationPointX != 0.0F || rotationPointY != 0.0F || rotationPointZ != 0.0F) {
 			GL11.glTranslatef(rotationPointX * par1, rotationPointY * par1, rotationPointZ * par1);
-
+			
 			renderObject(par1);
-
+			
 			GL11.glTranslatef(-rotationPointX * par1, -rotationPointY * par1, -rotationPointZ * par1);
 		} else {
 			renderObject(par1);
 		}
 	}
-
 	@Override
-	public void renderWithRotation(float par1) {
+	@Deprecated
+	public void render(float par1) {
+		renderMM(par1);
+	}
+
+	public void renderWithRotationMM(float par1) {
 		if (isHidden) {
 			return;
 		}
-
+		
 		if (!showModel) {
 			return;
 		}
-
+		
 		if (!compiled) {
 			compileDisplayList(par1);
 		}
-
+		
 		GL11.glPushMatrix();
 		GL11.glTranslatef(rotationPointX * par1, rotationPointY * par1,
 				rotationPointZ * par1);
-
+		
 		setRotation();
-
+		
 		GL11.glCallList(displayList);
 		GL11.glPopMatrix();
 	}
-
 	@Override
-	public void postRender(float par1) {
+	@Deprecated
+	public void renderWithRotation(float par1) {
+		renderWithRotationMM(par1);
+	}
+
+	public void postRenderMM(float par1) {
 		if (isHidden) {
 			return;
 		}
@@ -570,33 +583,43 @@ public class MMM_ModelRenderer extends ModelRenderer {
 			GL11.glTranslatef(rotationPointX * par1, rotationPointY * par1, rotationPointZ * par1);
 		}
 	}
+	@Override
+	@Deprecated
+	public void postRender(float par1) {
+		postRenderMM(par1);
+	}
 
-	public void postRenderAll(float par1, EntityLiving pEntityLiving) {
+	/**
+	 * 自分以下のパーツの座標変換を行う。
+	 * レンダリングはしない。
+	 * 主にマトリクスを獲得するのに使う。
+	 */
+	public void postRenderAll(float par1) {
 		if (isHidden) {
 			return;
 		}
-
+		
 		if (!showModel) {
 			return;
 		}
-
+		
 		if (!compiled) {
 			compileDisplayList(par1);
 		}
-
+		
 		if (rotateAngleX != 0.0F || rotateAngleY != 0.0F || rotateAngleZ != 0.0F) {
 			GL11.glTranslatef(rotationPointX * par1, rotationPointY * par1, rotationPointZ * par1);
-
+			
 			setRotation();
 		} else if (rotationPointX != 0.0F || rotationPointY != 0.0F || rotationPointZ != 0.0F) {
 			GL11.glTranslatef(rotationPointX * par1, rotationPointY * par1, rotationPointZ * par1);
 		}
 		// ポストレンダリング、あと子供も
 		GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, matrix);
-
+		
 		if (childModels != null) {
 			for (int i = 0; i < childModels.size(); i++) {
-				((MMM_ModelRenderer) childModels.get(i)).postRenderAll(par1, pEntityLiving);
+				((MMM_ModelRenderer) childModels.get(i)).postRenderAll(par1);
 			}
 		}
 	}
@@ -625,6 +648,9 @@ public class MMM_ModelRenderer extends ModelRenderer {
 		return this;
 	}
 
+
+	// ゲッター、セッター
+
 	public boolean getMirror() {
 		return mirror;
 	}
@@ -641,7 +667,9 @@ public class MMM_ModelRenderer extends ModelRenderer {
 		showModel = flag;
 	}
 
+
 	// Deg付きは角度指定が度数法
+
 	public float getRotateAngleX() {
 		return rotateAngleX;
 	}
@@ -656,6 +684,14 @@ public class MMM_ModelRenderer extends ModelRenderer {
 
 	public float setRotateAngleDegX(float value) {
 		return rotateAngleX = value * degFactor;
+	}
+
+	public float addRotateAngleX(float value) {
+		return rotateAngleX += value;
+	}
+
+	public float addRotateAngleDegX(float value) {
+		return rotateAngleX += value * degFactor;
 	}
 
 	public float getRotateAngleY() {
@@ -674,6 +710,14 @@ public class MMM_ModelRenderer extends ModelRenderer {
 		return rotateAngleY = value * degFactor;
 	}
 
+	public float addRotateAngleY(float value) {
+		return rotateAngleY += value;
+	}
+
+	public float addRotateAngleDegY(float value) {
+		return rotateAngleY += value * degFactor;
+	}
+
 	public float getRotateAngleZ() {
 		return rotateAngleZ;
 	}
@@ -688,6 +732,14 @@ public class MMM_ModelRenderer extends ModelRenderer {
 
 	public float setRotateAngleDegZ(float value) {
 		return rotateAngleZ = value * degFactor;
+	}
+
+	public float addRotateAngleZ(float value) {
+		return rotateAngleZ += value;
+	}
+
+	public float addRotateAngleDegZ(float value) {
+		return rotateAngleZ += value * degFactor;
 	}
 
 	public MMM_ModelRenderer setRotateAngle(float x, float y, float z) {
@@ -709,8 +761,11 @@ public class MMM_ModelRenderer extends ModelRenderer {
 	}
 
 	public float setRotationPointX(float value) {
-		rotationPointX = value;
-		return rotationPointX;
+		return rotationPointX = value;
+	}
+
+	public float addRotationPointX(float value) {
+		return rotationPointX += value;
 	}
 
 	public float getRotationPointY() {
@@ -718,8 +773,11 @@ public class MMM_ModelRenderer extends ModelRenderer {
 	}
 
 	public float setRotationPointY(float value) {
-		rotationPointY = value;
-		return rotationPointY;
+		return rotationPointY = value;
+	}
+
+	public float addRotationPointY(float value) {
+		return rotationPointY += value;
 	}
 
 	public float getRotationPointZ() {
@@ -727,8 +785,11 @@ public class MMM_ModelRenderer extends ModelRenderer {
 	}
 
 	public float setRotationPointZ(float value) {
-		rotationPointZ = value;
-		return rotationPointZ;
+		return rotationPointZ = value;
+	}
+
+	public float addRotationPointZ(float value) {
+		return rotationPointZ += value;
 	}
 
 	public MMM_ModelRenderer setScale(float pX, float pY, float pZ) {

@@ -128,6 +128,11 @@ public class MMM_ModelLittleMaid_Archetype extends MMM_ModelLittleMaid {
 
 	}
 
+	@Override
+	public String getUsingTexture() {
+		return "default";
+	}
+
 	public float getHeight() {
 		// êgí∑
 		return 1.35F;

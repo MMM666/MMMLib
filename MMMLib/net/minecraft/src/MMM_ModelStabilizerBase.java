@@ -1,6 +1,6 @@
 package net.minecraft.src;
 
-public abstract class MMM_ModelStabilizerBase extends ModelBase {
+public abstract class MMM_ModelStabilizerBase extends MMM_ModelBase {
 
 	public MMM_ModelStabilizerBase() {
 	}

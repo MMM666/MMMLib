@@ -13,7 +13,7 @@ import org.lwjgl.opengl.GL11;
  *
  */
 public abstract class MMM_ModelMultiBase
-	extends ModelBase implements MMM_IModelCaps {
+	extends MMM_ModelBase implements MMM_IModelCaps {
 
 	public MMM_ModelRenderer mainFrame;
 	
@@ -102,12 +102,6 @@ public abstract class MMM_ModelMultiBase
 
 	/**
 	 * mainFrameに全てぶら下がっているならば標準で描画する。
-	 * @param par2
-	 * @param par3
-	 * @param ticksExisted
-	 * @param pheadYaw
-	 * @param pheadPitch
-	 * @param par7
 	 */
 	public void renderMM(float par2, float par3, float ticksExisted,
 			float pheadYaw, float pheadPitch, float par7) {
@@ -121,53 +115,6 @@ public abstract class MMM_ModelMultiBase
 			float par5, float par6, float par7) {
 		renderMM(par2, par3, par4, par5, par6, par7);
 	}
-
-	/**
-	 * 通常のレンダリング前に呼ばれる。
-	 * @return falseを返すと通常のレンダリングをスキップする。
-	 */
-	public boolean preRender(float par2, float par3,
-			float par4, float par5, float par6, float par7) {
-		return true;
-	}
-
-	/**
-	 * 通常のレンダリング後に呼ぶ。 基本的に装飾品などの自律運動しないパーツの描画用。
-	 */
-	public void renderExtention(float par2, float par3,
-			float par4, float par5, float par6, float par7) {
-	}
-
-	/**
-	 * スタビライザーの描画。 自動では呼ばれないのでrender内で呼ぶ必要があります。
-	 */
-	protected void renderStabilizer(float par2, float par3,
-			float ticksExisted, float pheadYaw, float pheadPitch, float par7) {
-		// スタビライザーの描画、doRenderの方がいいか？
-		if (stabiliser == null || stabiliser.isEmpty() || render == null)
-			return;
-
-		GL11.glPushMatrix();
-		for (Entry<String, MMM_EquippedStabilizer> le : stabiliser.entrySet()) {
-			MMM_EquippedStabilizer les = le.getValue();
-			if (les != null && les.equipPoint != null) {
-				MMM_ModelStabilizerBase lsb = les.stabilizer;
-				if (lsb.isLoadAnotherTexture()) {
-					render.loadTexture(lsb.getTexture());
-				}
-				les.equipPoint.loadMatrix();
-				lsb.render(this, null, par2, par3, ticksExisted, pheadYaw, pheadPitch, par7);
-			}
-		}
-		GL11.glPopMatrix();
-	}
-
-	/**
-	 * ハードポイントに接続されたアイテムを表示する
-	 */
-	public abstract void renderItems();
-
-
 
 	public void setRotationAnglesMM(float par1, float par2, float pTicksExisted,
 			float pHeadYaw, float pHeadPitch, float par6) {
@@ -183,8 +130,8 @@ public abstract class MMM_ModelMultiBase
 	}
 	@Override
 	@Deprecated
-	public final void setLivingAnimations(EntityLiving par1EntityLiving, float par2,
-			float par3, float par4) {
+	public final void setLivingAnimations(EntityLiving par1EntityLiving,
+			float par2, float par3, float par4) {
 		setLivingAnimationsMM(par2, par3, par4);
 	}
 
@@ -211,62 +158,34 @@ public abstract class MMM_ModelMultiBase
 	}
 
 	protected void setTextureOffsetMM(String par1Str, int par2, int par3) {
-		setTextureOffset(par1Str, par2, par3);
+		super.setTextureOffset(par1Str, par2, par3);
 	}
 	@Override
 	@Deprecated
 	protected final void setTextureOffset(String par1Str, int par2, int par3) {
-		super.setTextureOffset(par1Str, par2, par3);
+		setTextureOffsetMM(par1Str, par2, par3);
 	}
 
+	/**
+	 * 推奨されません。
+	 */
 	public TextureOffset getTextureOffsetMM(String par1Str) {
-		return getTextureOffset(par1Str);
+		// このままだと意味ないな。
+		return super.getTextureOffset(par1Str);
 	}
 	@Override
 	@Deprecated
 	public final TextureOffset getTextureOffset(String par1Str) {
-		return super.getTextureOffset(par1Str);
+		return getTextureOffsetMM(par1Str);
 	}
 
-	// ゲッター、セッター群
-	public List getBoxList() {
-		return boxList;
-	}
-	public float getOnGround() {
-		return onGround;
-	}
-	public float setOnGround(float pOnGround) {
-		return onGround = pOnGround;
-	}
-	public boolean getIsRiding() {
-		return isRiding;
-	}
-	public boolean setIsRiding(boolean pIsRiding) {
-		return isRiding = pIsRiding;
-	}
-	public boolean getIsChild() {
-		return isChild;
-	}
-	public boolean setIsChild(boolean pIsChild) {
-		return isChild = pIsChild;
-	}
-	public int getTextureWidth() {
-		return textureWidth;
-	}
-	public int getTextureHeight() {
-		return textureHeight;
-	}
-	public void setTextureSize(int pWidth, int pHeight) {
-		textureWidth = pWidth;
-		textureHeight = pHeight;
-	}
 
 
 	// 独自定義関数群
 	/**
 	 * モデルの初期化コード
 	 */
-	public void initModel(float psize, float pyoffset) {};
+	public abstract  void initModel(float psize, float pyoffset);
 
 	/**
 	 * アーマーモデルのサイズを返す。
@@ -337,6 +256,61 @@ public abstract class MMM_ModelMultiBase
 		return fcapsmap;
 	}
 
+	/**
+	 * Renderer辺でこの変数を設定する。
+	 * 設定値はMMM_IModelCapsを継承したEntitiyとかを想定。
+	 */
+	public void setEntityCaps(MMM_IModelCaps pEntityCaps) {
+		entityCaps = pEntityCaps;
+	}
+
+	/**
+	 * 通常のレンダリング前に呼ばれる。
+	 * @return falseを返すと通常のレンダリングをスキップする。
+	 */
+	public boolean preRender(float par2, float par3,
+			float par4, float par5, float par6, float par7) {
+		return true;
+	}
+
+	/**
+	 * 通常のレンダリング後に呼ぶ。 基本的に装飾品などの自律運動しないパーツの描画用。
+	 */
+	public void renderExtention(float par2, float par3,
+			float par4, float par5, float par6, float par7) {
+	}
+
+	/**
+	 * スタビライザーの描画。 自動では呼ばれないのでrender内で呼ぶ必要があります。
+	 */
+	protected void renderStabilizer(float par2, float par3,
+			float ticksExisted, float pheadYaw, float pheadPitch, float par7) {
+		// スタビライザーの描画、doRenderの方がいいか？
+		if (stabiliser == null || stabiliser.isEmpty() || render == null)
+			return;
+
+		GL11.glPushMatrix();
+		for (Entry<String, MMM_EquippedStabilizer> le : stabiliser.entrySet()) {
+			MMM_EquippedStabilizer les = le.getValue();
+			if (les != null && les.equipPoint != null) {
+				MMM_ModelStabilizerBase lsb = les.stabilizer;
+				if (lsb.isLoadAnotherTexture()) {
+					render.loadTexture(lsb.getTexture());
+				}
+				les.equipPoint.loadMatrix();
+				lsb.render(this, null, par2, par3, ticksExisted, pheadYaw, pheadPitch, par7);
+			}
+		}
+		GL11.glPopMatrix();
+	}
+
+	/**
+	 * ハードポイントに接続されたアイテムを表示する
+	 */
+	public abstract void renderItems();
+
+
+	// IModelCaps
 	@Override
 	public Object getCapsValue(int pIndex, Object ...pArg) {
 		switch (pIndex) {
@@ -401,70 +375,5 @@ public abstract class MMM_ModelMultiBase
 		
 		return false;
 	}
-
-	/**
-	 * Renderer辺でこの変数を設定する。
-	 * 設定値はMMM_IModelCapsを継承したEntitiyとかを想定。
-	 */
-	public void setModelCaps(MMM_IModelCaps pEntityCaps) {
-		entityCaps = pEntityCaps;
-	}
-
-
-
-	// MathHelperトンネル関数群
-	public static final float mh_sin(float f) {
-		f = f % 6.283185307179586F;
-		f = (f < 0F) ? 360 + f : f;
-		return MathHelper.sin(f);
-	}
-
-	public static final float mh_cos(float f) {
-		f = f % 6.283185307179586F;
-		f = (f < 0F) ? 360 + f : f;
-		return MathHelper.cos(f);
-	}
-
-	public static final float mh_sqrt_float(float f) {
-		return MathHelper.sqrt_float(f);
-	}
-
-	public static final float mh_sqrt_double(double d) {
-		return MathHelper.sqrt_double(d);
-	}
-
-	public static final int mh_floor_float(float f) {
-		return MathHelper.floor_float(f);
-	}
-
-	public static final int mh_floor_double(double d) {
-		return MathHelper.floor_double(d);
-	}
-
-	public static final long mh_floor_double_long(double d) {
-		return MathHelper.floor_double_long(d);
-	}
-
-	public static final float mh_abs(float f) {
-		return MathHelper.abs(f);
-	}
-
-	public static final double mh_abs_max(double d, double d1) {
-		return MathHelper.abs_max(d, d1);
-	}
-
-	public static final int mh_bucketInt(int i, int j) {
-		return MathHelper.bucketInt(i, j);
-	}
-
-	public static final boolean mh_stringNullOrLengthZero(String s) {
-		return MathHelper.stringNullOrLengthZero(s);
-	}
-
-	public static final int mh_getRandomIntegerInRange(Random random, int i,
-			int j) {
-		return MathHelper.getRandomIntegerInRange(random, i, j);
-	}
-
 
 }

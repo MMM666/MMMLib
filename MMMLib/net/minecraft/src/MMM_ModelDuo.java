@@ -7,6 +7,8 @@ import org.lwjgl.opengl.GL11;
 
 /**
  * アーマーの二重描画用クラス。
+ * 必ずInner側にはモデルを設定すること。
+ * 通常のRendererで描画するためのクラスなので、Renderをちゃんと記述するならいらないクラスです。
  */
 public class MMM_ModelDuo extends ModelBase implements MMM_IModelCaps {
 
@@ -122,15 +124,15 @@ public class MMM_ModelDuo extends ModelBase implements MMM_IModelCaps {
 	 * Renderer辺でこの変数を設定する。
 	 * 設定値はMMM_IModelCapsを継承したEntitiyとかを想定。
 	 */
-	public void setModelCaps(MMM_IModelCaps pModelCaps) {
+	public void setEntityCaps(MMM_IModelCaps pModelCaps) {
 		if (modelArmorInner != null) {
-			modelArmorInner.setModelCaps(pModelCaps);
+			modelArmorInner.setEntityCaps(pModelCaps);
 		}
 		if (modelArmorOuter != null) {
-			modelArmorOuter.setModelCaps(pModelCaps);
+			modelArmorOuter.setEntityCaps(pModelCaps);
 		}
 		if (capsLink != null) {
-			capsLink.setModelCaps(pModelCaps);
+			capsLink.setEntityCaps(pModelCaps);
 		}
 	}
 

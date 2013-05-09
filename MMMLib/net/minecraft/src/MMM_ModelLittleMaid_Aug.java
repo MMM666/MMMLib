@@ -57,7 +57,7 @@ public class MMM_ModelLittleMaid_Aug extends MMM_ModelLittleMaid_SR2 {
 		shaggyL.addParts(MMM_ModelPlate.class, 0.0F, 0.0F, -5.0F, 10, 4, 5, psize);
 		shaggyL.setRotationPointMM(-4.0F, -1.0F, 0.0F);
 		shaggyL.setRotateAngleZ(0.4F);
-
+		
 		sensor1 = new MMM_ModelRenderer(this, 0, 0);
 		sensor1.addParts(MMM_ModelPlate.class, -8.0F, -4.0F, 0.0F, 8, 4, 0);
 		sensor1.setRotationPointMM(0.0F, -8.0F + pyoffset, 0.0F);
@@ -107,7 +107,7 @@ public class MMM_ModelLittleMaid_Aug extends MMM_ModelLittleMaid_SR2 {
 			f3 *= 8.0F;
 			f4 = -0.2F;
 		} else {
-			f4 = (1F - (float)MMM_ModelCapsHelper.getCapsValueFloat(entityCaps, caps_health) / 20F) * 0.5F;
+			f4 = (1F - (float)MMM_ModelCapsHelper.getCapsValueInt(entityCaps, caps_health) / 20F) * 0.5F;
 		}
 		float f5 = mh_sin(f3 * 0.067F) * 0.05F - f4;
 		float f6 = 40.0F / 57.29578F;
@@ -122,7 +122,7 @@ public class MMM_ModelLittleMaid_Aug extends MMM_ModelLittleMaid_SR2 {
 			float pTicksExisted, float pHeadYaw, float pHeadPitch, float par6) {
 		super.setRotationAnglesMM(par1, par2, pTicksExisted, pHeadYaw, pHeadPitch, par6);
 		
-		SideTailR.rotateAngleX =  SideTailL.rotateAngleX = -bipedHead.rotateAngleX / 1.5F;
+		SideTailR.setRotateAngleX(SideTailL.setRotateAngleX(bipedHead.getRotateAngleX() * -0.666666666F));
 	}
 
 }

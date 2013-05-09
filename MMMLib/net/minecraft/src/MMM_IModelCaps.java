@@ -63,6 +63,7 @@ public interface MMM_IModelCaps {
 	public static final int caps_Actions		= 0x0136;
 	public static final int caps_Grounds		= 0x0137;
 	public static final int caps_Inventory		= 0x0138;
+	public static final int caps_Ground			= 0x0139;
 	public static final int caps_interestedAngle	= 0x0150;
 	
 	// PlayerFormLittleMaid
