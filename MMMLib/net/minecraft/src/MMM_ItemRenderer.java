@@ -7,7 +7,7 @@ import org.lwjgl.opengl.GL13;
 
 import net.minecraft.client.Minecraft;
 
-public class MMM_ItemRenderer extends ItemRenderer implements MMM_IItemRenderer {
+public class MMM_ItemRenderer extends ItemRenderer {
 
 	// プライベート変数を使えるように
 	public Minecraft mc;
@@ -22,22 +22,18 @@ public class MMM_ItemRenderer extends ItemRenderer implements MMM_IItemRenderer 
 		mc = minecraft;
 	}
 
-	@Override
 	public Minecraft getMC() {
 		return mc;
 	}
 
-	@Override
 	public ItemStack getItemToRender() {
 		return itemToRender;
 	}
 
-	@Override
 	public float getEquippedProgress() {
 		return equippedProgress;
 	}
 
-	@Override
 	public float getPrevEquippedProgress() {
 		return prevEquippedProgress;
 	}

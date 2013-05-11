@@ -8,52 +8,20 @@ import net.minecraft.client.Minecraft;
 
 public class MMM_Client {
 
-	public static Class itemRendererClass;
-	public static Constructor itemRendererConstructor;
-
-
-	public static void getItemRendererClass() {
-		itemRendererClass = MMM_ItemRenderer.class;
-		if (MMM_Helper.mc.entityRenderer.itemRenderer.getClass().getSimpleName().equals("ItemRendererHD")) {
-			try {
-				String ls = "MMM_ItemRendererHD";
-				if (MMM_Helper.fpackage != null) {
-					ls = MMM_Helper.fpackage.getName() + "." + ls;
-				}
-				Class lc = Class.forName(ls);
-				itemRendererClass = lc;
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		try {
-			itemRendererConstructor = itemRendererClass.getConstructor(Minecraft.class);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+	public static MMM_ItemRenderer itemRenderer;
 
 
 	public static void setItemRenderer() {
-		if (!(MMM_Helper.mc.entityRenderer.itemRenderer instanceof MMM_IItemRenderer)) {
-			mod_MMM_MMMLib.Debug("replace entityRenderer.itemRenderer.");
-			getItemRendererClass();
-			try {
-				Object lo = itemRendererConstructor.newInstance(MMM_Helper.mc);
-				MMM_Helper.mc.entityRenderer.itemRenderer = (ItemRenderer)lo;
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+		if (itemRenderer == null) {
+			itemRenderer = new MMM_ItemRenderer(MMM_Helper.mc);
 		}
-		if (!(RenderManager.instance.itemRenderer instanceof MMM_IItemRenderer)) {
+		if (!(MMM_Helper.mc.entityRenderer.itemRenderer instanceof MMM_ItemRenderer)) {
+			mod_MMM_MMMLib.Debug("replace entityRenderer.itemRenderer.");
+			MMM_Helper.mc.entityRenderer.itemRenderer = itemRenderer;
+		}
+		if (!(RenderManager.instance.itemRenderer instanceof MMM_ItemRenderer)) {
 			mod_MMM_MMMLib.Debug("replace RenderManager.itemRenderer.");
-			getItemRendererClass();
-			try {
-				Object lo = itemRendererConstructor.newInstance(MMM_Helper.mc);
-				RenderManager.instance.itemRenderer = (ItemRenderer)lo;
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			RenderManager.instance.itemRenderer = itemRenderer;
 		}
 		// GUIの表示を変えるには常時監視が必要？
 	}

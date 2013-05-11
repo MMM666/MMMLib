@@ -20,6 +20,7 @@ public class MMM_ItemRenderManager {
 	private Method frenderItemInFirstPerson;
 	private Method fgetRenderTexture;
 	private Method frenderItemWorld;
+	private MMM_IItemRenderManager exRender;
 
 
 	private MMM_ItemRenderManager(Object pObject, Method prenderItem, Method prenderItemInFirstPerson,
@@ -29,6 +30,21 @@ public class MMM_ItemRenderManager {
 		frenderItemInFirstPerson = prenderItemInFirstPerson;
 		fgetRenderTexture = pgetRenderTexture;
 		frenderItemWorld = prenderItemWorld;
+		exRender = null;
+	}
+	
+	private MMM_ItemRenderManager(Object pObject, MMM_IItemRenderManager pEXRender) {
+		fobject = pObject;
+		exRender = pEXRender;
+	}
+
+	public static boolean setEXRender(Item pItem, MMM_IItemRenderManager pEXRender) {
+		// アイテムの特殊描画機能を強制的に追加する
+		if (pItem == null || pEXRender == null) return false;
+		
+		checkList.add(pItem);
+		classList.put(pItem, new MMM_ItemRenderManager(pItem, pEXRender));
+		return true;
 	}
 
 	public static boolean isEXRender(Item pItem) {
@@ -47,7 +63,7 @@ public class MMM_ItemRenderManager {
 			} catch (Exception e) {
 			}
 			try {
-				lrenderItemInFirstPerson = lc.getMethod("renderItemInFirstPerson", float.class, MMM_IItemRenderer.class);
+				lrenderItemInFirstPerson = lc.getMethod("renderItemInFirstPerson", float.class);
 			} catch (Exception e) {
 			}
 			try {
@@ -75,7 +91,9 @@ public class MMM_ItemRenderManager {
 
 
 	public boolean renderItem(EntityLiving pEntity, ItemStack pItemstack, int pIndex) {
-		if (frenderItem != null) {
+		if (exRender != null) {
+			return exRender.renderItem(pEntity, pItemstack, pIndex);
+		} else if (frenderItem != null) {
 			try {
 				return (Boolean)frenderItem.invoke(fobject, pEntity, pItemstack, pIndex);
 			} catch (Exception e) {
@@ -84,10 +102,12 @@ public class MMM_ItemRenderManager {
 		return false;
 	}
 
-	public boolean renderItemInFirstPerson(float pDelta, MMM_IItemRenderer pItemRenderer) {
-		if (frenderItemInFirstPerson != null) {
+	public boolean renderItemInFirstPerson(float pDelta, MMM_ItemRenderer pItemRenderer) {
+		if (exRender != null) {
+			return exRender.renderItemInFirstPerson(pDelta, pItemRenderer);
+		} else if (frenderItemInFirstPerson != null) {
 			try {
-				return (Boolean)frenderItemInFirstPerson.invoke(fobject, pDelta, pItemRenderer);
+				return (Boolean)frenderItemInFirstPerson.invoke(fobject, pDelta);
 			} catch (Exception e) {
 			}
 		}
@@ -95,7 +115,9 @@ public class MMM_ItemRenderManager {
 	}
 
 	public String getRenderTexture() {
-		if (fgetRenderTexture != null) {
+		if (exRender != null) {
+			return exRender.getRenderTexture();
+		} else if (fgetRenderTexture != null) {
 			try {
 				return (String)fgetRenderTexture.invoke(fobject);
 			} catch (Exception e) {
@@ -105,7 +127,9 @@ public class MMM_ItemRenderManager {
 	}
 
 	public boolean isRenderItemWorld() {
-		if (frenderItemWorld != null) {
+		if (exRender != null) {
+			return exRender.isRenderItemWorld();
+		} else if (frenderItemWorld != null) {
 			try {
 				return (Boolean)frenderItemWorld.invoke(fobject);
 			} catch (Exception e) {
