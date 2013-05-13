@@ -334,6 +334,8 @@ public abstract class MMM_ModelMultiBase
 			return scaleFactor;
 		case caps_entityIdFactor:
 			return entityIdFactor;
+		case caps_ticksExisted:
+			return entityTicksExisted;
 		}
 		return null;
 	}
@@ -370,6 +372,9 @@ public abstract class MMM_ModelMultiBase
 			return true;
 		case caps_entityIdFactor:
 			entityIdFactor = (Float)pArg[0];
+			return true;
+		case caps_ticksExisted:
+			entityTicksExisted = (Integer)pArg[0];
 			return true;
 		}
 		

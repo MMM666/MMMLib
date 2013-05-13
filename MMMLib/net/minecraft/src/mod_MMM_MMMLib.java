@@ -133,7 +133,7 @@ public class mod_MMM_MMMLib extends BaseMod {
 			break;
 		case MMM_Statics.Server_GetTextureIndex:
 			// サーバー側での管理番号の問い合わせに対して応答する
-			MMM_TextureManager.reciveFromClientGetTexturePackIndex(var2.data);
+			MMM_TextureManager.reciveFromClientGetTexturePackIndex(var1, var2.data);
 			break;
 		case MMM_Statics.Server_GetTexturePackName:
 			// 管理番号に対応するテクスチャパック名を返す。
@@ -158,11 +158,12 @@ public class mod_MMM_MMMLib extends BaseMod {
 
 	@Override
 	public void clientDisconnect(NetClientHandler var1) {
-		if (MMM_Helper.isClient) {
-			MMM_Client.clientDisconnect(var1);
-		} else {
-			MMM_TextureManager.saveTextureIndex();
-		}
+		MMM_Client.clientDisconnect(var1);
+	}
+
+	// Forge
+	public void serverDisconnect() {
+		MMM_TextureManager.saveTextureIndex();
 	}
 
 }

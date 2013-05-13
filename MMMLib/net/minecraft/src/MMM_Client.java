@@ -48,8 +48,8 @@ public class MMM_Client {
 
 	public static void clientConnect(NetClientHandler var1) {
 		if (MMM_Helper.mc.isIntegratedServerRunning()) {
-//			Debug("Localmode: InitTextureList.");
-//			MMM_TextureManager.initTextureList(true);
+			Debug("Localmode: InitTextureList.");
+			MMM_TextureManager.initTextureList(true);
 		} else {
 			Debug("Remortmode: ClearTextureList.");
 			MMM_TextureManager.initTextureList(false);
@@ -58,8 +58,8 @@ public class MMM_Client {
 
 	public static void clientDisconnect(NetClientHandler var1) {
 //		super.clientDisconnect(var1);
-		Debug("Localmode: InitTextureList.");
-		MMM_TextureManager.initTextureList(true);
+//		Debug("Localmode: InitTextureList.");
+//		MMM_TextureManager.initTextureList(true);
 	}
 
 	public static void sendToServer(byte[] pData) {
