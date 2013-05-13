@@ -18,12 +18,17 @@ public class MMM_TextureBox {
 	 * pName, pTextureDir, pClassPrefix
 	 */
 	public String[] textureDir;
+	
+	protected float modelHeight;
+	protected float modelWidth;
+	protected float modelYOffset;
 
 
 
 	public MMM_TextureBox() {
 		textures = new HashMap<Integer, String>();
 		armors = new TreeMap<String, Map<Integer, String>>();
+		modelHeight = modelWidth = modelYOffset = 0.0F;
 	}
 	public MMM_TextureBox(String pName, String[] pSearch) {
 		this();
@@ -31,6 +36,16 @@ public class MMM_TextureBox {
 		textureDir = pSearch;
 	}
 
+	public void setModels(String pName, MMM_ModelMultiBase[] pModels) {
+		modelName = pName;
+		models = pModels;
+	}
+
+	public void setModelSize(float pHeight, float pWidth, float pYOffset) {
+		modelHeight = pHeight;
+		modelWidth = pWidth;
+		modelYOffset = pYOffset;
+	}
 
 	/**
 	 * テクスチャのフルパスを返す。
@@ -108,9 +123,16 @@ public class MMM_TextureBox {
 		return !armors.isEmpty();
 	}
 
-	public void setModels(String pName, MMM_ModelMultiBase[] pModels) {
-		modelName = pName;
-		models = pModels;
+	public float getHeight() {
+		return modelHeight == 0 ? models[0].getHeight() : modelHeight;
+	}
+
+	public float getWidth() {
+		return modelWidth == 0 ? models[0].getWidth() : modelWidth;
+	}
+
+	public float getYOffset() {
+		return modelYOffset == 0 ? models[0].getyOffset() : modelYOffset;
 	}
 
 }

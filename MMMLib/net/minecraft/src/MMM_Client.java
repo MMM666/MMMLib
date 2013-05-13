@@ -1,10 +1,6 @@
 package net.minecraft.src;
 
-import static net.minecraft.src.mod_MMM_MMMLib.*;
-
-import java.lang.reflect.Constructor;
-
-import net.minecraft.client.Minecraft;
+import static net.minecraft.src.mod_MMM_MMMLib.Debug;
 
 public class MMM_Client {
 
@@ -39,31 +35,14 @@ public class MMM_Client {
 		Debug("MMM|Upd Clt Call[%2x:%d].", lmode, leid);
 		
 		switch (lmode) {
-		case MMM_Client_SetTextureIndex:
-			// テクスチャ名称に対応するサーバー側と同じインデックスを設定する
-			/*
-			 * 0:id
-			 * 1:index
-			 * 2-5:TextureIndex
-			 */
-			int li7 = MMM_Helper.getShort(var2.data, 2);
-			String ls7 = MMM_TextureManager.getRequestString(var2.data[1]);
-			Debug("%d = %d : %s", li7, var2.data[1], ls7 == null ? "NULL" : ls7);
-			MMM_TextureManager.setStringToIndex(li7, ls7);
+		case MMM_Statics.Client_SetTextureIndex:
+			// 問い合わせたテクスチャパックの管理番号を受け取る
+			MMM_TextureManager.reciveFormServerSetTexturePackIndex(var2.data);
 			break;
-		case MMM_Client_SetTextureStr:
-			// インデックスに対応するテクスチャ名称を登録する、主にサーバー側のみに名称登録がある場合に使用。
-			/*
-			 * 0:id
-			 * 1-2:index 登録テクスチャ番号
-			 * 3-:Str 名称
-			 */
-			int li8 = MMM_Helper.getShort(var2.data, 1);
-			String ls8 = MMM_Helper.getStr(var2.data, 3);
-			Debug("%d = %s", li8, ls8 == null ? "NULL" : ls8);
-			MMM_TextureManager.setStringToIndex(li8, ls8);
+		case MMM_Statics.Client_SetTexturePackName:
+			// 管理番号に登録されているテクスチャパックの情報を受け取る
+			MMM_TextureManager.reciveFromServerSetTexturePackName(var2.data);
 			break;
-			
 		}
 	}
 

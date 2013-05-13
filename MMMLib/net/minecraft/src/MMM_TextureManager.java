@@ -51,26 +51,30 @@ public class MMM_TextureManager {
 	public static final int tx_wild			= 0x30; //48;
 	public static final int tx_armor1		= 0x40; //64;
 	public static final int tx_armor2		= 0x50; //80;
-	public static List<MMM_TextureBox> textures = new ArrayList<MMM_TextureBox>();
+	public static final int tx_light		= 0x60; //96;
 	private static Map<String, MMM_ModelMultiBase[]> modelMap = new TreeMap<String, MMM_ModelMultiBase[]>();
 	public static String[] armorFilenamePrefix;
 	public static MMM_ModelMultiBase[] defaultModel;
+
+	/**
+	 * ローカルで保持しているテクスチャパック
+	 */
+	public static List<MMM_TextureBox> textures = new ArrayList<MMM_TextureBox>();
+	/**
+	 * サーバー側での管理番号を識別するのに使う。
+	 */
+	public static Map<MMM_TextureBox, Integer> textureServerIndex = new HashMap<MMM_TextureBox, Integer>();
 	/**
 	 * サーバー・クライアント間でテクスチャパックの名称リストの同期を取るのに使う。
-	 * うまいこと作れば、クライアント側にだけテクスチャパックを入れれば、サーバには不要になるはず。
-	 * クライアントからサーバーにインデックスリストに無い名称のインデックスをリクエスト。
-	 * サーバーからリクエストされたインデックスを返す、無ければサーバー側のリストに追加して値を返す。
-	 * クライアント側のリストに追加。
 	 */
 	public static Map<Integer, MMM_TextureBoxServer> textureServer = new HashMap<Integer, MMM_TextureBoxServer>();
-//	public static Map<Integer, String> textureIndex = new HashMap<Integer, String>();
+//	public static List<MMM_TextureBoxServer> textureServer = new ArrayList<MMM_TextureBoxServer>();
 	/**
-	 * クライアント側は要らない
+	 * Entity毎にデフォルトテクスチャを参照。
+	 * 構築方法はEntityListを参照のこと。
 	 */
-//	public static Map<Integer, Integer> textureColor	= new HashMap<Integer, Integer>();
-//	public static Map<Integer, Float> textureHeight		= new HashMap<Integer, Float>();
-//	public static Map<Integer, Float> textureWidth		= new HashMap<Integer, Float>();
-//	public static Map<Integer, Float> textureYOffset	= new HashMap<Integer, Float>();
+	public static Map<MMM_ITextureEntity, MMM_TextureBox> defaultTextures = new HashMap<MMM_ITextureEntity, MMM_TextureBox>();
+	
 	/**
 	 * クライアント側で使う
 	 */
@@ -78,6 +82,9 @@ public class MMM_TextureManager {
 		null, null, null, null, null, null, null, null,
 		null, null, null, null, null, null, null, null
 	};
+	private static Map<MMM_ITextureEntity, int[]> stackGetTexturePack = new HashMap<MMM_ITextureEntity, int[]>();
+	private static Map<MMM_ITextureEntity, Object[]> stackSetTexturePack = new HashMap<MMM_ITextureEntity, Object[]>();
+	
 	protected static List<String[]> searchPrefix = new ArrayList<String[]>();
 
 
@@ -122,6 +129,13 @@ public class MMM_TextureManager {
 			if (le.getValue().textureName.equals(pName)) {
 				return le;
 			}
+		}
+		return null;
+	}
+
+	public static MMM_TextureBoxServer getTextureBoxServer(int pIndex) {
+		if (textureServer.containsKey(pIndex)) {
+			return textureServer.get(pIndex);
 		}
 		return null;
 	}
@@ -286,6 +300,9 @@ public class MMM_TextureManager {
 	 * テクスチャインデックスを構築。
 	 */
 	public static void initTextureList(boolean pFlag) {
+		textureServerIndex.clear();
+		
+		
 		textureServer.clear();
 		if (pFlag) {
 			// Internal
@@ -686,14 +703,15 @@ public class MMM_TextureManager {
 	 * 契約のメイドの色をランダムで返す
 	 */
 	public static int getRandomContractColor(int pIndex, Random rand) {
-		MMM_TextureBox ltb = getTextureBox(getIndexToString(pIndex));
-		if (ltb == null) return -1;
+		if (textureServer.isEmpty() || pIndex < 0) return -1;
 		
 		List<Integer> llist = new ArrayList<Integer>();
+		int lcolor = textureServer.get(pIndex).contractColor;
 		for (int li = 0; li < 16; li++) {
-			if (ltb.hasColor(li)) {
+			if ((lcolor & 0x01) > 0) {
 				llist.add(li);
 			}
+			lcolor = lcolor >>> 1;
 		}
 		
 		if (llist.size() > 0) {
@@ -703,111 +721,23 @@ public class MMM_TextureManager {
 		}
 	}
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	/*
 	 * サーバークライアント間でのテクスチャ管理関数群
 	 */
-	
-	/**
-	 * 渡されたテクスチャパックの名称に関連付けされたインデックスを返す。
-	 * @return -1:現在サーバーへ問い合わせ中
-	 */
-	public static int getStringToIndex(String pname) {
-		for (Entry<Integer, MMM_TextureBoxServer> le : textureServer.entrySet()) {
-			// TODO:余計な処理込み
-			if (le.getValue().textureName != null && le.getValue().textureName.equals(pname)) {
-				return le.getKey();
-			}
-		}
-		if (MMM_Helper.isClient) {
-			if (MMM_Client.isIntegratedServerRunning()) {
-				return 0;
-			} else {
-				// クライアントで未確認名称があった場合はサーバーへ問い合わせを行う。
-				int li = getRequestIndex(pname);
-				if (li < 0) {
-					// リクエスト中、もしくは空きがない。
-					return -1;
-				}
-				if (li > -1) {
-					// リクエスト可能
-					byte ldata[];
-					MMM_TextureBox lbox = MMM_TextureManager.getTextureBox(pname);
-					if (lbox != null) {
-						// モデルのステータスを書き込み
-						ldata = new byte[18 + pname.getBytes().length];
-						ldata[0] = mod_MMM_MMMLib.MMM_Server_SetTextureIndex;
-						ldata[1] = (byte)li;
-						MMM_Helper.setInt(ldata, 2, lbox.getWildColorBits());
-						MMM_Helper.setInt(ldata, 6, Float.floatToIntBits(lbox.models[0].getHeight()));
-						MMM_Helper.setInt(ldata, 10, Float.floatToIntBits(lbox.models[0].getWidth()));
-						MMM_Helper.setInt(ldata, 14, Float.floatToIntBits(lbox.models[0].getyOffset()));
-						MMM_Helper.setStr(ldata, 18, pname);
-					} else {
-						// 登録テクスチャがないのでサーバーに確認をする
-						ldata = new byte[2 + pname.getBytes().length];
-						ldata[0] = mod_MMM_MMMLib.MMM_Server_GetTextureIndex;
-						ldata[1] = (byte)li;
-						MMM_Helper.setStr(ldata, 2, pname);
-					}
-					MMM_Client.sendToServer(ldata);
-					mod_MMM_MMMLib.Debug("GetTextureIndex");
-				}
-				return -1;
-			}
-		} else {
-			// サーバー側で未確認名称があった場合はデフォルトを返す。
-			return 0;
-		}
-	}
-	public static int setStringToIndex(int pIndex, String pname) {
-		// クライアントの動作
-		MMM_TextureBox lbox = getTextureBox(pname);
-		if (lbox == null) {
-			// 自分のところにはないテクスチャパックはデフォルトで表示
-			lbox = getTextureBox("default");
-		}
-		textureServer.put(pIndex, new MMM_TextureBoxServer(lbox));
-		return getStringToIndex(pname);
-	}
-	public static int setTextureBoxToIndex(MMM_TextureBoxServer pBox) {
-		// サーバー側の動作
-		for (Entry<Integer, MMM_TextureBoxServer> le : textureServer.entrySet()) {
-			if (le.getValue().textureName.equals(pBox.textureName)) {
-				// 既にある分は登録しない
-				return le.getKey();
-			}
-		}
-		int li = textureServer.size();
-		textureServer.put(li, pBox);
-		return li;
-	}
-
-	public static String getIndexToString(int pIndex) {
-		MMM_TextureBoxServer lbox = getIndexToBox(pIndex);
-		return lbox == null ? null : lbox.textureName;
-	}
-	public static MMM_TextureBoxServer getIndexToBox(int pIndex) {
-		pIndex = (short)pIndex;
-		if (pIndex < 0) {
-			// マイナス値は有り得ない。
-			return null;
-		}
-		if (!textureServer.containsKey(pIndex)) {
-			if (MMM_Helper.isClient) {
-				// サーバー側へ番号に対応するテクスチャパックの名称を問い合わせ
-				// サーチかける時用のブランクを設置
-				// TODO:このへんおかしい
-				textureServer.put(pIndex, new MMM_TextureBoxServer());
-				byte[] ldata = new byte[3];
-				ldata[0] = mod_MMM_MMMLib.MMM_Server_GetTextureStr;
-				MMM_Helper.setShort(ldata, 1, pIndex);
-				MMM_Client.sendToServer(ldata);
-			} else {
-				// サーバー側にインデックスが無いということは有り得ないはず。
-			}
-		}
-		return textureServer.get(pIndex);
-	}
 
 	// ネットワーク越しにテクスチャインデクスを得る際に使う
 	public static int getRequestIndex(String pVal) {
@@ -830,6 +760,240 @@ public class MMM_TextureManager {
 		String ls = requestString[pIndex];
 		requestString[pIndex] = null;
 		return ls;
+	}
+
+
+
+	public static MMM_TextureBox getTextureBoxServerIndex(int pIndex) {
+		for (Entry<MMM_TextureBox, Integer> le : textureServerIndex.entrySet()) {
+			if (le.getValue() == pIndex) {
+				return le.getKey();
+			}
+		}
+		return null;
+	}
+
+
+	/**
+	 * テクスチャパックを設定するため、サーバーへ情報を送る。
+	 * @param pEntity
+	 * @param pPackName
+	 */
+	public static void postSetTexturePack(MMM_ITextureEntity pEntity, int pColor, String[] pPackName) {
+		// Client
+		if (pEntity instanceof Entity) return;
+		// テクスチャパックを設定するため、サーバーへ情報を送る。
+		int lindex[] = new int[pPackName.length];
+		boolean lflag = true;
+		
+		// PackeNameからサーバー側のテクスチャインデックスを獲得する。
+		for (int li = 0; li < pPackName.length; li++) {
+			MMM_TextureBox lbox = getTextureBox(pPackName[li]);
+			if (!textureServerIndex.containsKey(lbox)) {
+				lflag = false;
+				lindex[li] = -1;
+				int ll = getRequestIndex(pPackName[li]);
+				if (ll == -2) continue;
+				if (ll > -1) {
+					sendToServerGetTextureIndex(ll, lbox);
+				}
+			} else {
+				lindex[li] = textureServerIndex.get(lbox);
+			}
+		}
+		
+		if (lflag) {
+			// すべての名称からインデックスを取り出せた場合、サーバーへポストする。
+			sendToServerSetTexturePackIndex(pEntity, pColor, lindex);
+		} else {
+			// ローカルに設定値がない場合、バッファにジョブをスタックし終了。
+			Object lo[] = new Object[1 + pPackName.length];
+			lo[0] = pColor;
+			for (int li = 0; li < pPackName.length; li++) {
+				lo[li + 1] = pPackName[li];
+			}
+			stackSetTexturePack.put(pEntity, lo);
+		}
+	}
+
+	protected static void sendToServerSetTexturePackIndex(MMM_ITextureEntity pEntity, int pColor, int[] pIndex) {
+		// Client
+		// サーバー側へテクスチャパックのインデックスが変更されたことを通知する。
+		if (pEntity instanceof Entity) {
+			byte ldata[] = new byte[5 + pIndex.length * 2];
+			ldata[0] = MMM_Statics.Server_SetTexturePackIndex;
+			MMM_Helper.setInt(ldata, 1, ((Entity)pEntity).entityId);
+			ldata[5] = (byte)pColor;
+			int li = 6;
+			for (int ll  : pIndex) {
+				MMM_Helper.setShort(ldata, li, ll);
+				li += 2;
+			}
+			MMM_Client.sendToServer(ldata);
+		}
+	}
+
+	protected static void reciveFromClientSetTexturePackIndex(Entity pEntity, byte[] pData) {
+		// Server
+		if (pEntity instanceof MMM_ITextureEntity) {
+			// クライアント側からテクスチャパックのインデックスが変更された通知を受け取ったので処理を行う。
+			int lcount = (pData.length - 8) / 2;
+			if (lcount < 1) return;
+			int lindex[] = new int[lcount];
+			
+			for (int li = 0; li < lcount; li++) {
+				lindex[li] = MMM_Helper.getShort(pData, 8 + li * 2);
+			}
+			((MMM_ITextureEntity)pEntity).setTexturePackIndex(pData[5], lindex);
+		}
+	}
+
+	protected static void sendToServerGetTextureIndex(int pBufIndex, MMM_TextureBox pBox) {
+		// Client
+		// サーバー側へテクスチャパックの管理番号を問い合わせる。
+		// 呼び出し側のクライアントへのみ返す。
+		// 返すときはNameは不要、BufIndexのみで識別させる
+		byte ldata[] = new byte[18 + pBox.packegeName.length()];
+		ldata[0] = MMM_Statics.Server_GetTextureIndex;
+		ldata[1] = (byte)pBufIndex;
+		MMM_Helper.setShort(ldata, 2, pBox.getContractColorBits());
+		MMM_Helper.setShort(ldata, 4, pBox.getWildColorBits());
+		MMM_Helper.setFloat(ldata, 6, pBox.getHeight());
+		MMM_Helper.setFloat(ldata, 10, pBox.getWidth());
+		MMM_Helper.setFloat(ldata, 14, pBox.getYOffset());
+		MMM_Helper.setStr(ldata, 18, pBox.packegeName);
+		MMM_Client.sendToServer(ldata);
+	}
+
+	protected static void reciveFromClientGetTexturePackIndex(byte[] pData) {
+		// Server
+		// クライアント側へテクスチャパックの管理番号を返す。
+		String lpackname = MMM_Helper.getStr(pData, 18);
+		Entry<Integer, MMM_TextureBoxServer> le = getTextureBoxServer(lpackname);
+		MMM_TextureBoxServer lboxsrv;
+		int li;
+		if (le == null) {
+			li = textureServer.size() + 1;
+			lboxsrv = new MMM_TextureBoxServer();
+		} else {
+			li = le.getKey();
+			lboxsrv = le.getValue();
+		}
+		lboxsrv.contractColor = MMM_Helper.getShort(pData, 2);
+		lboxsrv.wildColor = MMM_Helper.getShort(pData, 4);
+		lboxsrv.modelHeight = MMM_Helper.getFloat(pData, 6);
+		lboxsrv.modelWidth = MMM_Helper.getFloat(pData, 10);
+		lboxsrv.modelYOffset = MMM_Helper.getFloat(pData, 14);
+		lboxsrv.textureName = lpackname;
+		textureServer.put(li, lboxsrv);
+		
+		byte ldata[] = new byte[4];
+		ldata[0] = MMM_Statics.Client_SetTextureIndex;
+		ldata[1] = pData[1];
+		MMM_Helper.setShort(ldata, 2, li);
+	}
+
+	protected static void reciveFormServerSetTexturePackIndex(byte[] pData) {
+		// Client
+		// サーバー側からテクスチャパックのインデックスを受け取ったので値を登録する。
+		MMM_TextureBox lbox = getTextureBox(getRequestString(pData[1]));
+		textureServerIndex.put(lbox, (int)MMM_Helper.getShort(pData, 2));
+		
+		// スタックされたジョブから処理可能な物があれば実行する。
+		Map<MMM_ITextureEntity, Object[]> lmap = new HashMap<MMM_ITextureEntity, Object[]>(stackSetTexturePack);
+		stackSetTexturePack.clear();
+		for (Entry<MMM_ITextureEntity, Object[]> le : lmap.entrySet()) {
+			Object lo[] = le.getValue();
+			String ls[] = new String[le.getValue().length - 1];
+			int lc = (Integer)lo[0];
+			for (int li = 1; li < lo.length; li++) {
+				ls[li - 1] = (String)lo[li];
+			}
+			postSetTexturePack(le.getKey(), lc, ls);
+		}
+	}
+
+
+
+	/**
+	 * サーバーから設定されたテクスチャインデックスからテクスチャパックを取得する。
+	 * @param pEntity
+	 * @param pIndex
+	 */
+	public static void postGetTexturePack(MMM_ITextureEntity pEntity, int[] pIndex) {
+		// Client
+		// クライアント側で指定されたインデックスに対してテクスチャパックの名称を返し設定させる
+		MMM_TextureBox lbox[] = new MMM_TextureBox[pIndex.length];
+		boolean lflag = true;
+		
+		// ローカルインデックスに名称が登録されていなければサーバーへ問い合わせる。
+		for (int li = 0; li < pIndex.length; li++) {
+			lbox[li] = getTextureBoxServerIndex(pIndex[li]);
+			if (lbox[li] == null) {
+				sendToServerGetTexturePackName(pIndex[li]);
+				lflag = false;
+			}
+		}
+		
+		if (lflag) {
+			// 全ての値が取れる場合はEntityへ値を設定する。
+			pEntity.setTexturePackName(lbox);
+		} else {
+			// 不明値がある場合は処理をスタックする。
+			stackGetTexturePack.put(pEntity, pIndex);
+		}
+	}
+
+	protected static void sendToServerGetTexturePackName(int pIndex) {
+		// Client
+		// サーバー側へテクスチャパックの名称を問い合わせる
+		byte ldata[] = new byte[3];
+		ldata[0] = MMM_Statics.Server_GetTexturePackName;
+		MMM_Helper.setShort(ldata, 1, pIndex);
+		MMM_Client.sendToServer(ldata);
+	}
+
+	protected static void reciveFromClientGetTexturePackName(NetServerHandler pHandler, byte[] pData) {
+		// Server
+		// クライアントからテクスチャパックの名称が問い合わせられた。
+		int lindex = MMM_Helper.getShort(pData, 1);
+		MMM_TextureBoxServer lboxserver = getTextureBoxServer(lindex);
+		
+		// Clientへ管理番号に登録されているテクスチャ名称をポストする
+		byte ldata[] = new byte[19 + lboxserver.textureName.length()];
+		ldata[0] = MMM_Statics.Client_SetTexturePackName;
+		MMM_Helper.setShort(ldata, 1, lindex);
+		MMM_Helper.setShort(ldata, 3, lboxserver.contractColor);
+		MMM_Helper.setShort(ldata, 5, lboxserver.wildColor);
+		MMM_Helper.setFloat(ldata, 7, lboxserver.modelHeight);
+		MMM_Helper.setFloat(ldata, 11, lboxserver.modelWidth);
+		MMM_Helper.setFloat(ldata, 15, lboxserver.modelYOffset);
+		MMM_Helper.setStr(ldata, 19, lboxserver.textureName);
+		mod_MMM_MMMLib.sendToClient(pHandler, pData);
+	}
+
+	protected static void reciveFromServerSetTexturePackName(byte[] pData) {
+		// Client
+		// サーバーからインデックスに対する名称の設定があった。
+		String lpackname = MMM_Helper.getStr(pData, 19);
+		MMM_TextureBox lbox = getTextureBox(lpackname);
+		if (lbox == null) {
+			// ローカルには存在しないテクスチャパック
+			lbox = new MMM_TextureBox(lpackname, null);
+			lbox.setModelSize(
+					MMM_Helper.getFloat(pData, 7),
+					MMM_Helper.getFloat(pData, 11),
+					MMM_Helper.getFloat(pData, 15));
+			textures.add(lbox);
+		}
+		textureServerIndex.put(lbox, (int)MMM_Helper.getShort(pData, 1));
+		
+		// 処理可能な物がスタックされている場合は処理を行う。
+		Map<MMM_ITextureEntity, int[]> lmap = new HashMap<MMM_ITextureEntity, int[]>(stackGetTexturePack);
+		stackGetTexturePack.clear();
+		for (Entry<MMM_ITextureEntity, int[]> le : lmap.entrySet()) {
+			postGetTexturePack(le.getKey(), le.getValue());
+		}
 	}
 
 }

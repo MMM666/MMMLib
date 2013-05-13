@@ -1,22 +1,13 @@
 package net.minecraft.src;
 
-import java.awt.event.TextEvent;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import net.minecraft.client.Minecraft;
 
 public class mod_MMM_MMMLib extends BaseMod {
 
 	public static final String Revision = "2";
-	
-	public static final int MMM_Server_GetTextureIndex	= 0x00;
-	public static final int MMM_Server_SetTextureIndex	= 0x02;
-	public static final int MMM_Server_GetTextureStr	= 0x01;
-	public static final int MMM_Client_SetTextureIndex	= 0x00;
-	public static final int MMM_Client_SetTextureStr	= 0x01;
-	
 	
 	@MLProp()
 	public static boolean isDebugView = false;
@@ -136,68 +127,18 @@ public class mod_MMM_MMMLib extends BaseMod {
 		byte[] ldata;
 		
 		switch (lmode) {
-		case MMM_Server_GetTextureIndex:
-			// テクスチャ名称のリクエストに対して番号を返す
-			/*
-			 * 0:ID
-			 * 1:index 要求かけた時の番号
-			 * 2-:Str
-			 */
-			String lsgti = MMM_Helper.getStr(var2.data, 2);
-			int ligti = 0;
-			Entry<Integer, MMM_TextureBoxServer> legti = MMM_TextureManager.getTextureBoxServer(lsgti);
-			if (legti != null) {
-				ligti = MMM_TextureManager.getTextureBoxServer(lsgti).getKey();
-			}
-			Debug("%s : %d = %d", lsgti, var2.data[1], ligti);
-			ldata = new byte[] {
-					MMM_Client_SetTextureIndex,
-					var2.data[1],
-					0, 0
-			};
-			MMM_Helper.setShort(ldata, 2, ligti);
-			sendToClient(var1, ldata);
+		case MMM_Statics.Server_SetTexturePackIndex:
+			// サーバー側のEntityに対してテクスチャインデックスを設定する
+			MMM_TextureManager.reciveFromClientSetTexturePackIndex(lentity, var2.data);
 			break;
-		case MMM_Server_SetTextureIndex:
-			// テクスチャ名称のリクエストに対して番号を返す
-			/*
-			 * 0:ID
-			 * 1:index 要求かけた時の番号
-			 * 2-3:contColorBits
-			 * 4-5:wildColorBits
-			 * 6-9:height
-			 * 10-13:width
-			 * 14-17:yoffset
-			 * 18-:Str
-			 */
-			MMM_TextureBoxServer lbox = new MMM_TextureBoxServer(var2.data);
-			int li = MMM_TextureManager.setTextureBoxToIndex(lbox);
-			Debug("%d = %d : %04x : %s", li, var2.data[1], lbox.wildColor, lbox.textureName == null ? "NULL" : lbox.textureName);
-			ldata = new byte[] {
-					MMM_Client_SetTextureIndex,
-					var2.data[1],
-					0, 0
-			};
-			MMM_Helper.setShort(ldata, 2, li);
-			sendToClient(var1, ldata);
+		case MMM_Statics.Server_GetTextureIndex:
+			// サーバー側での管理番号の問い合わせに対して応答する
+			MMM_TextureManager.reciveFromClientGetTexturePackIndex(var2.data);
 			break;
-		case MMM_Server_GetTextureStr:
-			// インデックスからテクスチャ名称を返す
-			/*
-			 * 0:ID
-			 * 1-2:index 登録テクスチャ番号
-			 */
-			int li8 = MMM_Helper.getShort(var2.data, 1);
-			MMM_TextureBoxServer lb8 = MMM_TextureManager.getIndexToBox(li8);
-			Debug("%d : %s", li8, lb8.textureName == null ? "NULL" : lb8.textureName);
-			ldata = new byte[3 + lb8.textureName.getBytes().length];
-			ldata[0] = MMM_Client_SetTextureStr;
-			ldata[1] = var2.data[1];
-			ldata[2] = var2.data[2];
-			MMM_Helper.setStr(ldata, 3, lb8.textureName);
-			sendToClient(var1, ldata);
+		case MMM_Statics.Server_GetTexturePackName:
+			// 管理番号に対応するテクスチャパック名を返す。
+			MMM_TextureManager.reciveFromClientGetTexturePackName(var1, var2.data);
 			break;
-			
 		}
 	}
 
