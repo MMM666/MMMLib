@@ -1,7 +1,7 @@
 package net.minecraft.src;
 
 
-public class MMM_ModelBiped_Steve extends MMM_ModelMultiBase {
+public class MMM_ModelMulti_Steve extends MMM_ModelMultiBase {
 
 	public MMM_ModelRenderer bipedHead;
 	public MMM_ModelRenderer bipedHeadwear;
@@ -14,13 +14,13 @@ public class MMM_ModelBiped_Steve extends MMM_ModelMultiBase {
 	public MMM_ModelRenderer bipedCloak;
 
 
-	public MMM_ModelBiped_Steve() {
+	public MMM_ModelMulti_Steve() {
 		super();
 	}
-	public MMM_ModelBiped_Steve(float psize) {
+	public MMM_ModelMulti_Steve(float psize) {
 		super(psize);
 	}
-	public MMM_ModelBiped_Steve(float psize, float pyoffset) {
+	public MMM_ModelMulti_Steve(float psize, float pyoffset) {
 		super(psize, pyoffset, 64, 32);
 	}
 
@@ -105,6 +105,11 @@ public class MMM_ModelBiped_Steve extends MMM_ModelMultiBase {
 	@Override
 	public float getyOffset() {
 		return 1.62F;
+	}
+
+	@Override
+	public float getMountedYOffset() {
+		return getHeight() * 0.75F;
 	}
 
 }

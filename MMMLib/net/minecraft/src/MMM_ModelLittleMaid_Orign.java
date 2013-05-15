@@ -8,7 +8,7 @@ import org.lwjgl.opengl.GL11;
 /**
  * LMM用に最適化
  */
-public class MMM_ModelLittleMaid extends MMM_ModelMultiBase {
+public class MMM_ModelLittleMaid_Orign extends MMM_ModelMultiBase {
 
 	//fields
 	public MMM_ModelRenderer bipedHead;
@@ -24,19 +24,19 @@ public class MMM_ModelLittleMaid extends MMM_ModelMultiBase {
 	/**
 	 * コンストラクタは全て継承させること
 	 */
-	public MMM_ModelLittleMaid() {
+	public MMM_ModelLittleMaid_Orign() {
 		super();
 	}
 	/**
 	 * コンストラクタは全て継承させること
 	 */
-	public MMM_ModelLittleMaid(float psize) {
+	public MMM_ModelLittleMaid_Orign(float psize) {
 		super(psize);
 	}
 	/**
 	 * コンストラクタは全て継承させること
 	 */
-	public MMM_ModelLittleMaid(float psize, float pyoffset) {
+	public MMM_ModelLittleMaid_Orign(float psize, float pyoffset) {
 		super(psize, pyoffset, 64, 32);
 	}
 
@@ -156,6 +156,11 @@ public class MMM_ModelLittleMaid extends MMM_ModelMultiBase {
 	@Override
 	public float getyOffset() {
 		return 1.215F;
+	}
+
+	@Override
+	public float getMountedYOffset() {
+		return 0.35F;
 	}
 
 	@Override

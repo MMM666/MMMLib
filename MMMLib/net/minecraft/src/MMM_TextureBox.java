@@ -4,47 +4,58 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class MMM_TextureBox {
+public class MMM_TextureBox extends MMM_TextureBoxBase {
 
 	/**
-	 * テクスチャパックの名称
+	 * テクスチャパックの名称、モデル指定詞の前までの文字列。
 	 */
 	public String packegeName;
+	/**
+	 * テクスチャファイルのファイル名リスト。
+	 */
 	public Map<Integer, String> textures;
+	/**
+	 * アーマーファイルのファイル名リスト。
+	 */
 	public Map<String, Map<Integer, String>> armors;
+	/**
+	 * モデル指定詞
+	 */
 	public String modelName;
+	/**
+	 * マルチモデルクラス
+	 */
 	public MMM_ModelMultiBase[] models;
 	/**
 	 * pName, pTextureDir, pClassPrefix
 	 */
 	public String[] textureDir;
-	
-	protected float modelHeight;
-	protected float modelWidth;
-	protected float modelYOffset;
 
 
 
 	public MMM_TextureBox() {
 		textures = new HashMap<Integer, String>();
 		armors = new TreeMap<String, Map<Integer, String>>();
-		modelHeight = modelWidth = modelYOffset = 0.0F;
+		modelHeight = modelWidth = modelYOffset = modelMountedYOffset = 0.0F;
 	}
-	public MMM_TextureBox(String pName, String[] pSearch) {
+
+	public MMM_TextureBox(String pTextureName, String[] pSearch) {
 		this();
-		packegeName = pName;
+		textureName = pTextureName;
+		int li = pTextureName.lastIndexOf("_");
+		if (li > -1) {
+			packegeName = pTextureName.substring(0, li - 1);
+			modelName = pTextureName.substring(li + 1);
+		} else {
+			packegeName = pTextureName;
+			modelName = "";
+		}
 		textureDir = pSearch;
 	}
 
-	public void setModels(String pName, MMM_ModelMultiBase[] pModels) {
-		modelName = pName;
-		models = pModels;
-	}
-
-	public void setModelSize(float pHeight, float pWidth, float pYOffset) {
-		modelHeight = pHeight;
-		modelWidth = pWidth;
-		modelYOffset = pYOffset;
+	public void setModels(String pModelName, MMM_ModelMultiBase[] pModels, MMM_ModelMultiBase[] pDefModels) {
+		modelName = pModelName;
+		models = pModels == null ? pDefModels : pModels;
 	}
 
 	/**
@@ -89,6 +100,7 @@ public class MMM_TextureBox {
 	/**
 	 * 契約色の有無をビット配列にして返す
 	 */
+	@Override
 	public int getContractColorBits() {
 		int li = 0;
 		for (Integer i : textures.keySet()) {
@@ -101,6 +113,7 @@ public class MMM_TextureBox {
 	/**
 	 * 野生色の有無をビット配列にして返す
 	 */
+	@Override
 	public int getWildColorBits() {
 		int li = 0;
 		for (Integer i : textures.keySet()) {
@@ -110,7 +123,7 @@ public class MMM_TextureBox {
 		}
 		return li;
 	}
-	
+
 	public boolean hasColor(int pIndex) {
 		return textures.containsKey(pIndex);
 	}
@@ -123,16 +136,35 @@ public class MMM_TextureBox {
 		return !armors.isEmpty();
 	}
 
+	@Override
 	public float getHeight() {
-		return modelHeight == 0 ? models[0].getHeight() : modelHeight;
+		return models != null ? models[0].getHeight() : modelHeight;
 	}
 
+	@Override
 	public float getWidth() {
-		return modelWidth == 0 ? models[0].getWidth() : modelWidth;
+		return models != null ? models[0].getWidth() : modelWidth;
 	}
 
+	@Override
 	public float getYOffset() {
-		return modelYOffset == 0 ? models[0].getyOffset() : modelYOffset;
+		return models != null ? models[0].getyOffset() : modelYOffset;
 	}
 
+	@Override
+	public float getMountedYOffset() {
+		return models != null ? models[0].getMountedYOffset() : modelMountedYOffset;
+	}
+
+	public MMM_TextureBox duplicate() {
+		MMM_TextureBox lbox = new MMM_TextureBox();
+		lbox.textureName = textureName;
+		lbox.packegeName = packegeName;
+		lbox.textureDir = textureDir;
+		lbox.textures = textures;
+		lbox.armors = armors;
+		
+		
+		return lbox;
+	}
 }

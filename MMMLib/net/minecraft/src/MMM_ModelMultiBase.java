@@ -214,6 +214,10 @@ public abstract class MMM_ModelMultiBase
 	 * PF用。
 	 */
 	public abstract float getyOffset();
+	/**
+	 * 上に乗せる時のオフセット高
+	 */
+	public abstract float getMountedYOffset();
 
 	/**
 	 * アイテムを持っているときに手を前に出すかどうか。

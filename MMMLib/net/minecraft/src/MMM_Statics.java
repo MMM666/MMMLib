@@ -22,7 +22,8 @@ public class MMM_Statics {
 	 * [6..9]	: height
 	 * [10..13]	: width
 	 * [14..17]	: yoffset
-	 * [18..]	: TexturePackName;
+	 * [18..21]	: mountedYOffset
+	 * [22..]	: TexturePackName;
 	 */
 	public static final byte Server_GetTextureIndex = (byte)0x01;
 	/**
@@ -48,7 +49,8 @@ public class MMM_Statics {
 	 * [7..10]	: height
 	 * [11..14]	: width
 	 * [15..18]	: yoffset
-	 * [19..]	: TexturePackName;
+	 * [19..22]	: mountedYOffset
+	 * [23..]	: TexturePackName;
 	 */
 	public static final byte Client_SetTexturePackName = (byte)0x02;
 	

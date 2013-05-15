@@ -5,7 +5,7 @@ import org.lwjgl.opengl.GL11;
 /**
  * u‚«•t‚«Šî–{Œ`
  */
-public class MMM_ModelLittleMaid_SR2 extends MMM_ModelLittleMaid {
+public class MMM_ModelLittleMaid_SR2 extends MMM_ModelLittleMaid_Orign {
 
 	public MMM_ModelRenderer eyeR;
 	public MMM_ModelRenderer eyeL;

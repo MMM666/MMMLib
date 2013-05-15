@@ -64,19 +64,21 @@ public class mod_MMM_MMMLib extends BaseMod {
 		// バイオームに設定されたスポーン情報を置き換え。
 		MMM_Helper.replaceBaiomeSpawn();
 		
+		// テクスチャパックの構築
+		MMM_TextureManager.loadTextures();
 		// ロード
 		if (MMM_Helper.isClient) {
 			// テクスチャパックの構築
 			MMM_TextureManager.loadTextures();
 			MMM_StabilizerManager.loadStabilizer();
 			MMM_Client.setArmorPrefix();
+			// テクスチャインデックスの構築
+			Debug("Localmode: InitTextureList.");
+			MMM_TextureManager.initTextureList(true);
 		} else {
 			MMM_TextureManager.loadTextureIndex();
 		}
 		
-		// テクスチャインデックスの構築
-		Debug("Localmode: InitTextureList.");
-		MMM_TextureManager.initTextureList(true);
 	}
 
 	@Override

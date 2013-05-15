@@ -26,8 +26,8 @@ import net.minecraft.server.MinecraftServer;
 
 public class MMM_TextureManager {
 
-//	private static String defDirName = "/mob/littleMaid/";
-	private static String nameTextureIndex = "config/mod_MMM_textureList.cfg";
+	protected static String nameTextureIndex = "config/mod_MMM_textureList.cfg";
+	protected static String defaultModelName = "Orign";
 	/**
 	 * 旧タイプのファイル名
 	 */
@@ -47,15 +47,16 @@ public class MMM_TextureManager {
 	public static final int tx_oldwild		= 0x10; //16;
 	public static final int tx_oldarmor1	= 0x11; //17;
 	public static final int tx_oldarmor2	= 0x12; //18;
+	public static final int tx_oldeye		= 0x13; //19;
 	public static final int tx_gui			= 0x20; //32;
 	public static final int tx_wild			= 0x30; //48;
 	public static final int tx_armor1		= 0x40; //64;
 	public static final int tx_armor2		= 0x50; //80;
-	public static final int tx_light		= 0x60; //96;
+	public static final int tx_eye			= 0x60; //96;
 	private static Map<String, MMM_ModelMultiBase[]> modelMap = new TreeMap<String, MMM_ModelMultiBase[]>();
 	public static String[] armorFilenamePrefix;
-	public static MMM_ModelMultiBase[] defaultModel;
-
+//	public static MMM_ModelMultiBase[] defaultModel;
+	
 	/**
 	 * ローカルで保持しているテクスチャパック
 	 */
@@ -67,13 +68,12 @@ public class MMM_TextureManager {
 	/**
 	 * サーバー・クライアント間でテクスチャパックの名称リストの同期を取るのに使う。
 	 */
-//	public static Map<Integer, MMM_TextureBoxServer> textureServer = new HashMap<Integer, MMM_TextureBoxServer>();
 	public static List<MMM_TextureBoxServer> textureServer = new ArrayList<MMM_TextureBoxServer>();
 	/**
 	 * Entity毎にデフォルトテクスチャを参照。
 	 * 構築方法はEntityListを参照のこと。
 	 */
-	public static Map<MMM_ITextureEntity, MMM_TextureBoxServer> defaultTextures = new HashMap<MMM_ITextureEntity, MMM_TextureBoxServer>();
+	public static Map<Class, MMM_TextureBox> defaultTextures = new HashMap<Class, MMM_TextureBox>();
 	
 	/**
 	 * クライアント側で使う
@@ -91,9 +91,9 @@ public class MMM_TextureManager {
 
 	protected static void init() {
 		MMM_FileManager.getModFile("MMMLib", "MMMLib");
+		addSearch("MMMLib", "/mob/ModelMulti/", "ModelMulti_");
 		MMM_FileManager.getModFile("littleMaidMob", "littleMaidMob");
 		addSearch("littleMaidMob", "/mob/littleMaid/", "ModelLittleMaid_");
-//		addSearch("littleMaidMob", "/mob/littleMaid/", "ModelLittleMaid_");
 	}
 
 	protected static String[] getSearch(String pName) {
@@ -113,11 +113,11 @@ public class MMM_TextureManager {
 	}
 
 	/**
-	 * パッケージ名称の一致する物を返す。
+	 * テクスチャ名称の一致する物を返す。
 	 */
 	public static MMM_TextureBox getTextureBox(String pName) {
 		for (MMM_TextureBox ltb : textures) {
-			if (ltb.packegeName.equals(pName)) {
+			if (ltb.textureName.equals(pName)) {
 				return ltb;
 			}
 		}
@@ -161,27 +161,7 @@ public class MMM_TextureManager {
 		// アーマーのファイル名を識別するための文字列を獲得する
 		getArmorPrefix();
 		
-		// TODO:一時しのぎ
-		MMM_ModelMultiBase lmodel = new MMM_ModelLittleMaid(0.0F);
-		MMM_TextureManager.defaultModel = new MMM_ModelMultiBase[] {
-				lmodel,
-				new MMM_ModelLittleMaid(lmodel.getArmorModelsSize()[0]),
-				new MMM_ModelLittleMaid(lmodel.getArmorModelsSize()[1])
-		};
-
-		
-		
-		// デフォルトテクスチャ名の作成
-		if (defaultModel != null) {
-			String[] lss = getSearch("littleMaidMob");
-			for (int i = 0; i < defNames.length; i++) {
-				addTextureName((new StringBuilder()).append(lss[1]).append("default/").append(defNames[i]).toString(), lss);
-			}
-			modelMap.put("default", defaultModel);
-//			getStringToIndex("default");
-			mod_MMM_MMMLib.Debug("getTexture-append-default-done.");
-		}
-		
+		// ファイルを解析してテクスチャを追加
 		for (String[] lss : searchPrefix) {
 			mod_MMM_MMMLib.Debug("getTexture[%s].", lss[0]);
 			// jar内のテクスチャを追加
@@ -204,31 +184,34 @@ public class MMM_TextureManager {
 				mod_MMM_MMMLib.Debug("getTexture-append-%s-%s.", lf.getName(), lflag ? "done" : "fail");
 			}
 		}
-/*		
-		// ロードしたテクスチャパックからクラスを強制ロード
-		for (Entry<String, Map<Integer, String>> tt: textures.entrySet()) {
-			String st = tt.getKey();
-			int index = st.lastIndexOf("_");
-			if (index > -1) {
-				st = st.substring(index + 1);
-				if (!st.isEmpty()) {
-					addModelClass("ModelLittleMaid_".concat(st).concat(".class"));
-				}
+		
+		// テクスチャパッケージにモデルクラスを紐付け
+		MMM_ModelMultiBase[] ldm = modelMap.get(defaultModelName);
+		if (ldm == null) {
+			ldm = (MMM_ModelMultiBase[])modelMap.values().toArray()[0];
+		}
+		for (MMM_TextureBox ltb : textures) {
+			if (ltb.modelName.isEmpty()) {
+				ltb.setModels(defaultModelName, null, ldm);
+			} else {
+				ltb.setModels(ltb.modelName, modelMap.get(ltb.modelName), ldm);
 			}
 		}
-		mod_MMM_MMMLib.Debug("getTexture-append-Models-append-done.");
-*/
-		// テクスチャパッケージにモデルクラスを紐付け
-		for (MMM_TextureBox ltb : textures) {
-			int li = ltb.packegeName.lastIndexOf("_");
-			if (li > -1) {
-				String ls = ltb.packegeName.substring(li + 1);
-				ltb.setModels(ls, modelMap.get(ls));
-				if (ltb.models == null) {
-					ltb.setModels("default", defaultModel);
+		for (Entry<String, MMM_ModelMultiBase[]> le : modelMap.entrySet()) {
+			String ls = le.getValue()[0].getUsingTexture();
+			if (ls != null) {
+				MMM_TextureBox lbox = null;
+				for (MMM_TextureBox ltb : textures) {
+					if (ltb.models == le.getValue()) {
+						lbox = ltb;
+						break;
+					}
 				}
-			} else {
-				ltb.setModels("default", defaultModel);
+				if (lbox != null) {
+					lbox = lbox.duplicate();
+					lbox.setModels(le.getKey(), null, le.getValue());
+					textures.add(lbox);
+				}
 			}
 		}
 		
@@ -247,14 +230,16 @@ public class MMM_TextureManager {
 				
 				while ((ls = br.readLine()) != null) {
 					String lt[] = ls.split(",");
-					if (lt.length > 1) {
+					if (lt.length == 8) {
 						MMM_TextureBoxServer lbox = new MMM_TextureBoxServer();
 						lbox.contractColor	= Integer.valueOf(lt[0], 16);
 						lbox.wildColor		= Integer.valueOf(lt[1], 16);
-						lbox.modelHeight	= Float.valueOf(lt[2]);
-						lbox.modelWidth		= Float.valueOf(lt[3]);
-						lbox.modelYOffset	= Float.valueOf(lt[4]);
-						lbox.textureName	= lt[5];
+						lbox.setModelSize(
+								Float.valueOf(lt[2]),
+								Float.valueOf(lt[3]),
+								Float.valueOf(lt[4]),
+								Float.valueOf(lt[5]));
+						lbox.textureName	= lt[6];
 						textureServer.add(lbox);
 					}
 				}
@@ -288,12 +273,13 @@ public class MMM_TextureManager {
 			
 			for (MMM_TextureBoxServer lbox : textureServer) {
 				bw.write(String.format(
-						"%04x,%04x,%f,%f,%f,%s",
-						lbox.contractColor,
-						lbox.wildColor,
-						lbox.modelHeight,
-						lbox.modelWidth,
-						lbox.modelYOffset,
+						"%04x,%04x,%f,%f,%f,%f,%s",
+						lbox.getContractColorBits(),
+						lbox.getWildColorBits(),
+						lbox.getHeight(),
+						lbox.getWidth(),
+						lbox.getYOffset(),
+						lbox.getMountedYOffset(),
 						lbox.textureName));
 				bw.newLine();
 			}
@@ -357,7 +343,6 @@ public class MMM_TextureManager {
 				mlm[1] = cm.newInstance(lsize[0]);
 				mlm[2] = cm.newInstance(lsize[1]);
 				modelMap.put(pn, mlm);
-//				mod_littleMaidMob.Debug(String.format("getModelClass-%s", mlm[0].getClass().getName()));
 				mod_MMM_MMMLib.Debug("getModelClass-%s:%s", pn, cn);
 				
 			}
@@ -401,7 +386,6 @@ public class MMM_TextureManager {
 						lts = new MMM_TextureBox(pn, pSearch);
 						textures.add(lts);
 						mod_MMM_MMMLib.Debug("getTextureName-append-texturePack-%s", pn);
-//						mod_MMM_MMMLib.Debug(String.format("getTextureName-append-armorPack-%s", pn));
 					}
 					if (j >= 0x40 && j <= 0x5f) {
 						// ダメージドアーマー
@@ -413,12 +397,10 @@ public class MMM_TextureManager {
 							s.put(an, ss);
 						}
 						ss.put(j, fn);
-//						mod_littleMaidMob.Debug(String.format("getTextureName-append-armor-%s:%d:%s", pn, j, fn));
 					} else {
 						// 通常のテクスチャ
 						Map<Integer, String> s = lts.textures;
 						s.put(j, fn);
-//						mod_littleMaidMob.Debug(String.format("getTextureName-append-%s:%d:%s", pn, j, fn));
 					}
 				}
 			}
@@ -503,7 +485,7 @@ public class MMM_TextureManager {
 		}
 	}
 
-	public static boolean addTexturesDir(File file, String[] pSearch) {
+	protected static boolean addTexturesDir(File file, String[] pSearch) {
 		// modsフォルダに突っ込んであるものも検索、再帰で。
 		if (file == null) {
 			return false;
@@ -528,7 +510,6 @@ public class MMM_TextureManager {
 				}
 			}
 			return true;
-			
 		} catch (Exception e) {
 			mod_MMM_MMMLib.Debug("addTextureDebug-Exception.");
 			return false;
@@ -588,6 +569,7 @@ public class MMM_TextureManager {
 		return lreturn == null ? null  :lreturn.packegeName;
 	}
 
+	@Deprecated
 	public static String getTextureName(MMM_TextureBox pBox, int pIndex) {
 		if (pBox == null) {
 			return null;
@@ -602,6 +584,7 @@ public class MMM_TextureManager {
 			return pBox.getTextureName(pIndex);
 		}
 	}
+	@Deprecated
 	public static String getTextureName(String name, int index) {
 		return getTextureName(getTextureBox(name), index);
 	}
@@ -652,6 +635,7 @@ public class MMM_TextureManager {
 	/**
 	 * アーマーのテクスチャファイル名を返す
 	 */
+	@Deprecated
 	public static String getArmorTextureName(String name, int index, ItemStack itemstack) {
 		// indexは0x40,0x50番台
 		MMM_TextureBox ltb = getTextureBox(name);
@@ -662,6 +646,7 @@ public class MMM_TextureManager {
 	}
 
 	public static String getRandomTexture(Random pRand) {
+		// TODO:要修正
 		if (textureServer.isEmpty()) {
 			return "default";
 		} else {
@@ -679,6 +664,7 @@ public class MMM_TextureManager {
 	/**
 	 * 野生のメイドの色をランダムで返す
 	 */
+	@Deprecated
 	public static int getRandomWildColor(int pIndex, Random rand) {
 		if (textureServer.isEmpty() || pIndex < 0) return -1;
 		
@@ -701,6 +687,7 @@ public class MMM_TextureManager {
 	/**
 	 * 契約のメイドの色をランダムで返す
 	 */
+	@Deprecated
 	public static int getRandomContractColor(int pIndex, Random rand) {
 		if (textureServer.isEmpty() || pIndex < 0) return -1;
 		
@@ -733,14 +720,39 @@ public class MMM_TextureManager {
 			}
 		}
 		// 見当たらなかったのでEntityに対応するデフォルトを返す
-		int li = textureServer.indexOf(defaultTextures.get(pEntity));
+		int li = textureServerIndex.get(getDefaultTexture(pEntity));
 		if (li > -1) return li;
 		return 0;
 	}
-	
-	
-	
-	
+
+	/**
+	 * Entityに対応するデフォルトのテクスチャを設定する。
+	 */
+	public static void setDefaultTexture(MMM_ITextureEntity pEntity, MMM_TextureBox pBox) {
+		setDefaultTexture(pEntity.getClass(), pBox);
+	}
+	public static void setDefaultTexture(Class pEntityClass, MMM_TextureBox pBox) {
+		defaultTextures.put(pEntityClass, pBox);
+	}
+
+	/**
+	 * Entityに対応するデフォルトモデルを返す。
+	 */
+	public static MMM_TextureBox getDefaultTexture(MMM_ITextureEntity pEntity) {
+		return getDefaultTexture(pEntity.getClass());
+	}
+	public static MMM_TextureBox getDefaultTexture(Class pEntityClass) {
+		if (defaultTextures.containsKey(pEntityClass)) {
+			return defaultTextures.get(pEntityClass);
+		} else {
+			MMM_TextureBox lbox = getDefaultTexture(pEntityClass.getSuperclass());
+			if (lbox != null) {
+				setDefaultTexture(pEntityClass, lbox);
+			}
+			return lbox;
+		}
+	}
+
 	
 	
 	
@@ -868,7 +880,7 @@ public class MMM_TextureManager {
 		// サーバー側へテクスチャパックの管理番号を問い合わせる。
 		// 呼び出し側のクライアントへのみ返す。
 		// 返すときはNameは不要、BufIndexのみで識別させる
-		byte ldata[] = new byte[18 + pBox.packegeName.length()];
+		byte ldata[] = new byte[22 + pBox.packegeName.length()];
 		ldata[0] = MMM_Statics.Server_GetTextureIndex;
 		ldata[1] = (byte)pBufIndex;
 		MMM_Helper.setShort(ldata, 2, pBox.getContractColorBits());
@@ -876,7 +888,8 @@ public class MMM_TextureManager {
 		MMM_Helper.setFloat(ldata, 6, pBox.getHeight());
 		MMM_Helper.setFloat(ldata, 10, pBox.getWidth());
 		MMM_Helper.setFloat(ldata, 14, pBox.getYOffset());
-		MMM_Helper.setStr(ldata, 18, pBox.packegeName);
+		MMM_Helper.setFloat(ldata, 18, pBox.getMountedYOffset());
+		MMM_Helper.setStr(ldata, 22, pBox.packegeName);
 		MMM_Client.sendToServer(ldata);
 	}
 
@@ -893,12 +906,7 @@ public class MMM_TextureManager {
 		} else {
 			li = textureServer.indexOf(lboxsrv);
 		}
-		lboxsrv.contractColor = MMM_Helper.getShort(pData, 2);
-		lboxsrv.wildColor = MMM_Helper.getShort(pData, 4);
-		lboxsrv.modelHeight = MMM_Helper.getFloat(pData, 6);
-		lboxsrv.modelWidth = MMM_Helper.getFloat(pData, 10);
-		lboxsrv.modelYOffset = MMM_Helper.getFloat(pData, 14);
-		lboxsrv.textureName = lpackname;
+		lboxsrv.setValue(pData);
 		
 		byte ldata[] = new byte[4];
 		ldata[0] = MMM_Statics.Client_SetTextureIndex;
@@ -974,22 +982,23 @@ public class MMM_TextureManager {
 		MMM_TextureBoxServer lboxserver = getTextureBoxServer(lindex);
 		
 		// Clientへ管理番号に登録されているテクスチャ名称をポストする
-		byte ldata[] = new byte[19 + lboxserver.textureName.length()];
+		byte ldata[] = new byte[23 + lboxserver.textureName.length()];
 		ldata[0] = MMM_Statics.Client_SetTexturePackName;
 		MMM_Helper.setShort(ldata, 1, lindex);
-		MMM_Helper.setShort(ldata, 3, lboxserver.contractColor);
-		MMM_Helper.setShort(ldata, 5, lboxserver.wildColor);
-		MMM_Helper.setFloat(ldata, 7, lboxserver.modelHeight);
-		MMM_Helper.setFloat(ldata, 11, lboxserver.modelWidth);
-		MMM_Helper.setFloat(ldata, 15, lboxserver.modelYOffset);
-		MMM_Helper.setStr(ldata, 19, lboxserver.textureName);
+		MMM_Helper.setShort(ldata, 3, lboxserver.getContractColorBits());
+		MMM_Helper.setShort(ldata, 5, lboxserver.getWildColorBits());
+		MMM_Helper.setFloat(ldata, 7, lboxserver.getHeight());
+		MMM_Helper.setFloat(ldata, 11, lboxserver.getWidth());
+		MMM_Helper.setFloat(ldata, 15, lboxserver.getYOffset());
+		MMM_Helper.setFloat(ldata, 19, lboxserver.getMountedYOffset());
+		MMM_Helper.setStr(ldata, 23, lboxserver.textureName);
 		mod_MMM_MMMLib.sendToClient(pHandler, ldata);
 	}
 
 	protected static void reciveFromServerSetTexturePackName(byte[] pData) {
 		// Client
 		// サーバーからインデックスに対する名称の設定があった。
-		String lpackname = MMM_Helper.getStr(pData, 19);
+		String lpackname = MMM_Helper.getStr(pData, 23);
 		MMM_TextureBox lbox = getTextureBox(lpackname);
 		if (lbox == null) {
 			// ローカルには存在しないテクスチャパック
@@ -997,7 +1006,8 @@ public class MMM_TextureManager {
 			lbox.setModelSize(
 					MMM_Helper.getFloat(pData, 7),
 					MMM_Helper.getFloat(pData, 11),
-					MMM_Helper.getFloat(pData, 15));
+					MMM_Helper.getFloat(pData, 15),
+					MMM_Helper.getFloat(pData, 19));
 			textures.add(lbox);
 		}
 		textureServerIndex.put(lbox, (int)MMM_Helper.getShort(pData, 1));

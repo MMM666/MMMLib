@@ -8,7 +8,7 @@ import org.lwjgl.opengl.GL11;
  * 旧型モデル互換のベースモデル。
  * 関節リンクしていない
  */
-public class MMM_ModelLittleMaid_Archetype extends MMM_ModelLittleMaid {
+public class MMM_ModelLittleMaid_Archetype extends MMM_ModelLittleMaid_Orign {
 
 	// fields
 	public MMM_ModelRenderer bipedHeadwear;

@@ -59,6 +59,11 @@ public class MMM_ModelLittleMaid_AC extends MMM_ModelMultiBase {
 	}
 	
 	@Override
+	public float getMountedYOffset() {
+		return 0.35F;
+	}
+	
+	@Override
 	public void renderItems() {
 		// TODO Auto-generated method stub
 		
