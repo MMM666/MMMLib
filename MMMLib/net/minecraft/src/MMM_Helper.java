@@ -349,8 +349,8 @@ public class MMM_Helper {
 		try {
 			// stringToClassMapping
 			Map lmap;
-			int lint;
-			String ls;
+			int lint = 0;
+			String ls = "";
 			lmap = (Map)ModLoader.getPrivateValue(EntityList.class, null, 0);
 			for (Entry<String, Class> le : ((Map<String, Class>)lmap).entrySet()) {
 				if (le.getValue() == pSrcClass) {
@@ -379,7 +379,7 @@ public class MMM_Helper {
 				lmap.put(pDestClass, lint);
 			}
 			replaceEntitys.put(pSrcClass, pDestClass);
-			Debug("Replace %s -> %s", pSrcClass.getSimpleName(), pDestClass.getSimpleName());
+			Debug("Replace %s -> %s(EntityListID: %d, EntityListString: %s)", pSrcClass.getSimpleName(), pDestClass.getSimpleName(), lint, ls);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

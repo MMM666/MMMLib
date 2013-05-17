@@ -8,13 +8,13 @@ public class MMM_TextureBoxServer extends MMM_TextureBoxBase {
 	public MMM_TextureBoxServer(MMM_TextureBox pBox) {
 		contractColor	= pBox.getContractColorBits();
 		wildColor		= pBox.getWildColorBits();
+		textureName		= pBox.textureName;
 		if (pBox.models != null) {
 			modelHeight			= pBox.models[0].getHeight();
 			modelWidth			= pBox.models[0].getWidth();
 			modelYOffset		= pBox.models[0].getyOffset();
 			modelMountedYOffset	= pBox.models[0].getMountedYOffset();
 		}
-		textureName		= pBox.packegeName;
 	}
 
 	/*

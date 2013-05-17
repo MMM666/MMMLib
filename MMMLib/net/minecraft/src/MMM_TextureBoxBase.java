@@ -7,8 +7,8 @@ import java.util.Random;
 public abstract class MMM_TextureBoxBase {
 
 	public String textureName;
-	public int contractColor;
-	public int wildColor;
+	protected int contractColor;
+	protected int wildColor;
 	protected float modelHeight;
 	protected float modelWidth;
 	protected float modelYOffset;

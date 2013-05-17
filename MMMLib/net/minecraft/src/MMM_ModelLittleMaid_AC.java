@@ -3,7 +3,7 @@ package net.minecraft.src;
 /**
  * スタビライザー搭載機
  */
-public class MMM_ModelLittleMaid_AC extends MMM_ModelMultiBase {
+public class MMM_ModelLittleMaid_AC extends MMM_ModelMultiMMMBase {
 
 	public MMM_ModelRenderer bipedHead;
 	public MMM_ModelRenderer bipedBody;
@@ -64,7 +64,13 @@ public class MMM_ModelLittleMaid_AC extends MMM_ModelMultiBase {
 	}
 	
 	@Override
-	public void renderItems() {
+	public void renderItems(MMM_IModelCaps pEntityCaps) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void renderFirstPersonHand(MMM_IModelCaps pEntityCaps) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -18,18 +18,18 @@ public class MMM_ModelStabilizer_WitchHat extends MMM_ModelStabilizerBase {
 		WitchHat1 = new MMM_ModelRenderer(this, 0, 0);
 		WitchHat2 = new MMM_ModelRenderer(this, 0, 0);
 		WitchHat3 = new MMM_ModelRenderer(this, 0, 0);
-		WitchHat.setTextureOffsetMM( 0, 15).addBoxMM(-8F, 0F, -8F, 16, 1, 16, 0.0F);
-		WitchHat.setTextureOffsetMM( 0,  0).addBoxMM(-4.5F, -4F, -4.5F, 9, 4, 9);
-		WitchHat1.setTextureOffsetMM(40, 4).addBoxMM(-3F, -3F, -3F, 6, 3, 6).setRotationPointMM(0F, -4F, 0F);
-		WitchHat2.setTextureOffsetMM(28, 0).addBoxMM(-2F, -2F, -2F, 4, 2, 4).setRotationPointMM(0F, -3F, 0F);
-		WitchHat3.setTextureOffsetMM( 0, 0).addBoxMM(-1F, -2F, -1F, 2, 2, 2).setRotationPointMM(0F, -2F, 0F);
+		WitchHat.setTextureOffset( 0, 15).addBox(-8F, 0F, -8F, 16, 1, 16, 0.0F);
+		WitchHat.setTextureOffset( 0,  0).addBox(-4.5F, -4F, -4.5F, 9, 4, 9);
+		WitchHat1.setTextureOffset(40, 4).addBox(-3F, -3F, -3F, 6, 3, 6).setRotationPoint(0F, -4F, 0F);
+		WitchHat2.setTextureOffset(28, 0).addBox(-2F, -2F, -2F, 4, 2, 4).setRotationPoint(0F, -3F, 0F);
+		WitchHat3.setTextureOffset( 0, 0).addBox(-1F, -2F, -1F, 2, 2, 2).setRotationPoint(0F, -2F, 0F);
 		
-		WitchHat.addChildMM(WitchHat1);
-		WitchHat1.addChildMM(WitchHat2);
-		WitchHat2.addChildMM(WitchHat3);
+		WitchHat.addChild(WitchHat1);
+		WitchHat1.addChild(WitchHat2);
+		WitchHat2.addChild(WitchHat3);
 	}
 	
-	@Override
+//	@Override
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
 		GL11.glTranslatef(0F, -0.1F, 0F);
 		WitchHat.render(f5);

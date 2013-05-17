@@ -2,36 +2,24 @@ package net.minecraft.src;
 
 public class MMM_ModelPlate extends MMM_ModelBoxBase {
 
-	private PositionTextureVertex vertexPositions[];
-	private TexturedQuad quadList[];
-	public final float posX1;
-	public final float posY1;
-	public final float posZ1;
-	public final float posX2;
-	public final float posY2;
-	public final float posZ2;
-
-
 	/**
 	 * @param pMRenderer
 	 * @param pArg
 	 * textureX, textureY, posX, posY, posZ, width, height, facePlane, sizeAdjust
 	 */
 	public MMM_ModelPlate(MMM_ModelRenderer pMRenderer, Object... pArg) {
-		this(pMRenderer, (Integer)pArg[0], (Integer)pArg[1],
+		super(pMRenderer, pArg);
+		init(pMRenderer, (Integer)pArg[0], (Integer)pArg[1],
 				(Float)pArg[2], (Float)pArg[3], (Float)pArg[4],
 				(Integer)pArg[5], (Integer)pArg[6], (Integer)pArg[7],
 				pArg.length < 9 ? 0.0F : (Float)pArg[8]);
 	}
 
-	private MMM_ModelPlate(ModelRenderer modelrenderer, int pTextureX, int pTextureY,
+	private void init(MMM_ModelRenderer modelrenderer, int pTextureX, int pTextureY,
 			float pX, float pY, float pZ, int pWidth, int pHeight, int pPlane, float pZoom) {
-		// 親は呼んでるけど、内容は未使用
-		super(modelrenderer, pTextureX, pTextureY, pX, pY, pZ, pWidth, pHeight, pPlane, pZoom);
-		
-		float f4;
-		float f5;
-		float f6;
+		float lx;
+		float ly;
+		float lz;
 		
 		// i1 は平面の生成位置
 		switch (pPlane & 3) {
@@ -40,19 +28,19 @@ public class MMM_ModelPlate extends MMM_ModelBoxBase {
 			posX1 = pX;
 			posY1 = pY;
 			posZ1 = pZ;
-			posX2 = f4 = pX + (float) pWidth;
-			posY2 = f5 = pY + (float) pHeight;
-			posZ2 = f6 = pZ;
+			posX2 = lx = pX + (float) pWidth;
+			posY2 = ly = pY + (float) pHeight;
+			posZ2 = lz = pZ;
 			pX -= pZoom;
 			pY -= pZoom;
-			f4 += pZoom;
-			f5 += pZoom;
+			lx += pZoom;
+			ly += pZoom;
 			if (pPlane < 4) {
 				pZ -= pZoom;
-				f6 -= pZoom;
+				lz -= pZoom;
 			} else {
 				pZ += pZoom;
-				f6 += pZoom;
+				lz += pZoom;
 			}
 			break;
 		case 1:
@@ -60,19 +48,19 @@ public class MMM_ModelPlate extends MMM_ModelBoxBase {
 			posX1 = pX;
 			posY1 = pY;
 			posZ1 = pZ;
-			posX2 = f4 = pX;
-			posY2 = f5 = pY + (float) pHeight;
-			posZ2 = f6 = pZ + (float) pWidth;
+			posX2 = lx = pX;
+			posY2 = ly = pY + (float) pHeight;
+			posZ2 = lz = pZ + (float) pWidth;
 			pY -= pZoom;
 			pZ -= pZoom;
-			f5 += pZoom;
-			f6 += pZoom;
+			ly += pZoom;
+			lz += pZoom;
 			if (pPlane < 4) {
 				pX += pZoom;
-				f4 += pZoom;
+				lx += pZoom;
 			} else {
 				pX -= pZoom;
-				f4 -= pZoom;
+				lx -= pZoom;
 			}
 			break;
 		case 2:
@@ -81,50 +69,41 @@ public class MMM_ModelPlate extends MMM_ModelBoxBase {
 			posX1 = pX;
 			posY1 = pY;
 			posZ1 = pZ;
-			posX2 = f4 = pX + (float) pWidth;
-			posY2 = f5 = pY;
-			posZ2 = f6 = pZ + (float) pHeight;
+			posX2 = lx = pX + (float) pWidth;
+			posY2 = ly = pY;
+			posZ2 = lz = pZ + (float) pHeight;
 			pX -= pZoom;
 			pZ -= pZoom;
-			f4 += pZoom;
-			f6 += pZoom;
+			lx += pZoom;
+			lz += pZoom;
 			if (pPlane < 4) {
 				pY -= pZoom;
-				f5 -= pZoom;
+				ly -= pZoom;
 			} else {
 				pY += pZoom;
-				f5 += pZoom;
+				ly += pZoom;
 			}
 			break;
 		}
 		
 		vertexPositions = new PositionTextureVertex[4];
 		quadList = new TexturedQuad[1];
-		// float f4 = field_40674_d;
-		// float f5 = field_40675_e;
-		// float f6 = field_40672_f;
-		// f -= f3;
-		// f1 -= f3;
-		// f2 -= f3;
-		// f4 += f3;
-		// f5 += f3;
-		// f6 += f3;
 		// 面の法面を反転する
 		if (modelrenderer.mirror) {
 			if (pPlane == 0 && pPlane == 4) {
 				// xy
-				float f7 = f4;
-				f4 = pX;
+				float f7 = lx;
+				lx = pX;
 				pX = f7;
 			} else if (pPlane == 1 && pPlane == 5) {
 				// zy
-				float f7 = f6;
-				f6 = pZ;
+				float f7 = lz;
+				lz = pZ;
 				pZ = f7;
 			} else {
 				// xz
-				float f7 = f4;
-				f4 = pX;
+				float f7 = lx;
+				lx = pX;
 				pX = f7;
 			}
 		}
@@ -132,11 +111,11 @@ public class MMM_ModelPlate extends MMM_ModelBoxBase {
 		PositionTextureVertex positiontexturevertex =
 				new PositionTextureVertex(pX, pY, pZ, 0.0F, 0.0F);
 		PositionTextureVertex positiontexturevertex1 =
-				new PositionTextureVertex(f4, pY, f6, 0.0F, 8F);
+				new PositionTextureVertex(lx, pY, lz, 0.0F, 8F);
 		PositionTextureVertex positiontexturevertex2 =
-				new PositionTextureVertex(f4, f5, f6, 8F, 8F);
+				new PositionTextureVertex(lx, ly, lz, 8F, 8F);
 		PositionTextureVertex positiontexturevertex3 =
-				new PositionTextureVertex(pX, f5, pZ, 8F, 0.0F);
+				new PositionTextureVertex(pX, ly, pZ, 8F, 0.0F);
 		vertexPositions[0] = positiontexturevertex;
 		vertexPositions[1] = positiontexturevertex1;
 		vertexPositions[2] = positiontexturevertex2;
@@ -163,12 +142,6 @@ public class MMM_ModelPlate extends MMM_ModelBoxBase {
 					pTextureX, pTextureY, pTextureX + pWidth, pTextureY + pHeight,
 					modelrenderer.textureWidth,
 					modelrenderer.textureHeight);
-		}
-		// 実際のポリゴンを継承元の変数に突っ込む
-		try {
-			ModLoader.setPrivateValue(ModelBox.class, this, 0, vertexPositions);
-			ModLoader.setPrivateValue(ModelBox.class, this, 1, quadList);
-		} catch (Exception exception) {
 		}
 	}
 

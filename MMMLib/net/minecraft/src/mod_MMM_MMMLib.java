@@ -69,7 +69,7 @@ public class mod_MMM_MMMLib extends BaseMod {
 		// ロード
 		if (MMM_Helper.isClient) {
 			// テクスチャパックの構築
-			MMM_TextureManager.loadTextures();
+//			MMM_TextureManager.loadTextures();
 			MMM_StabilizerManager.loadStabilizer();
 			MMM_Client.setArmorPrefix();
 			// テクスチャインデックスの構築

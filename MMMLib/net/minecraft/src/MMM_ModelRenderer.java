@@ -3,12 +3,49 @@ package net.minecraft.src;
 import static net.minecraft.src.MMM_IModelCaps.*;
 import java.lang.reflect.Constructor;
 import java.nio.FloatBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
-public class MMM_ModelRenderer extends ModelRenderer {
+public class MMM_ModelRenderer {
 
+	// ModelRenderer互換変数群
+	public float textureWidth;
+	public float textureHeight;
+	private int textureOffsetX;
+	private int textureOffsetY;
+	public float rotationPointX;
+	public float rotationPointY;
+	public float rotationPointZ;
+	public float rotateAngleX;
+	public float rotateAngleY;
+	public float rotateAngleZ;
+	protected boolean compiled;
+	protected int displayList;
+	public boolean mirror;
+	public boolean showModel;
+	public boolean isHidden;
+	public List<MMM_ModelBoxBase> cubeList;
+	public List<MMM_ModelRenderer> childModels;
+	public final String boxName;
+	private MMM_ModelBase baseModel;
+	/**
+	 * offsetX
+	 */
+	public float field_82906_o;
+	/**
+	 * offsetY
+	 */
+	public float field_82908_p;
+	/**
+	 * offsetZ
+	 */
+	public float field_82907_q;
+	
+	
+	
 	/**
 	 * (180F / (float)Math.PI)
 	 */
@@ -29,12 +66,6 @@ public class MMM_ModelRenderer extends ModelRenderer {
 	public static final int ModeItemStack = 0x002;
 	public static final int ModeParts = 0x010;
 
-	protected int textureOffsetX;
-	protected int textureOffsetY;
-	protected boolean compiled;
-	protected int displayList;
-	protected MMM_ModelBase baseModel;
-
 	public int rotatePriority;
 	public ItemStack itemstack;
 	public boolean adjust;
@@ -45,16 +76,23 @@ public class MMM_ModelRenderer extends ModelRenderer {
 	public float scaleY;
 	public float scaleZ;
 	
-	public ModelRenderer pearent;
+	public MMM_ModelRenderer pearent;
 
 
 
 	public MMM_ModelRenderer(MMM_ModelBase pModelBase, String pName) {
-		super(pModelBase, pName);
-		
+		textureWidth = 64.0F;
+		textureHeight = 32.0F;
 		compiled = false;
 		displayList = 0;
+		mirror = false;
+		showModel = true;
+		isHidden = false;
+		cubeList = new ArrayList<MMM_ModelBoxBase>();
 		baseModel = pModelBase;
+		pModelBase.boxList.add(this);
+		boxName = pName;
+		setTextureSize(pModelBase.textureWidth, pModelBase.textureHeight);
 		
 		rotatePriority = RotXYZ;
 		itemstack = null;
@@ -71,11 +109,11 @@ public class MMM_ModelRenderer extends ModelRenderer {
 
 	public MMM_ModelRenderer(MMM_ModelBase pModelBase, int px, int py) {
 		this(pModelBase, null);
-		setTextureOffsetMM(px, py);
+		setTextureOffset(px, py);
 	}
 
 	public MMM_ModelRenderer(MMM_ModelBase pModelBase) {
-		this(pModelBase, null);
+		this(pModelBase, (String)null);
 	}
 
 	public MMM_ModelRenderer(MMM_ModelBase pModelBase, int px, int py, float pScaleX, float pScaleY, float pScaleZ) {
@@ -92,47 +130,130 @@ public class MMM_ModelRenderer extends ModelRenderer {
 		this.scaleZ = pScaleZ;
 	}
 
+	// ModelRenderer互換関数群
 
-	public void addChildMM(MMM_ModelRenderer pModelRenderer) {
-		super.addChild(pModelRenderer);
-	}
-	@Override
-	@Deprecated
-	public void addChild(ModelRenderer par1ModelRenderer) {
-		addChildMM((MMM_ModelRenderer)par1ModelRenderer);
+	public void addChild(MMM_ModelRenderer pModelRenderer) {
+		if (childModels == null) {
+			childModels = new ArrayList<MMM_ModelRenderer>();
+		}
+		childModels.add(pModelRenderer);
+		pModelRenderer.pearent = this;
 	}
 
-	public MMM_ModelRenderer setTextureOffsetMM(int pOffsetX, int pOffsetY) {
-		super.setTextureOffset(pOffsetX, pOffsetY);
+	public MMM_ModelRenderer setTextureOffset(int pOffsetX, int pOffsetY) {
 		textureOffsetX = pOffsetX;
 		textureOffsetY = pOffsetY;
 		return this;
 	}
-	@Override
-	@Deprecated
-	public ModelRenderer setTextureOffset(int par1, int par2) {
-		return setTextureOffsetMM(par1, par2);
-	}
 
-	public MMM_ModelRenderer setTextureSizeMM(int pWidth, int pHeight) {
-		super.setTextureSize(pWidth, pHeight);
+	public MMM_ModelRenderer addBox(String pName, float pX, float pY, float pZ,
+			int pWidth, int pHeight, int pDepth) {
+		addParts(MMM_ModelBox.class, pName, pX, pY, pZ, pWidth, pHeight, pDepth, 0.0F);
 		return this;
 	}
-	@Override
-	@Deprecated
-	public ModelRenderer setTextureSize(int par1, int par2) {
-		return setTextureSizeMM(par1, par2);
-	}
 
-	public MMM_ModelRenderer setRotationPointMM(float f, float f1, float f2) {
-		super.setRotationPoint(f, f1, f2);
+	public MMM_ModelRenderer addBox(float pX, float pY, float pZ,
+			int pWidth, int pHeight, int pDepth) {
+		addParts(MMM_ModelBox.class, pX, pY, pZ, pWidth, pHeight, pDepth, 0.0F);
 		return this;
 	}
-	@Override
-	@Deprecated
-	public void setRotationPoint(float par1, float par2, float par3) {
-		setRotationPointMM(par1, par2, par3);
+
+	public MMM_ModelRenderer addBox(float pX, float pY, float pZ,
+			int pWidth, int pHeight, int pDepth, float pSizeAdjust) {
+		addParts(MMM_ModelBox.class, pX, pY, pZ, pWidth, pHeight, pDepth, pSizeAdjust);
+		return this;
 	}
+
+	public MMM_ModelRenderer setRotationPoint(float pX, float pY, float pZ) {
+		rotationPointX = pX;
+		rotationPointY = pY;
+		rotationPointZ = pZ;
+		return this;
+	}
+
+	// TODO:アップデート時はここをチェックすること
+	public void render(float par1, boolean pIsRender) {
+		if (isHidden) return;
+		if (!showModel) return;
+		
+		if (!compiled) {
+			compileDisplayList(par1);
+		}
+		
+		GL11.glPushMatrix();
+		GL11.glTranslatef(field_82906_o, field_82908_p, field_82907_q);
+		
+		if (rotationPointX != 0.0F || rotationPointY != 0.0F || rotationPointZ != 0.0F) {
+			GL11.glTranslatef(rotationPointX * par1, rotationPointY * par1, rotationPointZ * par1);
+		}
+		if (rotateAngleX != 0.0F || rotateAngleY != 0.0F || rotateAngleZ != 0.0F) {
+			setRotation();
+		}
+		renderObject(par1, pIsRender);
+		GL11.glPopMatrix();
+	}
+	public void render(float par1) {
+		render(par1, true);
+	}
+
+	public void renderWithRotation(float par1) {
+		if (isHidden) return;
+		if (!showModel) return;
+		
+		if (!compiled) {
+			compileDisplayList(par1);
+		}
+		
+		GL11.glPushMatrix();
+		GL11.glTranslatef(rotationPointX * par1, rotationPointY * par1, rotationPointZ * par1);
+		
+		setRotation();
+		
+		GL11.glCallList(displayList);
+		GL11.glPopMatrix();
+	}
+
+	public void postRender(float par1) {
+		if (isHidden) return;
+		if (!showModel) return;
+		
+		if (!compiled) {
+			compileDisplayList(par1);
+		}
+		
+		if (pearent != null) {
+			pearent.postRender(par1);
+		}
+		
+		if (rotationPointX != 0.0F || rotationPointY != 0.0F || rotationPointZ != 0.0F) {
+			GL11.glTranslatef(rotationPointX * par1, rotationPointY * par1, rotationPointZ * par1);
+		}
+		if (rotateAngleX != 0.0F || rotateAngleY != 0.0F || rotateAngleZ != 0.0F) {
+			setRotation();
+		}
+	}
+
+	protected void compileDisplayList(float par1) {
+		displayList = GLAllocation.generateDisplayLists(1);
+		GL11.glNewList(displayList, GL11.GL_COMPILE);
+		Tessellator tessellator = Tessellator.instance;
+		
+		for (int i = 0; i < cubeList.size(); i++) {
+			cubeList.get(i).render(tessellator, par1);
+		}
+		
+		GL11.glEndList();
+		compiled = true;
+	}
+
+	public MMM_ModelRenderer setTextureSize(int pWidth, int pHeight) {
+		textureWidth = (float)pWidth;
+		textureHeight = (float)pHeight;
+		return this;
+	}
+
+
+	// 独自追加分
 
 	/**
 	 * ModelBox継承の独自オブジェクト追加用
@@ -167,7 +288,7 @@ public class MMM_ModelRenderer extends ModelRenderer {
 		pName = (new StringBuilder()).append(boxName).append(".").append(pName).toString();
 		TextureOffset ltextureoffset = baseModel.getTextureOffset(pName);
 		setTextureOffset(ltextureoffset.textureOffsetX, ltextureoffset.textureOffsetY);
-		addCubeList(getModelBoxBase(pModelBoxBase, getArg(pArg)).setBoxNameMM(pName));
+		addCubeList(getModelBoxBase(pModelBoxBase, getArg(pArg)).setBoxName(pName));
 		return this;
 	}
 
@@ -182,7 +303,7 @@ public class MMM_ModelRenderer extends ModelRenderer {
 	 */
 	public MMM_ModelRenderer addPartsTexture(Class pModelBoxBase, String pName, Object ... pArg) {
 		pName = (new StringBuilder()).append(boxName).append(".").append(pName).toString();
-		addCubeList(getModelBoxBase(pModelBoxBase, pArg).setBoxNameMM(pName));
+		addCubeList(getModelBoxBase(pModelBoxBase, pArg).setBoxName(pName));
 		return this;
 	}
 
@@ -195,42 +316,6 @@ public class MMM_ModelRenderer extends ModelRenderer {
 		return this;
 	}
 
-
-	public MMM_ModelRenderer addBoxMM(float pX, float pY, float pZ,
-			int pWidth, int pHeight, int pDepth, float pSizeAdjust) {
-		addParts(MMM_ModelBox.class, pX, pY, pZ, pWidth, pHeight, pDepth, pSizeAdjust);
-		return this;
-	}
-	@Override
-	@Deprecated
-	public ModelRenderer addBox(float par1, float par2, float par3,
-			int par4, int par5, int par6) {
-		return addBoxMM(par1, par2, par3, par4, par5, par6);
-	}
-
-	public MMM_ModelRenderer addBoxMM(float pX, float pY, float pZ,
-			int pWidth, int pHeight, int pDepth) {
-		addParts(MMM_ModelBox.class, pX, pY, pZ, pWidth, pHeight, pDepth, 0.0F);
-		return this;
-	}
-	@Override
-	@Deprecated
-	public void addBox(float par1, float par2, float par3,
-			int par4, int par5, int par6, float par7) {
-		addBoxMM(par1, par2, par3, par4, par5, par6, par7);
-	}
-
-	public MMM_ModelRenderer addBoxMM(String pName, float pX, float pY, float pZ,
-			int pWidth, int pHeight, int pDepth) {
-		addParts(MMM_ModelBox.class, pName, pX, pY, pZ, pWidth, pHeight, pDepth, 0.0F);
-		return this;
-	}
-	@Override
-	@Deprecated
-	public ModelRenderer addBox(String par1Str, float par2, float par3, float par4,
-			int par5, int par6, int par7) {
-		return addBoxMM(par1Str, par2, par3, par4, par5, par6, par7);
-	}
 
 	public MMM_ModelRenderer addPlate(float pX, float pY, float pZ,
 			int pWidth, int pHeight, int pFacePlane) {
@@ -259,26 +344,20 @@ public class MMM_ModelRenderer extends ModelRenderer {
 		childModels.clear();
 	}
 
-	@Deprecated
-	public MMM_ModelRenderer setItemStack(ItemStack pItemStack) {
-		itemstack = pItemStack;
-		return this;
-	}
-
 	// TODO:このあたりは要修正
-	public boolean renderItems(MMM_ModelMultiBase pModelMulti, boolean pRealBlock, int pIndex) {
-		ItemStack[] litemstacks = (ItemStack[])MMM_ModelCapsHelper.getCapsValue(pModelMulti.entityCaps, caps_Items);
+	public boolean renderItems(MMM_ModelMultiBase pModelMulti, MMM_IModelCaps pEntityCaps, boolean pRealBlock, int pIndex) {
+		ItemStack[] litemstacks = (ItemStack[])MMM_ModelCapsHelper.getCapsValue(pEntityCaps, caps_Items);
 		if (litemstacks == null) return false;
-		EnumAction[] lactions = (EnumAction[])MMM_ModelCapsHelper.getCapsValue(pModelMulti.entityCaps, caps_Actions);
-		EntityLiving lentity = (EntityLiving)pModelMulti.entityCaps.getCapsValue(caps_Entity);
+		EnumAction[] lactions = (EnumAction[])MMM_ModelCapsHelper.getCapsValue(pEntityCaps, caps_Actions);
+		EntityLiving lentity = (EntityLiving)pEntityCaps.getCapsValue(caps_Entity);
 		
 		renderItems(lentity, pModelMulti.render, pRealBlock, lactions[pIndex], litemstacks[pIndex]);
 		return true;
 	}
 
-	public void renderItemsHead(MMM_ModelMultiBase pModelMulti) {
-		ItemStack lis = (ItemStack)pModelMulti.entityCaps.getCapsValue(caps_HeadMount);
-		EntityLiving lentity = (EntityLiving)pModelMulti.entityCaps.getCapsValue(caps_Entity);
+	public void renderItemsHead(MMM_ModelMultiBase pModelMulti, MMM_IModelCaps pEntityCaps) {
+		ItemStack lis = (ItemStack)pEntityCaps.getCapsValue(caps_HeadMount);
+		EntityLiving lentity = (EntityLiving)pEntityCaps.getCapsValue(caps_Entity);
 		
 		renderItems(lentity, pModelMulti.render, true, null, lis);
 	}
@@ -475,10 +554,10 @@ public class MMM_ModelRenderer extends ModelRenderer {
 	/**
 	 * 内部実行用、レンダリング部分。
 	 */
-	protected void renderObject(float par1) {
+	protected void renderObject(float par1, boolean pRendering) {
 		// レンダリング、あと子供も
 		GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, matrix);
-		if (!(baseModel instanceof MMM_ModelMultiBase) || ((MMM_ModelMultiBase)baseModel).isRendering) {
+		if (pRendering) {
 			GL11.glPushMatrix();
 			GL11.glScalef(scaleX, scaleY, scaleZ);
 			GL11.glCallList(displayList);
@@ -487,154 +566,9 @@ public class MMM_ModelRenderer extends ModelRenderer {
 		
 		if (childModels != null) {
 			for (int li = 0; li < childModels.size(); li++) {
-				((MMM_ModelRenderer) childModels.get(li)).renderMM(par1);
+				childModels.get(li).render(par1, pRendering);
 			}
 		}
-	}
-
-	// TODO:アップデート時はここをチェックすること
-	public void renderMM(float par1) {
-		if (isHidden) {
-			return;
-		}
-		
-		if (!showModel) {
-			return;
-		}
-		
-		if (!compiled) {
-			compileDisplayList(par1);
-		}
-		
-		if (rotateAngleX != 0.0F || rotateAngleY != 0.0F || rotateAngleZ != 0.0F) {
-			GL11.glPushMatrix();
-			GL11.glTranslatef(rotationPointX * par1, rotationPointY * par1, rotationPointZ * par1);
-			
-			setRotation();
-			renderObject(par1);
-			
-			GL11.glPopMatrix();
-		} else if (rotationPointX != 0.0F || rotationPointY != 0.0F || rotationPointZ != 0.0F) {
-			GL11.glTranslatef(rotationPointX * par1, rotationPointY * par1, rotationPointZ * par1);
-			
-			renderObject(par1);
-			
-			GL11.glTranslatef(-rotationPointX * par1, -rotationPointY * par1, -rotationPointZ * par1);
-		} else {
-			renderObject(par1);
-		}
-	}
-	@Override
-	@Deprecated
-	public void render(float par1) {
-		renderMM(par1);
-	}
-
-	public void renderWithRotationMM(float par1) {
-		if (isHidden) {
-			return;
-		}
-		
-		if (!showModel) {
-			return;
-		}
-		
-		if (!compiled) {
-			compileDisplayList(par1);
-		}
-		
-		GL11.glPushMatrix();
-		GL11.glTranslatef(rotationPointX * par1, rotationPointY * par1,
-				rotationPointZ * par1);
-		
-		setRotation();
-		
-		GL11.glCallList(displayList);
-		GL11.glPopMatrix();
-	}
-	@Override
-	@Deprecated
-	public void renderWithRotation(float par1) {
-		renderWithRotationMM(par1);
-	}
-
-	public void postRenderMM(float par1) {
-		if (isHidden) {
-			return;
-		}
-		
-		if (!showModel) {
-			return;
-		}
-		
-		if (!compiled) {
-			compileDisplayList(par1);
-		}
-		
-		if (pearent != null) {
-			pearent.postRender(par1);
-		}
-		
-		if (rotateAngleX != 0.0F || rotateAngleY != 0.0F || rotateAngleZ != 0.0F) {
-			GL11.glTranslatef(rotationPointX * par1, rotationPointY * par1, rotationPointZ * par1);
-			
-			setRotation();
-		} else if (rotationPointX != 0.0F || rotationPointY != 0.0F || rotationPointZ != 0.0F) {
-			GL11.glTranslatef(rotationPointX * par1, rotationPointY * par1, rotationPointZ * par1);
-		}
-	}
-	@Override
-	@Deprecated
-	public void postRender(float par1) {
-		postRenderMM(par1);
-	}
-
-	/**
-	 * 自分以下のパーツの座標変換を行う。
-	 * レンダリングはしない。
-	 * 主にマトリクスを獲得するのに使う。
-	 */
-	public void postRenderAll(float par1) {
-		if (isHidden) {
-			return;
-		}
-		
-		if (!showModel) {
-			return;
-		}
-		
-		if (!compiled) {
-			compileDisplayList(par1);
-		}
-		
-		if (rotateAngleX != 0.0F || rotateAngleY != 0.0F || rotateAngleZ != 0.0F) {
-			GL11.glTranslatef(rotationPointX * par1, rotationPointY * par1, rotationPointZ * par1);
-			
-			setRotation();
-		} else if (rotationPointX != 0.0F || rotationPointY != 0.0F || rotationPointZ != 0.0F) {
-			GL11.glTranslatef(rotationPointX * par1, rotationPointY * par1, rotationPointZ * par1);
-		}
-		// ポストレンダリング、あと子供も
-		GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, matrix);
-		
-		if (childModels != null) {
-			for (int i = 0; i < childModels.size(); i++) {
-				((MMM_ModelRenderer) childModels.get(i)).postRenderAll(par1);
-			}
-		}
-	}
-
-	protected void compileDisplayList(float par1) {
-		displayList = GLAllocation.generateDisplayLists(1);
-		GL11.glNewList(displayList, GL11.GL_COMPILE);
-		Tessellator tessellator = Tessellator.instance;
-		
-		for (int i = 0; i < cubeList.size(); i++) {
-			((ModelBox) cubeList.get(i)).render(tessellator, par1);
-		}
-		
-		GL11.glEndList();
-		compiled = true;
 	}
 
 	/**

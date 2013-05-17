@@ -19,15 +19,13 @@ public class MMM_EquippedStabilizer {
 		stabilizer = pStabilizer;
 	}
 */	
-	public boolean updateEquippedPoint(ModelBase pmodel) {
+	public boolean updateEquippedPoint(MMM_ModelBase pmodel) {
 		// 取り付け位置をアップデート
 		for (int li = 0; li < pmodel.boxList.size(); li++) {
-    		ModelRenderer lmr = (ModelRenderer)pmodel.boxList.get(li);
-    		if (lmr instanceof MMM_ModelRenderer) {
-    			if (lmr.boxName != null && lmr.boxName.equalsIgnoreCase(equipPointName)) {
-    				equipPoint = (MMM_ModelRenderer)lmr;
-    				return true;
-    			}
+			MMM_ModelRenderer lmr = pmodel.boxList.get(li);
+			if (lmr.boxName != null && lmr.boxName.equalsIgnoreCase(equipPointName)) {
+				equipPoint = (MMM_ModelRenderer)lmr;
+				return true;
 			}
 		}
 		

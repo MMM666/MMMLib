@@ -64,7 +64,7 @@ public class MMM_StabilizerManager extends MMM_ManagerBase {
 	/**
 	 * 実装場所のアップデート
 	 */
-	public static void updateEquippedPoint(Map<String, MMM_EquippedStabilizer> pMap, ModelBase pModel) {
+	public static void updateEquippedPoint(Map<String, MMM_EquippedStabilizer> pMap, MMM_ModelBase pModel) {
 		for (Entry<String, MMM_EquippedStabilizer> le : pMap.entrySet()) {
 			le.getValue().updateEquippedPoint(pModel);
 		}

@@ -2,6 +2,10 @@ package net.minecraft.src;
 
 import static net.minecraft.src.mod_MMM_MMMLib.Debug;
 
+import java.util.Random;
+
+import org.lwjgl.opengl.GL11;
+
 public class MMM_Client {
 
 	public static MMM_ItemRenderer itemRenderer;
@@ -78,5 +82,53 @@ public class MMM_Client {
 		} catch (Exception e) {
 		}
 	}
+
+	/**
+	 * Duoを使う時は必ずRender側のこの関数を置き換えること。
+	 * @param par1EntityLiving
+	 * @param par2
+	 */
+	public static void renderArrowsStuckInEntity(EntityLiving par1EntityLiving, float par2,
+			Render pRender, MMM_ModelBase pModel) {
+		int lacount = par1EntityLiving.getArrowCountInEntity();
+		
+		if (lacount > 0) {
+			EntityArrow larrow = new EntityArrow(par1EntityLiving.worldObj, par1EntityLiving.posX, par1EntityLiving.posY, par1EntityLiving.posZ);
+			Random lrand = new Random((long)par1EntityLiving.entityId);
+			RenderHelper.disableStandardItemLighting();
+			
+			for (int var6 = 0; var6 < lacount; ++var6) {
+				GL11.glPushMatrix();
+				MMM_ModelRenderer var7 = pModel.getRandomModelBox(lrand);
+				MMM_ModelBoxBase var8 = var7.cubeList.get(lrand.nextInt(var7.cubeList.size()));
+				var7.postRender(0.0625F);
+				float var9 = lrand.nextFloat();
+				float var10 = lrand.nextFloat();
+				float var11 = lrand.nextFloat();
+				float var12 = (var8.posX1 + (var8.posX2 - var8.posX1) * var9) / 16.0F;
+				float var13 = (var8.posY1 + (var8.posY2 - var8.posY1) * var10) / 16.0F;
+				float var14 = (var8.posZ1 + (var8.posZ2 - var8.posZ1) * var11) / 16.0F;
+				GL11.glTranslatef(var12, var13, var14);
+				var9 = var9 * 2.0F - 1.0F;
+				var10 = var10 * 2.0F - 1.0F;
+				var11 = var11 * 2.0F - 1.0F;
+				var9 *= -1.0F;
+				var10 *= -1.0F;
+				var11 *= -1.0F;
+				float var15 = MathHelper.sqrt_float(var9 * var9 + var11 * var11);
+				larrow.prevRotationYaw = larrow.rotationYaw = (float)(Math.atan2((double)var9, (double)var11) * 180.0D / Math.PI);
+				larrow.prevRotationPitch = larrow.rotationPitch = (float)(Math.atan2((double)var10, (double)var15) * 180.0D / Math.PI);
+				double var16 = 0.0D;
+				double var18 = 0.0D;
+				double var20 = 0.0D;
+				float var22 = 0.0F;
+				pRender.renderManager.renderEntityWithPosYaw(larrow, var16, var18, var20, var22, par2);
+				GL11.glPopMatrix();
+			}
+			
+			RenderHelper.enableStandardItemLighting();
+		}
+	}
+
 
 }

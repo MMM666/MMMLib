@@ -90,6 +90,8 @@ public class MMM_TextureManager {
 
 
 	protected static void init() {
+		// 検索対象ファイル名を登録します。
+		// パターンを登録しない場合、独自名称のMODファイル、テクスチャディレクトリ、クラスが読み込まれません。
 		MMM_FileManager.getModFile("MMMLib", "MMMLib");
 		addSearch("MMMLib", "/mob/ModelMulti/", "ModelMulti_");
 		MMM_FileManager.getModFile("littleMaidMob", "littleMaidMob");
@@ -200,20 +202,28 @@ public class MMM_TextureManager {
 		for (Entry<String, MMM_ModelMultiBase[]> le : modelMap.entrySet()) {
 			String ls = le.getValue()[0].getUsingTexture();
 			if (ls != null) {
-				MMM_TextureBox lbox = null;
-				for (MMM_TextureBox ltb : textures) {
-					if (ltb.models == le.getValue()) {
-						lbox = ltb;
-						break;
+				if (getTextureBox(ls + "_" + le.getKey()) == null) {
+					MMM_TextureBox lbox = null;
+					for (MMM_TextureBox ltb : textures) {
+						if (ltb.packegeName.equals(ls)) {
+							lbox = ltb;
+							break;
+						}
 					}
-				}
-				if (lbox != null) {
-					lbox = lbox.duplicate();
-					lbox.setModels(le.getKey(), null, le.getValue());
-					textures.add(lbox);
+					if (lbox != null) {
+						lbox = lbox.duplicate();
+						lbox.setModels(le.getKey(), null, le.getValue());
+						textures.add(lbox);
+					}
 				}
 			}
 		}
+		mod_MMM_MMMLib.Debug("Loaded Texture Lists.(%d)", textures.size());
+		for (MMM_TextureBox lbox : textures) {
+			mod_MMM_MMMLib.Debug("texture: %s(%s)", lbox.textureName, lbox.fileName);
+		}
+		
+		setDefaultTexture(EntityLiving.class, getTextureBox("default_" + defaultModelName));
 		
 		return false;
 	}
@@ -344,7 +354,6 @@ public class MMM_TextureManager {
 				mlm[2] = cm.newInstance(lsize[1]);
 				modelMap.put(pn, mlm);
 				mod_MMM_MMMLib.Debug("getModelClass-%s:%s", pn, cn);
-				
 			}
 			catch (Exception exception) {
 				mod_MMM_MMMLib.Debug("getModelClass-Exception: %s", fname);
@@ -533,40 +542,40 @@ public class MMM_TextureManager {
 		return -1;
 	}
 
-	public static String getNextPackege(String nowname, int index) {
+	public static MMM_TextureBox getNextPackege(MMM_TextureBox pNowBox, int pColor) {
 		// 次のテクスチャパッケージの名前を返す
 		boolean f = false;
 		MMM_TextureBox lreturn = null;
 		for (MMM_TextureBox ltb : textures) {
-			if (ltb.hasColor(index)) {
+			if (ltb.hasColor(pColor)) {
 				if (f) {
-					return ltb.packegeName;
+					return ltb;
 				}
 				if (lreturn == null) {
 					lreturn = ltb;
 				}
 			}
-			if (ltb.packegeName.equalsIgnoreCase(nowname)) {
+			if (ltb == pNowBox) {
 				f = true;
 			}
 		}
-		return lreturn == null ? null : lreturn.packegeName;
+		return lreturn == null ? null : lreturn;
 	}
 
-	public static String getPrevPackege(String nowname, int index) {
+	public static MMM_TextureBox getPrevPackege(MMM_TextureBox pNowBox, int pColor) {
 		// 前のテクスチャパッケージの名前を返す
 		MMM_TextureBox lreturn = null;
 		for (MMM_TextureBox ltb : textures) {
-			if (ltb.packegeName.equalsIgnoreCase(nowname)) {
+			if (ltb == pNowBox) {
 				if (lreturn != null) {
 					break;
 				}
 			}
-			if (ltb.hasColor(index)) {
+			if (ltb.hasColor(pColor)) {
 				lreturn = ltb;
 			}
 		}
-		return lreturn == null ? null  :lreturn.packegeName;
+		return lreturn == null ? null : lreturn;
 	}
 
 	@Deprecated
@@ -584,10 +593,6 @@ public class MMM_TextureManager {
 			return pBox.getTextureName(pIndex);
 		}
 	}
-	@Deprecated
-	public static String getTextureName(String name, int index) {
-		return getTextureName(getTextureBox(name), index);
-	}
 
 	/**
 	 * ローカルで読み込まれているテクスチャパックの数。
@@ -596,31 +601,31 @@ public class MMM_TextureManager {
 		return textures.size();
 	}
 
-	public static String getNextArmorPackege(String nowname) {
+	public static MMM_TextureBox getNextArmorPackege(MMM_TextureBox pNowBox) {
 		// 次のテクスチャパッケージの名前を返す
 		boolean f = false;
 		MMM_TextureBox lreturn = null;
 		for (MMM_TextureBox ltb : textures) {
 			if (ltb.hasArmor()) {
 				if (f) {
-					return ltb.packegeName;
+					return ltb;
 				}
 				if (lreturn == null) {
 					lreturn = ltb;
 				}
 			}
-			if (ltb.packegeName.equalsIgnoreCase(nowname)) {
+			if (ltb == pNowBox) {
 				f = true;
 			}
 		}
-		return lreturn.packegeName;
+		return lreturn;
 	}
 
-	public static String getPrevArmorPackege(String nowname) {
+	public static MMM_TextureBox getPrevArmorPackege(MMM_TextureBox pNowBox) {
 		// 前のテクスチャパッケージの名前を返す
 		MMM_TextureBox lreturn = null;
 		for (MMM_TextureBox ltb : textures) {
-			if (ltb.packegeName.equalsIgnoreCase(nowname)) {
+			if (ltb == pNowBox) {
 				if (lreturn != null) {
 					break;
 				}
@@ -629,35 +634,25 @@ public class MMM_TextureManager {
 				lreturn = ltb;
 			}
 		}
-		return lreturn.packegeName;
+		return lreturn;
 	}
 
-	/**
-	 * アーマーのテクスチャファイル名を返す
-	 */
-	@Deprecated
-	public static String getArmorTextureName(String name, int index, ItemStack itemstack) {
-		// indexは0x40,0x50番台
-		MMM_TextureBox ltb = getTextureBox(name);
-		if (ltb == null) {
-			return null;
-		}
-		return ltb.getArmorTextureName(index, itemstack);
+	public static String getRandomTextureString(Random pRand) {
+		return getRandomTexture(pRand).textureName;
 	}
 
-	public static String getRandomTexture(Random pRand) {
-		// TODO:要修正
+	public static MMM_TextureBoxServer getRandomTexture(Random pRand) {
 		if (textureServer.isEmpty()) {
-			return "default";
+			return null;
 		} else {
 			// 野生色があるものをリストアップ
 			List<MMM_TextureBoxServer> llist = new ArrayList<MMM_TextureBoxServer>();
 			for (MMM_TextureBoxServer lbox : textureServer) {
-				if (lbox.wildColor > 0) {
+				if (lbox.getWildColorBits() > 0) {
 					llist.add(lbox);
 				}
 			}
-			return llist.get(pRand.nextInt(llist.size())).textureName;
+			return llist.get(pRand.nextInt(llist.size()));
 		}
 	}
 
@@ -745,11 +740,15 @@ public class MMM_TextureManager {
 		if (defaultTextures.containsKey(pEntityClass)) {
 			return defaultTextures.get(pEntityClass);
 		} else {
-			MMM_TextureBox lbox = getDefaultTexture(pEntityClass.getSuperclass());
-			if (lbox != null) {
-				setDefaultTexture(pEntityClass, lbox);
+			Class lsuper = pEntityClass.getSuperclass();
+			if (lsuper != null) {
+				MMM_TextureBox lbox = getDefaultTexture(lsuper);
+				if (lbox != null) {
+					setDefaultTexture(pEntityClass, lbox);
+				}
+				return lbox;
 			}
-			return lbox;
+			return null;
 		}
 	}
 
@@ -804,28 +803,27 @@ public class MMM_TextureManager {
 	/**
 	 * テクスチャパックを設定するため、サーバーへ情報を送る。
 	 * @param pEntity
-	 * @param pPackName
+	 * @param pBox
 	 */
-	public static void postSetTexturePack(MMM_ITextureEntity pEntity, int pColor, String[] pPackName) {
+	public static void postSetTexturePack(MMM_ITextureEntity pEntity, int pColor, MMM_TextureBoxBase[] pBox) {
 		// Client
-		if (pEntity instanceof Entity) return;
+		if (!(pEntity instanceof Entity)) return;
 		// テクスチャパックを設定するため、サーバーへ情報を送る。
-		int lindex[] = new int[pPackName.length];
+		int lindex[] = new int[pBox.length];
 		boolean lflag = true;
 		
 		// PackeNameからサーバー側のテクスチャインデックスを獲得する。
-		for (int li = 0; li < pPackName.length; li++) {
-			MMM_TextureBox lbox = getTextureBox(pPackName[li]);
-			if (!textureServerIndex.containsKey(lbox)) {
+		for (int li = 0; li < pBox.length; li++) {
+			if (!textureServerIndex.containsKey(pBox[li])) {
 				lflag = false;
 				lindex[li] = -1;
-				int ll = getRequestIndex(pPackName[li]);
+				int ll = getRequestIndex(pBox[li].textureName);
 				if (ll == -2) continue;
 				if (ll > -1) {
-					sendToServerGetTextureIndex(ll, lbox);
+					sendToServerGetTextureIndex(ll, (MMM_TextureBox)pBox[li]);
 				}
 			} else {
-				lindex[li] = textureServerIndex.get(lbox);
+				lindex[li] = textureServerIndex.get(pBox[li]);
 			}
 		}
 		
@@ -834,10 +832,10 @@ public class MMM_TextureManager {
 			sendToServerSetTexturePackIndex(pEntity, pColor, lindex);
 		} else {
 			// ローカルに設定値がない場合、バッファにジョブをスタックし終了。
-			Object lo[] = new Object[1 + pPackName.length];
+			Object lo[] = new Object[1 + pBox.length];
 			lo[0] = pColor;
-			for (int li = 0; li < pPackName.length; li++) {
-				lo[li + 1] = pPackName[li];
+			for (int li = 0; li < pBox.length; li++) {
+				lo[li + 1] = pBox[li];
 			}
 			stackSetTexturePack.put(pEntity, lo);
 		}
@@ -847,7 +845,7 @@ public class MMM_TextureManager {
 		// Client
 		// サーバー側へテクスチャパックのインデックスが変更されたことを通知する。
 		if (pEntity instanceof Entity) {
-			byte ldata[] = new byte[5 + pIndex.length * 2];
+			byte ldata[] = new byte[6 + pIndex.length * 2];
 			ldata[0] = MMM_Statics.Server_SetTexturePackIndex;
 			MMM_Helper.setInt(ldata, 1, ((Entity)pEntity).entityId);
 			ldata[5] = (byte)pColor;
@@ -864,13 +862,14 @@ public class MMM_TextureManager {
 		// Server
 		if (pEntity instanceof MMM_ITextureEntity) {
 			// クライアント側からテクスチャパックのインデックスが変更された通知を受け取ったので処理を行う。
-			int lcount = (pData.length - 8) / 2;
+			int lcount = (pData.length - 6) / 2;
 			if (lcount < 1) return;
 			int lindex[] = new int[lcount];
 			
 			for (int li = 0; li < lcount; li++) {
-				lindex[li] = MMM_Helper.getShort(pData, 8 + li * 2);
+				lindex[li] = MMM_Helper.getShort(pData, 6 + li * 2);
 			}
+			mod_MMM_MMMLib.Debug("reciveFromClientSetTexturePackIndex: %d, %4x", pData[5], lindex[0]);
 			((MMM_ITextureEntity)pEntity).setTexturePackIndex(pData[5], lindex);
 		}
 	}
@@ -880,7 +879,7 @@ public class MMM_TextureManager {
 		// サーバー側へテクスチャパックの管理番号を問い合わせる。
 		// 呼び出し側のクライアントへのみ返す。
 		// 返すときはNameは不要、BufIndexのみで識別させる
-		byte ldata[] = new byte[22 + pBox.packegeName.length()];
+		byte ldata[] = new byte[22 + pBox.textureName.length()];
 		ldata[0] = MMM_Statics.Server_GetTextureIndex;
 		ldata[1] = (byte)pBufIndex;
 		MMM_Helper.setShort(ldata, 2, pBox.getContractColorBits());
@@ -889,14 +888,15 @@ public class MMM_TextureManager {
 		MMM_Helper.setFloat(ldata, 10, pBox.getWidth());
 		MMM_Helper.setFloat(ldata, 14, pBox.getYOffset());
 		MMM_Helper.setFloat(ldata, 18, pBox.getMountedYOffset());
-		MMM_Helper.setStr(ldata, 22, pBox.packegeName);
+		MMM_Helper.setStr(ldata, 22, pBox.textureName);
 		MMM_Client.sendToServer(ldata);
+		mod_MMM_MMMLib.Debug("Server_GetTextureIndex: %s", pBox.textureName);
 	}
 
 	protected static void reciveFromClientGetTexturePackIndex(NetServerHandler pHandler, byte[] pData) {
 		// Server
 		// クライアント側へテクスチャパックの管理番号を返す。
-		String lpackname = MMM_Helper.getStr(pData, 18);
+		String lpackname = MMM_Helper.getStr(pData, 22);
 		MMM_TextureBoxServer lboxsrv = getTextureBoxServer(lpackname);
 		int li;
 		if (lboxsrv == null) {
@@ -912,6 +912,7 @@ public class MMM_TextureManager {
 		ldata[0] = MMM_Statics.Client_SetTextureIndex;
 		ldata[1] = pData[1];
 		MMM_Helper.setShort(ldata, 2, li);
+		mod_MMM_MMMLib.Debug("reciveFromClientGetTexturePackIndex: %s, %04x", lpackname, li);
 		mod_MMM_MMMLib.sendToClient(pHandler, ldata);
 	}
 
@@ -920,16 +921,17 @@ public class MMM_TextureManager {
 		// サーバー側からテクスチャパックのインデックスを受け取ったので値を登録する。
 		MMM_TextureBox lbox = getTextureBox(getRequestString(pData[1]));
 		textureServerIndex.put(lbox, (int)MMM_Helper.getShort(pData, 2));
+		mod_MMM_MMMLib.Debug("reciveFormServerSetTexturePackIndex: %s, %04x", lbox.textureName, (int)MMM_Helper.getShort(pData, 2));
 		
 		// スタックされたジョブから処理可能な物があれば実行する。
 		Map<MMM_ITextureEntity, Object[]> lmap = new HashMap<MMM_ITextureEntity, Object[]>(stackSetTexturePack);
 		stackSetTexturePack.clear();
 		for (Entry<MMM_ITextureEntity, Object[]> le : lmap.entrySet()) {
 			Object lo[] = le.getValue();
-			String ls[] = new String[le.getValue().length - 1];
+			MMM_TextureBox ls[] = new MMM_TextureBox[le.getValue().length - 1];
 			int lc = (Integer)lo[0];
 			for (int li = 1; li < lo.length; li++) {
-				ls[li - 1] = (String)lo[li];
+				ls[li - 1] = (MMM_TextureBox)lo[li];
 			}
 			postSetTexturePack(le.getKey(), lc, ls);
 		}

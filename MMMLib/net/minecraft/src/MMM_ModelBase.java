@@ -1,45 +1,71 @@
 package net.minecraft.src;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
-public class MMM_ModelBase extends ModelBase {
+public abstract class MMM_ModelBase {
 
-	// ゲッター、セッター群
-	public List getBoxList() {
-		return boxList;
+	// ModelBaseとの互換用
+	public float onGround;
+	public boolean isRiding = false;
+	public List<MMM_ModelRenderer> boxList = new ArrayList();
+	public boolean isChild = true;
+	private Map<String, TextureOffset> modelTextureMap = new HashMap<String, TextureOffset>();
+	public int textureWidth = 64;
+	public int textureHeight = 32;
+
+	public Render render;
+
+
+
+	// ModelBase互換関数群
+
+	public void render(MMM_IModelCaps pEntityCaps, float par2, float par3,
+			float ticksExisted, float pheadYaw, float pheadPitch, float par7, boolean pIsRender) {
 	}
-	public float getOnGround() {
-		return onGround;
+
+	public void setRotationAngles(float par1, float par2, float pTicksExisted,
+			float pHeadYaw, float pHeadPitch, float par6, MMM_IModelCaps pEntityCaps) {
 	}
-	public float setOnGround(float pOnGround) {
-		return onGround = pOnGround;
+
+	public void setLivingAnimations(MMM_IModelCaps pEntityCaps, float par2, float par3, float pRenderPartialTicks) {
 	}
-	public boolean getIsRiding() {
-		return isRiding;
+
+	public MMM_ModelRenderer getRandomModelBox(Random par1Random) {
+		// 膝に矢を受けてしまってな・・・
+		int li = par1Random.nextInt(this.boxList.size());
+		MMM_ModelRenderer lmr = (MMM_ModelRenderer)this.boxList.get(li);
+		for (int lj = 0; lj < boxList.size(); lj++) {
+			if (!lmr.cubeList.isEmpty()) {
+				break;
+			}
+			// 箱がない
+			if (++li >= boxList.size()) {
+				li = 0;
+			}
+			lmr = (MMM_ModelRenderer)this.boxList.get(li);
+		}
+		return lmr;
 	}
-	public boolean setIsRiding(boolean pIsRiding) {
-		return isRiding = pIsRiding;
+
+	protected void setTextureOffset(String par1Str, int par2, int par3) {
+		modelTextureMap.put(par1Str, new TextureOffset(par2, par3));
 	}
-	public boolean getIsChild() {
-		return isChild;
-	}
-	public boolean setIsChild(boolean pIsChild) {
-		return isChild = pIsChild;
-	}
-	public int getTextureWidth() {
-		return textureWidth;
-	}
-	public int getTextureHeight() {
-		return textureHeight;
-	}
-	public void setTextureSize(int pWidth, int pHeight) {
-		textureWidth = pWidth;
-		textureHeight = pHeight;
+
+	/**
+	 * 推奨されません。
+	 */
+	public TextureOffset getTextureOffset(String par1Str) {
+		// このままだと意味ないな。
+		return modelTextureMap.get(par1Str);
 	}
 
 
 	// MathHelperトンネル関数群
+
 	public static final float mh_sin(float f) {
 		f = f % 6.283185307179586F;
 		f = (f < 0F) ? 360 + f : f;
@@ -88,8 +114,7 @@ public class MMM_ModelBase extends ModelBase {
 		return MathHelper.stringNullOrLengthZero(s);
 	}
 
-	public static final int mh_getRandomIntegerInRange(Random random, int i,
-			int j) {
+	public static final int mh_getRandomIntegerInRange(Random random, int i, int j) {
 		return MathHelper.getRandomIntegerInRange(random, i, j);
 	}
 
