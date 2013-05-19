@@ -118,12 +118,12 @@ public class MMM_ModelBaseDuo extends ModelBase implements MMM_IModelBaseMMM {
 	}
 
 	@Override
-	public void showArmorParts(int pIndex) {
+	public void showArmorParts(int pParts) {
 		if (modelInner != null) {
-			modelInner.showArmorParts(pIndex);
+			modelInner.showArmorParts(pParts, 0);
 		}
 		if (modelOuter != null) {
-			modelOuter.showArmorParts(pIndex);
+			modelOuter.showArmorParts(pParts, 1);
 		}
 	}
 

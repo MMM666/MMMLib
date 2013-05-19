@@ -16,10 +16,10 @@ import org.lwjgl.opengl.GL11;
  */
 public abstract class MMM_ModelMultiBase extends MMM_ModelBase implements MMM_IModelCaps {
 
-	public int heldItemLeft;
-	public int heldItemRight;
-	public boolean isSneak;
+	public float heldItemLeft;
+	public float heldItemRight;
 	public boolean aimedBow;
+	public boolean isSneak;
 	public boolean isWait;
 	
 	public MMM_ModelRenderer mainFrame;
@@ -131,10 +131,13 @@ public abstract class MMM_ModelMultiBase extends MMM_ModelBase implements MMM_IM
 	 * 2:ì∑ïîÅB
 	 * 1:ãrïî
 	 * 0:ë´ïî
+	 * @param index
+	 * 0:inner
+	 * 1:outer
 	 * @return
 	 * ñﬂÇËílÇÕäÓñ{ -1
 	 */
-	public int showArmorParts(int parts) {
+	public int showArmorParts(int parts, int index) {
 		return -1;
 	}
 
@@ -185,7 +188,9 @@ public abstract class MMM_ModelMultiBase extends MMM_ModelBase implements MMM_IM
 	public boolean setCapsValue(int pIndex, Object... pArg) {
 		switch (pIndex) {
 		case caps_onGround:
-			onGround = (Float)pArg[0];
+			for (int li = 0; li < onGround.length && li < pArg.length; li++) {
+				onGround[li] = (Float)pArg[li];
+			}
 			return true;
 		case caps_isRiding:
 			isRiding = (Boolean)pArg[0];

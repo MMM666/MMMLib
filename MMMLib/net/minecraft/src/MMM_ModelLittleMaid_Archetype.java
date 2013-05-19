@@ -223,9 +223,10 @@ public class MMM_ModelLittleMaid_Archetype extends MMM_ModelLittleMaidBase {
 
 		bipedRightArm.rotateAngleY = 0.0F;
 		bipedLeftArm.rotateAngleY = 0.0F;
-		if (onGround > -9990F && !aimedBow) {
+		float lonGround = Math.max(onGround[0], onGround[1]);
+		if (lonGround > -9990F && !aimedBow) {
 			// òrêUÇË
-			float f6 = onGround;
+			float f6 = lonGround;
 			bipedBody.rotateAngleY = MathHelper
 					.sin(mh_sqrt_float(f6) * 3.141593F * 2.0F) * 0.2F;
 			Skirt.rotateAngleY = bipedBody.rotateAngleY;
@@ -240,16 +241,16 @@ public class MMM_ModelLittleMaid_Archetype extends MMM_ModelLittleMaidBase {
 			bipedRightArm.rotateAngleY += bipedBody.rotateAngleY;
 			bipedLeftArm.rotateAngleY += bipedBody.rotateAngleY;
 			bipedLeftArm.rotateAngleX += bipedBody.rotateAngleY;
-			f6 = 1.0F - onGround;
+			f6 = 1.0F - lonGround;
 			f6 *= f6;
 			f6 *= f6;
 			f6 = 1.0F - f6;
 			float f7 = mh_sin(f6 * 3.141593F);
-			float f8 = mh_sin(onGround * 3.141593F)
+			float f8 = mh_sin(lonGround * 3.141593F)
 					* -(bipedHead.rotateAngleX - 0.7F) * 0.75F;
 			bipedRightArm.rotateAngleX -= (double) f7 * 1.2D + (double) f8;
 			bipedRightArm.rotateAngleY += bipedBody.rotateAngleY * 2.0F;
-			bipedRightArm.rotateAngleZ = mh_sin(onGround * 3.141593F)
+			bipedRightArm.rotateAngleZ = mh_sin(lonGround * 3.141593F)
 					* -0.4F;
 		}
 		if (isSneak) {
@@ -293,9 +294,9 @@ public class MMM_ModelLittleMaid_Archetype extends MMM_ModelLittleMaidBase {
 		} else {
 			if (aimedBow) {
 				// ã|ç\Ç¶
-				float f6 = mh_sin(onGround * 3.141593F);
-				float f7 = mh_sin((1.0F - (1.0F - onGround)
-						* (1.0F - onGround)) * 3.141593F);
+				float f6 = mh_sin(lonGround * 3.141593F);
+				float f7 = mh_sin((1.0F - (1.0F - lonGround)
+						* (1.0F - lonGround)) * 3.141593F);
 				bipedRightArm.rotateAngleZ = 0.0F;
 				bipedLeftArm.rotateAngleZ = 0.0F;
 				bipedRightArm.rotateAngleY = -(0.1F - f6 * 0.6F);

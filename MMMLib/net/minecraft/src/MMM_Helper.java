@@ -23,7 +23,10 @@ public class MMM_Helper {
 	public static final boolean isForge = ModLoader.isModLoaded("Forge");
 	public static final Minecraft mc;
 	public static Method methGetSmeltingResultForge = null;
+	public static Class entityRegistry = null;
+	public static Method registerModEntity = null;
 	protected static final Map<Class, Class>replaceEntitys = new HashMap<Class, Class>();
+	protected static Map<String, Integer> entityIDList = new HashMap<String, Integer>();
 	
 	static {
 		fpackage = ModLoader.class.getPackage();
@@ -43,9 +46,16 @@ public class MMM_Helper {
 			try {
 				methGetSmeltingResultForge = FurnaceRecipes.class.getMethod("getExperience", ItemStack.class);
 			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			try {
+				entityRegistry = getNameOfClass("EntityRegistry");
+				registerModEntity = entityRegistry.getMethod("registerModEntity",
+						Class.class, String.class, int.class, Object.class, int.class, int.class, boolean.class);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
-		
 	}
 
 	/**
@@ -199,7 +209,7 @@ public class MMM_Helper {
 	 * Modloader環境下で空いているEntityIDを返す。
 	 * 有効な値を獲得できなければ-1を返す。
 	 */
-	public static int getNextEntityID(boolean isLiving) {
+	private static int getNextEntityID(boolean isLiving) {
 		if (isLiving) {
 			// 生物用
 			for (int li = 1; li < 256; li++) {
@@ -216,6 +226,56 @@ public class MMM_Helper {
 			}
 		}
 		return -1;
+	}
+
+	/**
+	 * Entityを登録する。
+	 * RML、Forge両対応。
+	 * @param entityclass
+	 * @param entityName
+	 * @param defaultId
+	 * 0 : オートアサイン
+	 * @param mod
+	 * @param uniqueModeName
+	 * @param trackingRange
+	 * @param updateFrequency
+	 * @param sendVelocityUpdate
+	 */
+	public static void registerEntity(
+			Class<? extends Entity> entityclass, String entityName, int defaultId,
+			BaseMod mod, int trackingRange, int updateFrequency, boolean sendVelocityUpdate) {
+		int lid = 0;
+		lid = getModEntityID(mod.getName());
+		if (isForge) {
+			// EntityListへの登録は適当な数字でよい。
+			defaultId = getNextEntityID(false);
+			ModLoader.registerEntityID(entityclass, entityName, defaultId);
+//			lid = getModEntityID(mod.getName());
+			try {
+				registerModEntity.invoke(
+						entityRegistry, entityclass, entityName, lid,
+						mod, trackingRange, updateFrequency, sendVelocityUpdate);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else {
+			// EntityListへの登録は
+			if (defaultId == 0) {
+				defaultId = getNextEntityID(entityclass.isAssignableFrom(EntityLiving.class));
+			}
+			ModLoader.registerEntityID(entityclass, entityName, defaultId);
+			ModLoader.addEntityTracker(mod, entityclass, defaultId, trackingRange, updateFrequency, sendVelocityUpdate);
+		}
+		Debug("RegisterEntity ID:%d / %s-%d : %s", defaultId, mod.getName(), lid, entityName);
+	}
+
+	private static int getModEntityID(String uniqueModeName) {
+		int li = 0;
+		if (entityIDList.containsKey(uniqueModeName)) {
+			li = entityIDList.get(uniqueModeName);
+		}
+		entityIDList.put(uniqueModeName, li + 1);
+		return li;
 	}
 
 	/**

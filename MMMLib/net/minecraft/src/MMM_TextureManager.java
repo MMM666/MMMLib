@@ -187,6 +187,9 @@ public class MMM_TextureManager {
 			}
 		}
 		
+		// TODO:実験コード
+		buildCrafterTexture();
+		
 		// テクスチャパッケージにモデルクラスを紐付け
 		MMM_ModelMultiBase[] ldm = modelMap.get(defaultModelName);
 		if (ldm == null) {
@@ -196,7 +199,9 @@ public class MMM_TextureManager {
 			if (ltb.modelName.isEmpty()) {
 				ltb.setModels(defaultModelName, null, ldm);
 			} else {
-				ltb.setModels(ltb.modelName, modelMap.get(ltb.modelName), ldm);
+				if (modelMap.containsKey(ltb.modelName)) {
+					ltb.setModels(ltb.modelName, modelMap.get(ltb.modelName), ldm);
+				}
 			}
 		}
 		for (Entry<String, MMM_ModelMultiBase[]> le : modelMap.entrySet()) {
@@ -220,13 +225,37 @@ public class MMM_TextureManager {
 		}
 		mod_MMM_MMMLib.Debug("Loaded Texture Lists.(%d)", textures.size());
 		for (MMM_TextureBox lbox : textures) {
-			mod_MMM_MMMLib.Debug("texture: %s(%s)", lbox.textureName, lbox.fileName);
+			mod_MMM_MMMLib.Debug("texture: %s(%s) - hasModel:%b", lbox.textureName, lbox.fileName, lbox.models != null);
 		}
+		for (int li = textures.size() - 1; li >= 0; li--) {
+			if (textures.get(li).models == null) {
+				textures.remove(li);
+			}
+		}
+		mod_MMM_MMMLib.Debug("Rebuild Texture Lists.(%d)", textures.size());
+		
 		
 		setDefaultTexture(EntityLiving.class, getTextureBox("default_" + defaultModelName));
 		
 		return false;
 	}
+
+	public static void buildCrafterTexture() {
+		// TODO:実験コード標準モデルテクスチャで構築
+		MMM_TextureBox lbox = new MMM_TextureBox("Crafter_Steve", new String[] {"", "", ""});
+		lbox.fileName = "";
+		
+		lbox.textures.put(0x0c, "/mob/char.png");
+		for (String ls : armorFilenamePrefix) {
+			Map<Integer, String> lmap = new HashMap<Integer, String>();
+			lbox.armors.put(ls, lmap);
+			lmap.put(tx_armor1, (new StringBuilder()).append("/armor/").append(ls).append("_2.png").toString());
+			lmap.put(tx_armor2, (new StringBuilder()).append("/armor/").append(ls).append("_1.png").toString());
+		}
+		
+		textures.add(lbox);
+	}
+
 
 	public static boolean loadTextureIndex() {
 		// サーバー用テクスチャ名称のインデクッスローダー

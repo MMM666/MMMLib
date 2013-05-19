@@ -87,6 +87,12 @@ public abstract class MMM_ModelMultiMMMBase extends MMM_ModelMultiBase {
 		// カウンタ系の加算値、リミット値の設定など行う予定。
 	}
 
+	/**
+	 * 初期ロード時に実行
+	 */
+	public void buildTexture() {
+		
+	}
 
 
 	// IModelCaps

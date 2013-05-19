@@ -8,16 +8,16 @@ import java.util.Random;
 
 public abstract class MMM_ModelBase {
 
-	// ModelBase‚Æ‚ÌŒÝŠ·—p
-	public float onGround;
-	public boolean isRiding = false;
-	public List<MMM_ModelRenderer> boxList = new ArrayList();
-	public boolean isChild = true;
-	private Map<String, TextureOffset> modelTextureMap = new HashMap<String, TextureOffset>();
+	public Render render;
+
+	// ModelBase‚Æ‚ ‚é’ö“xŒÝŠ·
 	public int textureWidth = 64;
 	public int textureHeight = 32;
-
-	public Render render;
+	public float onGround[] = new float[] {0.0F, 0.0F};
+	public boolean isRiding = false;
+	public boolean isChild = true;
+	public List<MMM_ModelRenderer> boxList = new ArrayList();
+	private Map<String, TextureOffset> modelTextureMap = new HashMap<String, TextureOffset>();
 
 
 

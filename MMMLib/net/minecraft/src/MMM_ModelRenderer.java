@@ -27,6 +27,7 @@ public class MMM_ModelRenderer {
 	public boolean mirror;
 	public boolean showModel;
 	public boolean isHidden;
+	public boolean isRendering;
 	public List<MMM_ModelBoxBase> cubeList;
 	public List<MMM_ModelRenderer> childModels;
 	public final String boxName;
@@ -88,6 +89,7 @@ public class MMM_ModelRenderer {
 		mirror = false;
 		showModel = true;
 		isHidden = false;
+		isRendering = true;
 		cubeList = new ArrayList<MMM_ModelBoxBase>();
 		baseModel = pModelBase;
 		pModelBase.boxList.add(this);
@@ -557,7 +559,7 @@ public class MMM_ModelRenderer {
 	protected void renderObject(float par1, boolean pRendering) {
 		// レンダリング、あと子供も
 		GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, matrix);
-		if (pRendering) {
+		if (pRendering && isRendering) {
 			GL11.glPushMatrix();
 			GL11.glScalef(scaleX, scaleY, scaleZ);
 			GL11.glCallList(displayList);

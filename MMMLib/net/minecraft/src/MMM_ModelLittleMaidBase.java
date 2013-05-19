@@ -295,8 +295,9 @@ public abstract class MMM_ModelLittleMaidBase extends MMM_ModelMultiMMMBase {
 			float la, lb, lc;
 			if (aimedBow) {
 				// ã|ç\Ç¶
-				float f6 = mh_sin(onGround * 3.141593F);
-				float f7 = mh_sin((1.0F - (1.0F - onGround) * (1.0F - onGround)) * 3.141593F);
+				float lonGround = onGround[MMM_ModelCapsHelper.getCapsValueInt(pEntityCaps, caps_dominantArm)];
+				float f6 = mh_sin(lonGround * 3.141593F);
+				float f7 = mh_sin((1.0F - (1.0F - lonGround) * (1.0F - lonGround)) * 3.141593F);
 				la = 0.1F - f6 * 0.6F;
 				bipedRightArm.setRotateAngle(-1.470796F, -la, 0.0F);
 				bipedLeftArm.setRotateAngle(-1.470796F, la, 0.0F);
@@ -341,24 +342,24 @@ public abstract class MMM_ModelLittleMaidBase extends MMM_ModelMultiMMMBase {
 	}
 
 	@Override
-	public int showArmorParts(int parts) {
+	public int showArmorParts(int parts, int index) {
 		// äZÇÃï\é¶óp
 		boolean f;
 		// äï
 		f = parts == 3 ? true : false;
-		bipedHead.setVisible(f);
+		bipedHead.isRendering = f;
 		// äZ
 		f = parts == 2 ? true : false;
-		bipedBody.setVisible(f);
-		bipedRightArm.setVisible(f);
-		bipedLeftArm.setVisible(f);
+		bipedBody.isRendering = f;
+		bipedRightArm.isRendering = f;
+		bipedLeftArm.isRendering = f;
 		// ãrçb
 		f = parts == 1 ? true : false;
-		Skirt.setVisible(f);
+		Skirt.isRendering = f;
 		// ‰aìñ
 		f = parts == 0 ? true : false;
-		bipedRightLeg.setVisible(f);
-		bipedLeftLeg.setVisible(f);
+		bipedRightLeg.isRendering = f;
+		bipedLeftLeg.isRendering = f;
 		
 		return -1;
 	}
@@ -392,7 +393,7 @@ public abstract class MMM_ModelLittleMaidBase extends MMM_ModelMultiMMMBase {
 	public void renderFirstPersonHand(MMM_IModelCaps pEntityCaps) {
 		float var2 = 1.0F;
 		GL11.glColor3f(var2, var2, var2);
-		onGround = 0.0F;
+		onGround[0] = onGround[1] = 0.0F;
 		setRotationAngles(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F, pEntityCaps);
 		bipedRightArm.render(0.0625F);
 	}
