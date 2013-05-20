@@ -111,6 +111,9 @@ public class mod_MMM_MMMLib extends BaseMod {
 			MMM_Client.setItemRenderer();
 		}
 		
+		// テクスチャ管理用
+		MMM_TextureManager.onUpdate();
+		
 		return true;
 	}
 

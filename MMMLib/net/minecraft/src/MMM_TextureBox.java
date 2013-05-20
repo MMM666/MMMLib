@@ -87,29 +87,6 @@ public class MMM_TextureBox extends MMM_TextureBoxBase {
 			l = (10 * itemstack.getItemDamage() / itemstack.getMaxDamage());
 		}
 		return getArmorTextureName(pInner, MMM_TextureManager.armorFilenamePrefix[((ItemArmor)itemstack.getItem()).renderIndex], l);
-		
-/*		
-		Map<Integer, String> m = armors.get(MMM_TextureManager.armorFilenamePrefix[((ItemArmor)itemstack.getItem()).renderIndex]);
-		if (m == null) {
-			m = armors.get("default");
-			if (m == null) return null;
-		}
-		int l = 0;
-		if (itemstack.getMaxDamage() > 0) {
-			l = (10 * itemstack.getItemDamage() / itemstack.getMaxDamage());
-		}
-		String ls = null;
-		int lindex = pInner ? MMM_TextureManager.tx_armor1 : MMM_TextureManager.tx_armor2;
-		for (int i = lindex + l; i >= lindex; i--) {
-			ls = m.get(i);
-			if (ls != null) break;
-		}
-		if (ls == null) {
-			return null;
-		} else {
-			return (new StringBuilder()).append(textureDir[1]).append(fileName.replace('.', '/')).append(ls).toString();
-		}
-		*/
 	}
 	public String getArmorTextureName(boolean pInner, String pArmorPrefix, int pDamage) {
 		// index‚Í0x40,0x50”Ô‘ä

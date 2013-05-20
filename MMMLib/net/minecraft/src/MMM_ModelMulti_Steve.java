@@ -3,7 +3,7 @@ package net.minecraft.src;
 import org.lwjgl.opengl.GL11;
 
 
-public class MMM_ModelMulti_Steve extends MMM_ModelMultiMMMBase {
+public class MMM_ModelMulti_Steve extends MMM_ModelMultiBase {
 
 	public MMM_ModelRenderer bipedHead;
 	public MMM_ModelRenderer bipedHeadwear;
@@ -14,6 +14,7 @@ public class MMM_ModelMulti_Steve extends MMM_ModelMultiMMMBase {
 	public MMM_ModelRenderer bipedLeftLeg;
 	public MMM_ModelRenderer bipedEars;
 	public MMM_ModelRenderer bipedCloak;
+	public MMM_ModelRenderer bipedNeck;
 
 
 	public MMM_ModelMulti_Steve() {
@@ -64,19 +65,22 @@ public class MMM_ModelMulti_Steve extends MMM_ModelMultiMMMBase {
 		Arms[1].setRotationPoint(1.5F, 7.2F, -1F);
 		bipedLeftArm.addChild(Arms[1]);
 		
-		HeadMount.setRotationPoint(0.0F, 0.0F, 0.0F);
+		HeadMount.setRotationPoint(0.0F, -4.0F, 0.0F);
 		bipedHead.addChild(HeadMount);
-		HeadTop.setRotationPoint(0.0F, -8.0F, 0.0F);
+		HeadTop.setRotationPoint(0.0F, -12.0F, 0.0F);
 		bipedHead.addChild(HeadTop);
+		
+		bipedNeck = new MMM_ModelRenderer(this);
 		
 		mainFrame = new MMM_ModelRenderer(this);
 		mainFrame.setRotationPoint(0F, pyoffset, 0F);
 		mainFrame.addChild(bipedBody);
-		bipedBody.addChild(bipedHead);
+		bipedBody.addChild(bipedNeck);
+		bipedNeck.addChild(bipedHead);
 		bipedHead.addChild(bipedHeadwear);
 		bipedHead.addChild(bipedEars);
-		bipedBody.addChild(bipedRightArm);
-		bipedBody.addChild(bipedLeftArm);
+		bipedNeck.addChild(bipedRightArm);
+		bipedNeck.addChild(bipedLeftArm);
 		bipedBody.addChild(bipedRightLeg);
 		bipedBody.addChild(bipedLeftLeg);
 		bipedBody.addChild(bipedCloak);
@@ -103,6 +107,7 @@ public class MMM_ModelMulti_Steve extends MMM_ModelMultiMMMBase {
 		bipedLeftArm.setRotationPoint(5.0F, 2.0F, 0.0F).setRotateAngle(0.0F, 0.0F, 0.0F);
 		bipedRightLeg.setRotationPoint(-1.9F, 12.0F, 0.0F).setRotateAngle(0.0F, 0.0F, 0.0F);
 		bipedLeftLeg.setRotationPoint(1.9F, 12.0F, 0.0F).setRotateAngle(0.0F, 0.0F, 0.0F);
+		bipedNeck.setRotationPoint(0.0F, 0.0F, 0.0F).setRotateAngle(0.0F, 0.0F, 0.0F);
 		
 		// òrÇ”ÇËÅAë⁄è„Ç∞
 		float lf1 = mh_cos(par1 * 0.6662F);
@@ -133,39 +138,38 @@ public class MMM_ModelMulti_Steve extends MMM_ModelMultiMMMBase {
 		}
 		
 		float lf;
-		if ((onGround[0] > -9990F || onGround[1] > -9990F) && !aimedBow) {
+		if ((onGrounds[0] > -9990F || onGrounds[1] > -9990F) && !aimedBow) {
 			// òrêUÇË
-//			float f6, f7, f8;
 			lf = (float)Math.PI * 2.0F;
-			lf1 = mh_sin(mh_sqrt_float(onGround[0]) * lf);
-			lf2 = mh_sin(mh_sqrt_float(onGround[1]) * lf);
+			lf1 = mh_sin(mh_sqrt_float(onGrounds[0]) * lf);
+			lf2 = mh_sin(mh_sqrt_float(onGrounds[1]) * lf);
 			bipedBody.rotateAngleY = (lf1 - lf2) * 0.2F;
 			
 			// R
-			if (onGround[0] > 0F) {
-				lf = 1.0F - onGround[0];
+			if (onGrounds[0] > 0F) {
+				lf = 1.0F - onGrounds[0];
 				lf *= lf;
 				lf *= lf;
 				lf = 1.0F - lf;
 				lf1 = mh_sin(lf * (float)Math.PI);
-				lf2 = mh_sin(onGround[0] * (float)Math.PI) * -(bipedHead.rotateAngleX - 0.7F) * 0.75F;
+				lf2 = mh_sin(onGrounds[0] * (float)Math.PI) * -(bipedHead.rotateAngleX - 0.7F) * 0.75F;
 				bipedRightArm.addRotateAngleX(-lf1 * 1.2F - lf2);
 				bipedRightArm.addRotateAngleY(bipedBody.rotateAngleY * 2.0F);
-				bipedRightArm.setRotateAngleZ(mh_sin(onGround[0] * 3.141593F) * -0.4F);
+				bipedRightArm.setRotateAngleZ(mh_sin(onGrounds[0] * 3.141593F) * -0.4F);
 			} else {
 				bipedRightArm.rotateAngleX += bipedBody.rotateAngleY;
 			}
 			// L
-			if (onGround[1] > 0F) {
-				lf = 1.0F - onGround[1];
+			if (onGrounds[1] > 0F) {
+				lf = 1.0F - onGrounds[1];
 				lf *= lf;
 				lf *= lf;
 				lf = 1.0F - lf;
 				lf1 = mh_sin(lf * (float)Math.PI);
-				lf2 = mh_sin(onGround[1] * (float)Math.PI) * -(bipedHead.rotateAngleX - 0.7F) * 0.75F;
+				lf2 = mh_sin(onGrounds[1] * (float)Math.PI) * -(bipedHead.rotateAngleX - 0.7F) * 0.75F;
 				bipedLeftArm.addRotateAngleX(-lf1 * 1.2F - lf2);
 				bipedLeftArm.addRotateAngleY(bipedBody.rotateAngleY * 2.0F);
-				bipedLeftArm.setRotateAngleZ(mh_sin(onGround[1] * 3.141593F) * 0.4F);
+				bipedLeftArm.setRotateAngleZ(mh_sin(onGrounds[1] * 3.141593F) * 0.4F);
 			} else {
 				bipedLeftArm.rotateAngleX += bipedBody.rotateAngleY;
 			}
@@ -176,11 +180,15 @@ public class MMM_ModelMulti_Steve extends MMM_ModelMultiMMMBase {
 			bipedBody.rotationPointY = 2.0F;
 			bipedBody.rotateAngleX += 0.5F;
 			bipedHead.rotationPointY += 1.0F;
-			bipedHead.rotateAngleX -= 0.5F;
-			bipedRightArm.rotateAngleX -= 0.1F;
-			bipedLeftArm.rotateAngleX -= 0.1F;
+			bipedNeck.rotateAngleX -= 0.5F;
+			bipedRightArm.rotateAngleX += 0.4F;
+			bipedLeftArm.rotateAngleX += 0.4F;
 			bipedRightLeg.rotateAngleX -= 0.5F;
 			bipedLeftLeg.rotateAngleX -= 0.5F;
+			bipedRightLeg.setRotationPoint(-1.9F, 9.8F, -0.8F);
+			bipedLeftLeg.setRotationPoint(1.9F, 9.8F, -0.8F);
+			// çÇÇ≥í≤êÆ
+			bipedBody.rotationPointY += 1.2F;
 		}
 		
 		if (aimedBow) {
@@ -210,13 +218,14 @@ public class MMM_ModelMulti_Steve extends MMM_ModelMultiMMMBase {
 		lf = mh_sin(pTicksExisted * 0.067F) * 0.05F;
 		this.bipedRightArm.rotateAngleX += lf;
 		this.bipedLeftArm.rotateAngleX -= lf;
-
+		
 	}
 
 	@Override
 	public void renderItems(MMM_IModelCaps pEntityCaps) {
 		// éËéùÇøÇÃï\é¶
 		GL11.glPushMatrix();
+		
 		// R
 		Arms[0].loadMatrix();
 //		GL11.glTranslatef(0F, 0.05F, -0.05F);
@@ -228,11 +237,10 @@ public class MMM_ModelMulti_Steve extends MMM_ModelMultiMMMBase {
 		// ì™ïîëïè¸ïi
 		boolean lplanter = MMM_ModelCapsHelper.getCapsValueBoolean(pEntityCaps, caps_isPlanter);
 		if (MMM_ModelCapsHelper.getCapsValueBoolean(pEntityCaps, caps_isCamouflage) || lplanter) {
-			HeadMount.loadMatrix();
 			if (lplanter) {
-				HeadTop.renderItemsHead(this, pEntityCaps);
+				HeadTop.loadMatrix().renderItemsHead(this, pEntityCaps);
 			} else {
-				HeadMount.renderItemsHead(this, pEntityCaps);
+				HeadMount.loadMatrix().renderItemsHead(this, pEntityCaps);
 			}
 		}
 		GL11.glPopMatrix();
@@ -243,7 +251,7 @@ public class MMM_ModelMulti_Steve extends MMM_ModelMultiMMMBase {
 		// Ç®éËéËÇÃï`âÊ
 		float var2 = 1.0F;
 		GL11.glColor3f(var2, var2, var2);
-		onGround[0] = onGround[1] = 0.0F;
+		onGrounds[0] = onGrounds[1] = 0.0F;
 		setRotationAngles(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F, pEntityCaps);
 		bipedRightArm.render(0.0625F);
 	}
@@ -281,11 +289,11 @@ public class MMM_ModelMulti_Steve extends MMM_ModelMultiMMMBase {
 	@Override
 	public int showArmorParts(int parts, int index) {
 		if (index == 0) {
-			bipedHead.isRendering = false;
-			bipedHeadwear.isRendering = false;
+			bipedHead.isRendering = parts == 3;
+			bipedHeadwear.isRendering = parts == 3;
 			bipedBody.isRendering = parts == 1;
-			bipedRightArm.isRendering = false;
-			bipedLeftArm.isRendering = false;
+			bipedRightArm.isRendering = parts == 2;
+			bipedLeftArm.isRendering = parts == 2;
 			bipedRightLeg.isRendering = parts == 1;
 			bipedLeftLeg.isRendering = parts == 1;
 		} else {

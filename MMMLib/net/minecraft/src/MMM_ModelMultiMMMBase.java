@@ -11,9 +11,6 @@ import org.lwjgl.opengl.GL11;
  */
 public abstract class MMM_ModelMultiMMMBase extends MMM_ModelMultiBase {
 
-	// Ç±Ç±Ç≈ê›íËÇµÇƒÇ‡à”ñ°Ç»Ç¢ÅH
-	public float scaleFactor = 0.9375F;
-	
 	public Map<String, MMM_EquippedStabilizer> stabiliser;
 
 
@@ -94,25 +91,8 @@ public abstract class MMM_ModelMultiMMMBase extends MMM_ModelMultiBase {
 		
 	}
 
-
-	// IModelCaps
-	@Override
-	public Object getCapsValue(int pIndex, Object ...pArg) {
-		switch (pIndex) {
-		case caps_ScaleFactor:
-			return scaleFactor;
-		}
-		return super.getCapsValue(pIndex, pArg);
-	}
-
-	@Override
-	public boolean setCapsValue(int pIndex, Object... pArg) {
-		switch (pIndex) {
-		case caps_ScaleFactor:
-			scaleFactor = (Float)pArg[0];
-			return true;
-		}
-		return super.setCapsValue(pIndex, pArg);
+	public void setDefaultPause() {
+		
 	}
 
 }

@@ -22,6 +22,8 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import javax.swing.DebugGraphics;
+
 import net.minecraft.server.MinecraftServer;
 
 public class MMM_TextureManager {
@@ -81,6 +83,18 @@ public class MMM_TextureManager {
 	private static String[] requestString = new String[] {
 		null, null, null, null, null, null, null, null,
 		null, null, null, null, null, null, null, null
+	};
+	private static int[] requestStringCounter = new int[] {
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+	};
+	private static int[] requestIndex = new int[] {
+		-1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+		-1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+	};
+	private static int[] requestIndexCounter = new int[] {
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	};
 	private static Map<MMM_ITextureEntity, int[]> stackGetTexturePack = new HashMap<MMM_ITextureEntity, int[]>();
 	private static Map<MMM_ITextureEntity, Object[]> stackSetTexturePack = new HashMap<MMM_ITextureEntity, Object[]>();
@@ -233,6 +247,9 @@ public class MMM_TextureManager {
 			}
 		}
 		mod_MMM_MMMLib.Debug("Rebuild Texture Lists.(%d)", textures.size());
+		for (MMM_TextureBox lbox : textures) {
+			mod_MMM_MMMLib.Debug("texture: %s(%s) - hasModel:%b", lbox.textureName, lbox.fileName, lbox.models != null);
+		}
 		
 		
 		setDefaultTexture(EntityLiving.class, getTextureBox("default_" + defaultModelName));
@@ -386,6 +403,7 @@ public class MMM_TextureManager {
 			}
 			catch (Exception exception) {
 				mod_MMM_MMMLib.Debug("getModelClass-Exception: %s", fname);
+				exception.printStackTrace();
 			}
 			catch (Error error) {
 				mod_MMM_MMMLib.Debug("getModelClass-Error: %s", fname);
@@ -607,22 +625,6 @@ public class MMM_TextureManager {
 		return lreturn == null ? null : lreturn;
 	}
 
-	@Deprecated
-	public static String getTextureName(MMM_TextureBox pBox, int pIndex) {
-		if (pBox == null) {
-			return null;
-		} else if (!pBox.hasColor(pIndex)) {
-			// 特殊パターン
-			if (pIndex >= 0x60 && pIndex <= 0x6f) {
-				// 目のテクスチャ
-				return getTextureName(pBox, 0x13);
-			}
-			return null;
-		} else {
-			return pBox.getTextureName(pIndex);
-		}
-	}
-
 	/**
 	 * ローカルで読み込まれているテクスチャパックの数。
 	 */
@@ -686,52 +688,6 @@ public class MMM_TextureManager {
 	}
 
 	/**
-	 * 野生のメイドの色をランダムで返す
-	 */
-	@Deprecated
-	public static int getRandomWildColor(int pIndex, Random rand) {
-		if (textureServer.isEmpty() || pIndex < 0) return -1;
-		
-		List<Integer> llist = new ArrayList<Integer>();
-		int lcolor = textureServer.get(pIndex).wildColor;
-		for (int li = 0; li < 16; li++) {
-			if ((lcolor & 0x01) > 0) {
-				llist.add(li);
-			}
-			lcolor = lcolor >>> 1;
-		}
-		
-		if (llist.size() > 0) {
-			return llist.get(rand.nextInt(llist.size()));
-		} else {
-			return -1;
-		}
-	}
-
-	/**
-	 * 契約のメイドの色をランダムで返す
-	 */
-	@Deprecated
-	public static int getRandomContractColor(int pIndex, Random rand) {
-		if (textureServer.isEmpty() || pIndex < 0) return -1;
-		
-		List<Integer> llist = new ArrayList<Integer>();
-		int lcolor = textureServer.get(pIndex).contractColor;
-		for (int li = 0; li < 16; li++) {
-			if ((lcolor & 0x01) > 0) {
-				llist.add(li);
-			}
-			lcolor = lcolor >>> 1;
-		}
-		
-		if (llist.size() > 0) {
-			return llist.get(rand.nextInt(llist.size()));
-		} else {
-			return -1;
-		}
-	}
-
-	/**
 	 * テクスチャパック名に対応するインデックスを返す。
 	 * @param pEntity
 	 * @param pPackName
@@ -781,25 +737,19 @@ public class MMM_TextureManager {
 		}
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
 	/*
 	 * サーバークライアント間でのテクスチャ管理関数群
 	 */
 
 	// ネットワーク越しにテクスチャインデクスを得る際に使う
-	protected static int getRequestIndex(String pVal) {
+	protected static int getRequestStringIndex(String pVal) {
 		int lblank = -1;
 		for (int li = 0; li < requestString.length; li++) {
 			if (requestString[li] == null) {
 				lblank = li;
+				requestStringCounter[li] = 0;
 			} else if (requestString[li].equals(pVal)) {
 				// 既に要求中
 				return -2;
@@ -807,6 +757,8 @@ public class MMM_TextureManager {
 		}
 		if (lblank >= 0) {
 			requestString[lblank] = pVal;
+		} else {
+			mod_MMM_MMMLib.Debug("requestString Overflow!");
 		}
 		return lblank;
 	}
@@ -817,6 +769,35 @@ public class MMM_TextureManager {
 		return ls;
 	}
 
+	protected static int getRequestIndex(int pTextureServerBoxIndex) {
+		int lblank = -1;
+		for (int li = 0; li < requestIndex.length; li++) {
+			if (requestIndex[li] == -1) {
+				lblank = li;
+				requestIndexCounter[li] = 0;
+			} else if (requestIndex[li] == pTextureServerBoxIndex) {
+				// 既に要求中
+				return -2;
+			}
+		}
+		if (lblank >= 0) {
+			requestIndex[lblank] = pTextureServerBoxIndex;
+		} else {
+			mod_MMM_MMMLib.Debug("requestIndex Overflow!");
+		}
+		return lblank;
+	}
+
+	protected static boolean clearRequestIndex(int pTextureServerBoxIndex) {
+		for (int li = 0; li < requestIndex.length; li++) {
+			if (requestIndex[li] == pTextureServerBoxIndex) {
+				// 要求中だったので消す。
+				requestIndex[li] = -1;
+				return true;
+			}
+		}
+		return false;
+	}
 
 
 	public static MMM_TextureBox getTextureBoxServerIndex(int pIndex) {
@@ -843,16 +824,9 @@ public class MMM_TextureManager {
 		
 		// PackeNameからサーバー側のテクスチャインデックスを獲得する。
 		for (int li = 0; li < pBox.length; li++) {
-			if (!textureServerIndex.containsKey(pBox[li])) {
+			lindex[li] = checkTextureBoxServer((MMM_TextureBox)pBox[li]);
+			if (lindex[li] < 0) {
 				lflag = false;
-				lindex[li] = -1;
-				int ll = getRequestIndex(pBox[li].textureName);
-				if (ll == -2) continue;
-				if (ll > -1) {
-					sendToServerGetTextureIndex(ll, (MMM_TextureBox)pBox[li]);
-				}
-			} else {
-				lindex[li] = textureServerIndex.get(pBox[li]);
 			}
 		}
 		
@@ -867,6 +841,26 @@ public class MMM_TextureManager {
 				lo[li + 1] = pBox[li];
 			}
 			stackSetTexturePack.put(pEntity, lo);
+		}
+	}
+
+	/**
+	 * TextureBoxにサーバー識別番号が付与されているかを確認し、なければ問い合わせを行う。
+	 * @param pBox
+	 * @return
+	 */
+	public static int checkTextureBoxServer(MMM_TextureBox pBox) {
+		// Client
+		if (textureServerIndex.containsKey(pBox)) {
+			return textureServerIndex.get(pBox);
+		} else {
+			int ll = getRequestStringIndex(pBox.textureName);
+			if (ll > -1) {
+				sendToServerGetTextureIndex(ll, pBox);
+				return -1;
+			} else {
+				return ll;
+			}
 		}
 	}
 
@@ -983,7 +977,9 @@ public class MMM_TextureManager {
 		for (int li = 0; li < pIndex.length; li++) {
 			lbox[li] = getTextureBoxServerIndex(pIndex[li]);
 			if (lbox[li] == null) {
-				sendToServerGetTexturePackName(pIndex[li]);
+				if (getRequestIndex(pIndex[li]) > -1) {
+					sendToServerGetTexturePackName(pIndex[li]);
+				}
 				lflag = false;
 			}
 		}
@@ -1024,6 +1020,7 @@ public class MMM_TextureManager {
 		MMM_Helper.setFloat(ldata, 19, lboxserver.getMountedYOffset());
 		MMM_Helper.setStr(ldata, 23, lboxserver.textureName);
 		mod_MMM_MMMLib.sendToClient(pHandler, ldata);
+		mod_MMM_MMMLib.Debug("SetTexturePackName:%04x - %s", lindex, lboxserver.textureName);
 	}
 
 	protected static void reciveFromServerSetTexturePackName(byte[] pData) {
@@ -1033,7 +1030,10 @@ public class MMM_TextureManager {
 		MMM_TextureBox lbox = getTextureBox(lpackname);
 		if (lbox == null) {
 			// ローカルには存在しないテクスチャパック
-			lbox = new MMM_TextureBox(lpackname, null);
+			// TODO:この辺要修正
+			lbox = getTextureBox("default_Orign").duplicate();
+			lbox.textureName = lpackname;
+//			lbox = new MMM_TextureBox(lpackname, null);
 			lbox.setModelSize(
 					MMM_Helper.getFloat(pData, 7),
 					MMM_Helper.getFloat(pData, 11),
@@ -1041,13 +1041,32 @@ public class MMM_TextureManager {
 					MMM_Helper.getFloat(pData, 19));
 			textures.add(lbox);
 		}
-		textureServerIndex.put(lbox, (int)MMM_Helper.getShort(pData, 1));
+		int lindex = MMM_Helper.getShort(pData, 1);
+		textureServerIndex.put(lbox, lindex);
+		clearRequestIndex(lindex);
 		
 		// 処理可能な物がスタックされている場合は処理を行う。
 		Map<MMM_ITextureEntity, int[]> lmap = new HashMap<MMM_ITextureEntity, int[]>(stackGetTexturePack);
 		stackGetTexturePack.clear();
 		for (Entry<MMM_ITextureEntity, int[]> le : lmap.entrySet()) {
 			postGetTexturePack(le.getKey(), le.getValue());
+		}
+	}
+
+	/**
+	 * Request系の値を一定カウントで消去
+	 */
+	protected static void onUpdate() {
+		for (int li = 0; li < requestString.length; li++) {
+			// 約30秒で解放
+			if (requestString[li] != null && requestStringCounter[li]++ > 600) {
+				requestString[li] = null;
+				requestStringCounter[li] = 0;
+			}
+			if (requestIndex[li] != -1 && requestIndexCounter[li]++ > 600) {
+				requestIndex[li] = -1;
+				requestIndexCounter[li] = 0;
+			}
 		}
 	}
 

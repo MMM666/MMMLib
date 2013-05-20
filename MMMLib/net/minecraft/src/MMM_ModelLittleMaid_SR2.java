@@ -17,8 +17,8 @@ public class MMM_ModelLittleMaid_SR2 extends MMM_ModelLittleMaidBase {
 	public MMM_ModelLittleMaid_SR2(float psize) {
 		super(psize);
 	}
-	public MMM_ModelLittleMaid_SR2(float psize, float pyoffset) {
-		super(psize, pyoffset);
+	public MMM_ModelLittleMaid_SR2(float psize, float pyoffset, int pTextureWidth, int pTextureHeight) {
+		super(psize, pyoffset, pTextureWidth, pTextureHeight);
 	}
 
 

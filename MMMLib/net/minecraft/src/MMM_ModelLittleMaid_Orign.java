@@ -17,8 +17,8 @@ public class MMM_ModelLittleMaid_Orign extends MMM_ModelLittleMaidBase {
 	/**
 	 * コンストラクタは全て継承させること
 	 */
-	public MMM_ModelLittleMaid_Orign(float psize, float pyoffset) {
-		super(64, 32);
+	public MMM_ModelLittleMaid_Orign(float psize, float pyoffset, int pTextureWidth, int pTextureHeight) {
+		super(psize, pyoffset, pTextureWidth, pTextureHeight);
 	}
 
 

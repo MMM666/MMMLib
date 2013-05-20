@@ -27,6 +27,10 @@ public class MMM_ModelRenderer {
 	public boolean mirror;
 	public boolean showModel;
 	public boolean isHidden;
+	/**
+	 * パーツの親子関係に左右されずに描画するかを決める。
+	 * アーマーの表示などに使う。
+	 */
 	public boolean isRendering;
 	public List<MMM_ModelBoxBase> cubeList;
 	public List<MMM_ModelRenderer> childModels;
@@ -343,7 +347,9 @@ public class MMM_ModelRenderer {
 	public void clearCubeList() {
 		cubeList.clear();
 		compiled = false;
-		childModels.clear();
+		if (childModels != null) {
+			childModels.clear();
+		}
 	}
 
 	// TODO:このあたりは要修正
@@ -591,8 +597,9 @@ public class MMM_ModelRenderer {
 		return mirror;
 	}
 
-	public void setMirror(boolean flag) {
+	public MMM_ModelRenderer setMirror(boolean flag) {
 		mirror = flag;
+		return this;
 	}
 
 	public boolean getVisible() {

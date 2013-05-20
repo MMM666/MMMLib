@@ -30,6 +30,8 @@ public abstract class MMM_ModelMultiBase extends MMM_ModelBase implements MMM_IM
 	
 	public float entityIdFactor;
 	public int entityTicksExisted;
+	// 変数である意味ない？
+	public float scaleFactor = 0.9375F;
 	/**
 	 * モデルが持っている機能群
 	 */
@@ -42,7 +44,7 @@ public abstract class MMM_ModelMultiBase extends MMM_ModelBase implements MMM_IM
 		put("heldItemLeft",		caps_heldItemLeft);
 		put("heldItemRight",	caps_heldItemRight);
 		put("aimedBow",			caps_aimedBow);
-//		put("ScaleFactor", 		caps_ScaleFactor);
+		put("ScaleFactor", 		caps_ScaleFactor);
 		put("entityIdFactor",	caps_entityIdFactor);
 	}};
 
@@ -161,7 +163,7 @@ public abstract class MMM_ModelMultiBase extends MMM_ModelBase implements MMM_IM
 	public Object getCapsValue(int pIndex, Object ...pArg) {
 		switch (pIndex) {
 		case caps_onGround:
-			return onGround;
+			return onGrounds;
 		case caps_isRiding:
 			return isRiding;
 		case caps_isSneak:
@@ -180,6 +182,8 @@ public abstract class MMM_ModelMultiBase extends MMM_ModelBase implements MMM_IM
 			return entityIdFactor;
 		case caps_ticksExisted:
 			return entityTicksExisted;
+		case caps_ScaleFactor:
+			return scaleFactor;
 		}
 		return null;
 	}
@@ -188,8 +192,8 @@ public abstract class MMM_ModelMultiBase extends MMM_ModelBase implements MMM_IM
 	public boolean setCapsValue(int pIndex, Object... pArg) {
 		switch (pIndex) {
 		case caps_onGround:
-			for (int li = 0; li < onGround.length && li < pArg.length; li++) {
-				onGround[li] = (Float)pArg[li];
+			for (int li = 0; li < onGrounds.length && li < pArg.length; li++) {
+				onGrounds[li] = (Float)pArg[li];
 			}
 			return true;
 		case caps_isRiding:
@@ -218,6 +222,9 @@ public abstract class MMM_ModelMultiBase extends MMM_ModelBase implements MMM_IM
 			return true;
 		case caps_ticksExisted:
 			entityTicksExisted = (Integer)pArg[0];
+			return true;
+		case caps_ScaleFactor:
+			scaleFactor = (Float)pArg[0];
 			return true;
 		}
 		

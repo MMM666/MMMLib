@@ -27,8 +27,8 @@ public class MMM_ModelLittleMaid_Archetype extends MMM_ModelLittleMaidBase {
 		super(f);
 	}
 
-	public MMM_ModelLittleMaid_Archetype(float f, float f1) {
-		super(f, f1);
+	public MMM_ModelLittleMaid_Archetype(float f, float f1, int pTextureWidth, int pTextureHeight) {
+		super(f, f1, pTextureWidth, pTextureHeight);
 	}
 
 	@Override
@@ -188,11 +188,11 @@ public class MMM_ModelLittleMaid_Archetype extends MMM_ModelLittleMaidBase {
 	public void setRotationAngles(float par1, float par2, float pTicksExisted,
 			float pHeadYaw, float pHeadPitch, float par6, MMM_IModelCaps pEntityCaps) {
 //		super.setRotationAnglesMM(par1, par2, pTicksExisted, pHeadYaw, pHeadPitch, par6);
-
+		
 		bipedHead.rotateAngleY = pHeadYaw / 57.29578F;
 		bipedHead.rotateAngleX = pHeadPitch / 57.29578F;
 //		bipedHeadwear.rotateAngleY = bipedHead.rotateAngleY;
-//		bipedHeadwear.rotateAngleX = bipedHead.rotateAngleX;
+		bipedHeadwear.rotateAngleX = 0F;
 		bipedRightArm.rotateAngleX = mh_cos(par1 * 0.6662F + 3.141593F) * 2.0F * par2 * 0.5F;
 		bipedLeftArm.rotateAngleX = mh_cos(par1 * 0.6662F) * 2.0F * par2 * 0.5F;
 		bipedRightArm.rotateAngleZ = 0.0F;
@@ -220,10 +220,10 @@ public class MMM_ModelLittleMaid_Archetype extends MMM_ModelLittleMaidBase {
 			bipedRightArm.rotateAngleX = bipedRightArm.rotateAngleX * 0.5F
 					- 0.3141593F * (float) heldItemRight;
 		}
-
+		
 		bipedRightArm.rotateAngleY = 0.0F;
 		bipedLeftArm.rotateAngleY = 0.0F;
-		float lonGround = Math.max(onGround[0], onGround[1]);
+		float lonGround = Math.max(onGrounds[0], onGrounds[1]);
 		if (lonGround > -9990F && !aimedBow) {
 			// òrêUÇË
 			float f6 = lonGround;
@@ -250,8 +250,7 @@ public class MMM_ModelLittleMaid_Archetype extends MMM_ModelLittleMaidBase {
 					* -(bipedHead.rotateAngleX - 0.7F) * 0.75F;
 			bipedRightArm.rotateAngleX -= (double) f7 * 1.2D + (double) f8;
 			bipedRightArm.rotateAngleY += bipedBody.rotateAngleY * 2.0F;
-			bipedRightArm.rotateAngleZ = mh_sin(lonGround * 3.141593F)
-					* -0.4F;
+			bipedRightArm.rotateAngleZ = mh_sin(lonGround * 3.141593F) * -0.4F;
 		}
 		if (isSneak) {
 			// ÇµÇ·Ç™Ç›

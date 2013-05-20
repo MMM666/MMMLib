@@ -13,7 +13,8 @@ public abstract class MMM_ModelBase {
 	// ModelBase‚Æ‚ ‚é’ö“xŒÝŠ·
 	public int textureWidth = 64;
 	public int textureHeight = 32;
-	public float onGround[] = new float[] {0.0F, 0.0F};
+	public float onGround;
+	public float onGrounds[] = new float[] {0.0F, 0.0F};
 	public boolean isRiding = false;
 	public boolean isChild = true;
 	public List<MMM_ModelRenderer> boxList = new ArrayList();
