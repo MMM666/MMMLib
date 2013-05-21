@@ -71,7 +71,7 @@ public abstract class MMM_ModelLittleMaidBase extends MMM_ModelMultiMMMBase {
 		*/
 		
 		HeadMount.setRotationPoint(0F, -4F, 0F);
-		HeadTop.setRotationPoint(0F, -8F, 0F);
+		HeadTop.setRotationPoint(0F, -13F, 0F);
 		
 		
 		bipedHead = new MMM_ModelRenderer(this, 0, 0);
@@ -336,7 +336,7 @@ public abstract class MMM_ModelLittleMaidBase extends MMM_ModelMultiMMMBase {
 				bipedLeftArm.addRotateAngleZ(-lc);
 			}
 		}
-		
+
 		
 		//
 //		Arms[2].setRotateAngle(-0.78539816339744830961566084581988F - bipedRightArm.getRotateAngleX(), 0F, 0F);
@@ -408,9 +408,9 @@ public abstract class MMM_ModelLittleMaidBase extends MMM_ModelMultiMMMBase {
 		if (MMM_ModelCapsHelper.getCapsValueBoolean(pEntityCaps, caps_isCamouflage) || lplanter) {
 			HeadMount.loadMatrix();
 			if (lplanter) {
-				HeadTop.renderItemsHead(this, pEntityCaps);
+				HeadTop.loadMatrix().renderItemsHead(this, pEntityCaps);
 			} else {
-				HeadMount.renderItemsHead(this, pEntityCaps);
+				HeadMount.loadMatrix().renderItemsHead(this, pEntityCaps);
 			}
 		}
 		GL11.glPopMatrix();

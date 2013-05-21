@@ -13,6 +13,8 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.swing.DebugGraphics;
+
 import net.minecraft.client.Minecraft;
 
 public class MMM_Helper {
@@ -49,7 +51,7 @@ public class MMM_Helper {
 				e.printStackTrace();
 			}
 			try {
-				entityRegistry = getNameOfClass("EntityRegistry");
+				entityRegistry = getNameOfClass("cpw.mods.fml.common.registry.EntityRegistry");
 				registerModEntity = entityRegistry.getMethod("registerModEntity",
 						Class.class, String.class, int.class, Object.class, int.class, int.class, boolean.class);
 			} catch (Exception e) {
@@ -107,6 +109,7 @@ public class MMM_Helper {
 		try {
 			lclass = Class.forName(pName);
 		} catch (Exception e) {
+			mod_MMM_MMMLib.Debug("Class:%s is not found.", pName);
 		}
 		
 		return lclass;
@@ -243,17 +246,35 @@ public class MMM_Helper {
 	 */
 	public static void registerEntity(
 			Class<? extends Entity> entityclass, String entityName, int defaultId,
-			BaseMod mod, int trackingRange, int updateFrequency, boolean sendVelocityUpdate) {
+			BaseMod mod, int trackingRange, int updateFrequency, boolean sendVelocityUpdate,
+			int pEggColor1, int pEggColor2) {
 		int lid = 0;
 		lid = getModEntityID(mod.getName());
 		if (isForge) {
-			// EntityListÇ÷ÇÃìoò^ÇÕìKìñÇ»êîéöÇ≈ÇÊÇ¢ÅB
-			defaultId = getNextEntityID(false);
-			ModLoader.registerEntityID(entityclass, entityName, defaultId);
-//			lid = getModEntityID(mod.getName());
 			try {
+				Method lmethod;
+				// EntityIDÇÃälìæ
+				lmethod = entityRegistry.getMethod("findGlobalUniqueEntityId");
+				defaultId = (Integer)lmethod.invoke(null);
+				
+				if (pEggColor1 == 0 && pEggColor2 == 0) {
+					lmethod = entityRegistry.getMethod("registerGlobalEntityID",
+							Class.class, String.class, int.class);
+					lmethod.invoke(null, entityclass, entityName, defaultId);
+				} else {
+					lmethod = entityRegistry.getMethod("registerGlobalEntityID",
+							Class.class, String.class, int.class, int.class, int.class);
+					lmethod.invoke(null, entityclass, entityName, defaultId, pEggColor1, pEggColor2);
+				}
+				// EntityListÇ÷ÇÃìoò^ÇÕìKìñÇ»êîéöÇ≈ÇÊÇ¢ÅB
+//				defaultId = getNextEntityID(false);
+//				if (pEggColor1 == 0 && pEggColor2 == 0) {
+//					ModLoader.registerEntityID(entityclass, entityName, defaultId);
+//				} else {
+//					ModLoader.registerEntityID(entityclass, entityName, defaultId, pEggColor1, pEggColor2);
+//				}
 				registerModEntity.invoke(
-						entityRegistry, entityclass, entityName, lid,
+						null, entityclass, entityName, lid,
 						mod, trackingRange, updateFrequency, sendVelocityUpdate);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -263,10 +284,19 @@ public class MMM_Helper {
 			if (defaultId == 0) {
 				defaultId = getNextEntityID(entityclass.isAssignableFrom(EntityLiving.class));
 			}
-			ModLoader.registerEntityID(entityclass, entityName, defaultId);
+			if (pEggColor1 == 0 && pEggColor2 == 0) {
+				ModLoader.registerEntityID(entityclass, entityName, defaultId);
+			} else {
+				ModLoader.registerEntityID(entityclass, entityName, defaultId, pEggColor1, pEggColor2);
+			}
 			ModLoader.addEntityTracker(mod, entityclass, defaultId, trackingRange, updateFrequency, sendVelocityUpdate);
 		}
 		Debug("RegisterEntity ID:%d / %s-%d : %s", defaultId, mod.getName(), lid, entityName);
+	}
+	public static void registerEntity(
+			Class<? extends Entity> entityclass, String entityName, int defaultId,
+			BaseMod mod, int trackingRange, int updateFrequency, boolean sendVelocityUpdate) {
+		registerEntity(entityclass, entityName, defaultId, mod, trackingRange, updateFrequency, sendVelocityUpdate, 0, 0);
 	}
 
 	private static int getModEntityID(String uniqueModeName) {
@@ -292,14 +322,16 @@ public class MMM_Helper {
 	 */
 	public static Entity getAvatarEntity(Entity pEntity){
 		// littleMaidópÉRÅ[ÉhÇ±Ç±Ç©ÇÁ
+		if (pEntity == null) return null;
 		try {
 			// éÀéËÇÃèÓïÒÇEntityLittleMaidAvatarÇ©ÇÁEntityLittleMaidÇ÷íuÇ´ä∑Ç¶ÇÈ
 			Field field = pEntity.getClass().getField("avatar");
 			pEntity = (EntityLiving)field.get(pEntity);
-		}
-		catch (NoSuchFieldException e) {
-		}
-		catch (Exception e) {
+		} catch (NoSuchFieldException e) {
+		} catch (Exception e) {
+			e.printStackTrace();
+		} catch (Error e) {
+			e.printStackTrace();
 		}
 		// Ç±Ç±Ç‹Ç≈
 		return pEntity;

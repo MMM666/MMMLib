@@ -76,7 +76,7 @@ public class mod_MMM_MMMLib extends BaseMod {
 			Debug("Localmode: InitTextureList.");
 			MMM_TextureManager.initTextureList(true);
 		} else {
-			MMM_TextureManager.loadTextureIndex();
+			MMM_TextureManager.loadTextureServer();
 		}
 		
 	}
@@ -168,7 +168,7 @@ public class mod_MMM_MMMLib extends BaseMod {
 
 	// Forge
 	public void serverDisconnect() {
-		MMM_TextureManager.saveTextureIndex();
+		MMM_TextureManager.saveTextureServer();
 	}
 
 }

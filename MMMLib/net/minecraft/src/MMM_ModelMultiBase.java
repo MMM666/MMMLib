@@ -66,12 +66,14 @@ public abstract class MMM_ModelMultiBase extends MMM_ModelBase implements MMM_IM
 		textureWidth = pTextureWidth;
 		textureHeight = pTextureHeight;
 		
-		// ハードポイント
-		Arms = new MMM_ModelRenderer[2];
-		HeadMount = new MMM_ModelRenderer(this, "HeadMount");
-		HeadTop = new MMM_ModelRenderer(this, "HeadTop");
-		
-		initModel(pSizeAdjust, pYOffset);
+		if (MMM_Helper.isClient) {
+			// ハードポイント
+			Arms = new MMM_ModelRenderer[2];
+			HeadMount = new MMM_ModelRenderer(this, "HeadMount");
+			HeadTop = new MMM_ModelRenderer(this, "HeadTop");
+			
+			initModel(pSizeAdjust, pYOffset);
+		}
 	}
 
 	// 独自定義関数群

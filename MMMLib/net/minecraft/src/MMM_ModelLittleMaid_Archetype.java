@@ -46,7 +46,7 @@ public class MMM_ModelLittleMaid_Archetype extends MMM_ModelLittleMaidBase {
 		Arms[0] = new MMM_ModelRenderer(this, 0, 0);
 		Arms[0].setRotationPoint(-1F, 5F, -1F);
 		HeadMount.setRotationPoint(0F, -4F, 0F);
-		HeadTop.setRotationPoint(0F, -8F, 0F);
+		HeadTop.setRotationPoint(0F, -13F, 0F);
 
 		bipedHead = new MMM_ModelRenderer(this, 0, 0);
 		bipedHead.addBox(-4F, -8F, -4F, 8, 8, 8, psize);
@@ -328,6 +328,7 @@ public class MMM_ModelLittleMaid_Archetype extends MMM_ModelLittleMaidBase {
 				bipedLeftArm.rotateAngleX -= mh_sin(pTicksExisted * 0.067F) * 0.05F;
 			}
 		}
+
 	}
 
 	@Override
@@ -342,9 +343,9 @@ public class MMM_ModelLittleMaid_Archetype extends MMM_ModelLittleMaidBase {
 			if (MMM_ModelCapsHelper.getCapsValueBoolean(pEntityCaps, caps_isCamouflage) || lplanter) {
 				HeadMount.loadMatrix();
 				if (lplanter) {
-					HeadTop.renderItemsHead(this, pEntityCaps);
+					HeadTop.loadMatrix().renderItemsHead(this, pEntityCaps);
 				} else {
-					HeadMount.renderItemsHead(this, pEntityCaps);
+					HeadMount.loadMatrix().renderItemsHead(this, pEntityCaps);
 				}
 			}
 		}
