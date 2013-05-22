@@ -267,7 +267,6 @@ public abstract class MMM_ModelLittleMaidBase extends MMM_ModelMultiMMMBase {
 				bipedLeftArm.rotateAngleX += bipedBody.rotateAngleY;
 			}
 		}
-		Skirt.isRendering = true;
 		if(isSneak) {
 			// ‚µ‚á‚ª‚Ý
 			bipedBody.rotateAngleX += 0.5F;
