@@ -7,14 +7,16 @@ import java.util.Map;
 import java.util.Random;
 
 public abstract class MMM_ModelBase {
+	
+	public static final float PI = (float)Math.PI;
 
 	public Render render;
 
 	// ModelBase‚Æ‚ ‚é’ö“xŒÝŠ·
 	public int textureWidth = 64;
 	public int textureHeight = 32;
-	public float onGround;
 	public float onGrounds[] = new float[] {0.0F, 0.0F};
+	public int dominantArm = 0;
 	public boolean isRiding = false;
 	public boolean isChild = true;
 	public List<MMM_ModelRenderer> boxList = new ArrayList();

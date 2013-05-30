@@ -26,9 +26,11 @@ public interface MMM_IModelCaps {
 	public static final int caps_isSneak			= 0x0012;
 	public static final int caps_aimedBow			= 0x0013;
 	// EntityCaps
-	public static final int caps_Entity				= 0x0020;
-	public static final int caps_health				= 0x0021;
-	public static final int caps_ticksExisted	= 0x0022;
+	public static final int caps_Entity					= 0x0020;
+	public static final int caps_health					= 0x0021;
+	public static final int caps_ticksExisted			= 0x0022;
+	public static final int caps_currentEquippedItem	= 0x0023;
+	public static final int caps_currentArmor			= 0x0024;
 	// littleMaid
 	public static final int caps_isRendering		= 0x0100;
 	public static final int caps_isBloodsuck		= 0x0101;
@@ -58,11 +60,17 @@ public interface MMM_IModelCaps {
 	public static final int caps_render				= 0x0130;
 	public static final int caps_Arms				= 0x0131;
 	public static final int caps_HeadMount			= 0x0132;
+	/** モデルに設定されているハードポイントを配列で返します **/
 	public static final int caps_HardPoint			= 0x0133;
+	/** 装備しているスタビライザーを返します **/
 	public static final int caps_stabiliser			= 0x0134;
+	/** 現在保持しているアイテムの配列を返します **/
 	public static final int caps_Items				= 0x0135;
+	/** 現在保持しているアイテムの挙動の配列を返します **/
 	public static final int caps_Actions			= 0x0136;
+	/** 現在保持しているアイテムの振り回し状態を配列で返します **/
 	public static final int caps_Grounds			= 0x0137;
+	/** Inventoryを返します **/
 	public static final int caps_Inventory			= 0x0138;
 	public static final int caps_Ground				= 0x0139;
 	public static final int caps_interestedAngle	= 0x0150;
@@ -72,6 +80,7 @@ public interface MMM_IModelCaps {
 	public static final int caps_PartsVisible	= 0x0201;
 	public static final int caps_Posing			= 0x0202;
 	public static final int caps_Actors			= 0x0203;
+	public static final int caps_PartsStrings	= 0x0204;
 
 	/**
 	 * モデルが実装している機能をリストに入れて返す。

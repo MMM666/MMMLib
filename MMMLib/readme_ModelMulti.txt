@@ -29,11 +29,11 @@ ModelLittleMaidBase
 ・パーツの親子関係
 	それぞれのパーツの親子関係は以下の通りになっています。
 
-	+- mainFrame
+	+- mainFrame@
 		|
-		+- bipedBody
+		+- bipedTorso@
 			|
-			+- bipedNeck
+			+- bipedNeck@
 			|	|
 			|	+- bipedHead
 			|	|	|
@@ -49,12 +49,54 @@ ModelLittleMaidBase
 			|		|
 			|		+- Arms[1]
 			|
-			+- Skirt
+			+- bipedBody
 			|
-			+- bipedRightLeg
-			|
-			+- bipedLeftLeg
+			+- bipedPelvic@
+				|
+				+- Skirt
+				|
+				+- bipedRightLeg
+				|
+				+- bipedLeftLeg
 
+
+ModelSmartMovingBase(未実装)
+
+・パーツの親子関係
+	それぞれのパーツの親子関係は以下の通りになっています。
+	+- bipedOuter@
+		|
+		+- bipedTorso@
+			|
+			+- bipedBreast@
+			|	|
+			|	+- bipedHead
+			|	|	|
+			|	|	+- bipedHeadwear
+			|	|	|
+			|	|	+- HeadTop
+			|	|	|
+			|	|	+- HeadMount
+			|	|
+			|	+- bipedRightShoulder@
+			|	|	|
+			|	|	+- bipedRightArm
+			|	|		|
+			|	|		+- Arms[0]
+			|	|
+			|	+- bipedLeftShoulder@
+			|		|
+			|		+- biprdLeftArm
+			|			|
+			|			+- Arms[1]
+			|
+			+- bipedBody
+			|
+			+- bipedPelvic@
+				|
+				+- bipedRightLeg
+				|
+				+- bipedLeftLeg
 
 
 

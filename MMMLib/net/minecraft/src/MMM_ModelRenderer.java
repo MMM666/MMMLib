@@ -35,53 +35,41 @@ public class MMM_ModelRenderer {
 	public List<MMM_ModelBoxBase> cubeList;
 	public List<MMM_ModelRenderer> childModels;
 	public final String boxName;
-	private MMM_ModelBase baseModel;
-	/**
-	 * offsetX
-	 */
-	public float field_82906_o;
-	/**
-	 * offsetY
-	 */
-	public float field_82908_p;
-	/**
-	 * offsetZ
-	 */
-	public float field_82907_q;
+	protected MMM_ModelBase baseModel;
+	public MMM_ModelRenderer pearent;
+	public float offsetX;
+	public float offsetY;
+	public float offsetZ;
+	public float scaleX;
+	public float scaleY;
+	public float scaleZ;
 	
 	
 	
-	/**
-	 * (180F / (float)Math.PI)
-	 */
-	public static final float radFactor = 57.295779513082320876798154814105F;
-	/**
-	 * PI / 180
-	 */
-	public static final float degFactor = 0.01745329251994329576923690768489F;
-
+	
+//	public static final float radFactor = 57.295779513082320876798154814105F;
+	public static final float radFactor = 180F / (float)Math.PI;
+//	public static final float degFactor = 0.01745329251994329576923690768489F;
+	public static final float degFactor = (float)Math.PI / 180F;
+	
+	public int rotatePriority;
 	public static final int RotXYZ = 0;
 	public static final int RotXZY = 1;
 	public static final int RotYXZ = 2;
 	public static final int RotYZX = 3;
 	public static final int RotZXY = 4;
 	public static final int RotZYX = 5;
+	
 	public static final int ModeEquip = 0x000;
 	public static final int ModeInventory = 0x001;
 	public static final int ModeItemStack = 0x002;
 	public static final int ModeParts = 0x010;
-
-	public int rotatePriority;
 	public ItemStack itemstack;
+	
 	public boolean adjust;
 	public FloatBuffer matrix;
 	public boolean isInvertX;
-	
-	public float scaleX;
-	public float scaleY;
-	public float scaleZ;
-	
-	public MMM_ModelRenderer pearent;
+
 
 
 
@@ -187,7 +175,7 @@ public class MMM_ModelRenderer {
 		}
 		
 		GL11.glPushMatrix();
-		GL11.glTranslatef(field_82906_o, field_82908_p, field_82907_q);
+		GL11.glTranslatef(offsetX, offsetY, offsetZ);
 		
 		if (rotationPointX != 0.0F || rotationPointY != 0.0F || rotationPointZ != 0.0F) {
 			GL11.glTranslatef(rotationPointX * par1, rotationPointY * par1, rotationPointZ * par1);

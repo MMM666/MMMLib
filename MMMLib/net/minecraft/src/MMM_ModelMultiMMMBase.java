@@ -13,6 +13,13 @@ public abstract class MMM_ModelMultiMMMBase extends MMM_ModelMultiBase {
 
 	public Map<String, MMM_EquippedStabilizer> stabiliser;
 
+	@Deprecated
+	public float onGround;
+	@Deprecated
+	public int heldItemLeft;
+	@Deprecated
+	public int heldItemRight;
+
 
 	public MMM_ModelMultiMMMBase() {
 		super();
@@ -92,7 +99,11 @@ public abstract class MMM_ModelMultiMMMBase extends MMM_ModelMultiBase {
 	}
 
 	public void setDefaultPause() {
-		
+	}
+
+	public void setDefaultPause(float par1, float par2, float pTicksExisted,
+			float pHeadYaw, float pHeadPitch, float par6, MMM_IModelCaps pEntityCaps) {
+		setDefaultPause();
 	}
 
 }

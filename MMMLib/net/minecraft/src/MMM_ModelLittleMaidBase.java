@@ -11,15 +11,16 @@ import org.lwjgl.opengl.GL11;
 public abstract class MMM_ModelLittleMaidBase extends MMM_ModelMultiMMMBase {
 
 	//fields
+	public MMM_ModelRenderer bipedTorso;
+	public MMM_ModelRenderer bipedNeck;
 	public MMM_ModelRenderer bipedHead;
-	public MMM_ModelRenderer bipedBody;
 	public MMM_ModelRenderer bipedRightArm;
 	public MMM_ModelRenderer bipedLeftArm;
+	public MMM_ModelRenderer bipedBody;
+	public MMM_ModelRenderer bipedPelvic;
 	public MMM_ModelRenderer bipedRightLeg;
 	public MMM_ModelRenderer bipedLeftLeg;
-	public MMM_ModelRenderer bipedNeck;
 	public MMM_ModelRenderer Skirt;
-
 
 
 	/**
@@ -45,37 +46,19 @@ public abstract class MMM_ModelLittleMaidBase extends MMM_ModelMultiMMMBase {
 	@Override
 	public void initModel(float psize, float pyoffset) {
 		// 標準型
-		Arms = new MMM_ModelRenderer[18];
 		// 手持ち
-		Arms[0] = new MMM_ModelRenderer(this, 0, 0);
+		Arms[0] = new MMM_ModelRenderer(this);
 		Arms[0].setRotationPoint(-1F, 5F, -1F);
-		Arms[1] = new MMM_ModelRenderer(this, 0, 0);
+		Arms[1] = new MMM_ModelRenderer(this);
 		Arms[1].setRotationPoint(1F, 5F, -1F);
 		Arms[1].isInvertX = true;
-/*
-		// バイプロダクトエフェクター
-		Arms[2] = new MMM_ModelRenderer(this, 0, 0);
-		Arms[2].setRotationPoint(-3F, 9F, 6F);
-		Arms[2].setRotateAngleDeg(45F, 0F, 0F);
-		Arms[3] = new MMM_ModelRenderer(this, 0, 0);
-		Arms[3].setRotationPoint(3F, 9F, 6F);
-		Arms[3].setRotateAngleDeg(45F, 0F, 0F);
-		Arms[3].isInvertX = true;
-		// テールソード
-		Arms[4] = new MMM_ModelRenderer(this, 0, 0);
-		Arms[4].setRotationPoint(-2F, 0F, 0F);
-		Arms[4].setRotateAngleDeg(180F, 0F, 0F);
-		Arms[5] = new MMM_ModelRenderer(this, 0, 0);
-		Arms[5].setRotationPoint(2F, 0F, 0F);
-		Arms[5].setRotateAngleDeg(180F, 0F, 0F);
-		*/
 		
 		HeadMount.setRotationPoint(0F, -4F, 0F);
 		HeadTop.setRotationPoint(0F, -13F, 0F);
 		
 		
 		bipedHead = new MMM_ModelRenderer(this, 0, 0);
-		bipedHead.setTextureOffset( 0,  0).addBox(-4F, -8F, -4F, 8, 8, 8, psize);			// Head
+		bipedHead.setTextureOffset( 0,  0).addBox(-4F, -8F, -4F, 8, 8, 8, psize);		// Head
 		bipedHead.setTextureOffset(24,  0).addBox(-4F, 0F, 1F, 8, 4, 3, psize);			// Hire
 		bipedHead.setTextureOffset(24, 18).addBox(-5F, -7F, 0.2F, 1, 3, 3, psize);		// ChignonR
 		bipedHead.setTextureOffset(24, 18).addBox(4F, -7F, 0.2F, 1, 3, 3, psize);		// ChignonL
@@ -85,7 +68,6 @@ public abstract class MMM_ModelLittleMaidBase extends MMM_ModelMultiMMMBase {
 		bipedHead.setMirror(true);
 		bipedHead.setTextureOffset(58, 21).addBox(4.5F, -6.8F, 0.9F, 1, 8, 2, psize);	// SideTailL
 		bipedHead.setRotationPoint(0F, 0F, 0F);
-//		bipedHead.addChildMM(Arms[8]);
 		
 		bipedRightArm = new MMM_ModelRenderer(this, 48, 0);
 		bipedRightArm.addBox(-2.0F, -1F, -1F, 2, 8, 2, psize);
@@ -94,8 +76,6 @@ public abstract class MMM_ModelLittleMaidBase extends MMM_ModelMultiMMMBase {
 		bipedLeftArm = new MMM_ModelRenderer(this, 56, 0);
 		bipedLeftArm.addBox(0.0F, -1F, -1F, 2, 8, 2, psize);
 		bipedLeftArm.setRotationPoint(3.0F, 1.5F, 0F);
-//		bipedLeftArm.addChild(Arms[1]);
-//		bipedLeftArm.addChild(Arms[3]);
 		
 		bipedRightLeg = new MMM_ModelRenderer(this, 32, 19);
 		bipedRightLeg.addBox(-2F, 0F, -2F, 3, 9, 4, psize);
@@ -113,29 +93,28 @@ public abstract class MMM_ModelLittleMaidBase extends MMM_ModelMultiMMMBase {
 		bipedBody = new MMM_ModelRenderer(this, 32, 8);
 		bipedBody.addBox(-3F, 0F, -2F, 6, 7, 4, psize);
 		bipedBody.setRotationPoint(0F, 0F, 0F);
-//		bipedBody.addChild(Arms[4]);
-//		bipedBody.addChild(Arms[5]);
 		
+		bipedTorso = new MMM_ModelRenderer(this);
 		bipedNeck = new MMM_ModelRenderer(this);
+		bipedPelvic = new MMM_ModelRenderer(this);
+		
 		
 		mainFrame = new MMM_ModelRenderer(this, 0, 0);
 		mainFrame.setRotationPoint(0F, 0F + pyoffset + 8F, 0F);
-		
-		
-		bipedHead.addChild(HeadMount);
-		bipedHead.addChild(HeadTop);
+		mainFrame.addChild(bipedTorso);
+		bipedTorso.addChild(bipedNeck);
+		bipedTorso.addChild(bipedBody);
+		bipedTorso.addChild(bipedPelvic);
 		bipedNeck.addChild(bipedHead);
 		bipedNeck.addChild(bipedRightArm);
 		bipedNeck.addChild(bipedLeftArm);
+		bipedHead.addChild(HeadMount);
+		bipedHead.addChild(HeadTop);
 		bipedRightArm.addChild(Arms[0]);
 		bipedLeftArm.addChild(Arms[1]);
-		bipedBody.addChild(bipedNeck);
-		bipedBody.addChild(bipedRightLeg);
-		bipedBody.addChild(bipedLeftLeg);
-		bipedBody.addChild(Skirt);
-		mainFrame.addChild(bipedBody);
-		
-		
+		bipedPelvic.addChild(bipedRightLeg);
+		bipedPelvic.addChild(bipedLeftLeg);
+		bipedPelvic.addChild(Skirt);
 	}
 
 	@Override
@@ -176,20 +155,7 @@ public abstract class MMM_ModelLittleMaidBase extends MMM_ModelMultiMMMBase {
 	@Override
 	public void setRotationAngles(float par1, float par2, float pTicksExisted,
 			float pHeadYaw, float pHeadPitch, float par6, MMM_IModelCaps pEntityCaps) {
-		setDefaultPause();
-		
-		bipedHead.setRotateAngleY(pHeadYaw / 57.29578F);
-		bipedHead.setRotateAngleX(pHeadPitch / 57.29578F);
-		bipedBody.setRotateAngle(0F, 0F, 0F);
-		bipedNeck.setRotateAngle(0F, 0F, 0F);
-		bipedRightArm.setRotateAngleX(mh_cos(par1 * 0.6662F + 3.141593F) * 2.0F * par2 * 0.5F);
-		bipedLeftArm.setRotateAngleX(mh_cos(par1 * 0.6662F) * 2.0F * par2 * 0.5F);
-		bipedRightArm.setRotateAngleZ(0.0F);
-		bipedLeftArm.setRotateAngleZ(0.0F);
-		bipedRightLeg.setRotateAngleX(mh_cos(par1 * 0.6662F) * 1.4F * par2);
-		bipedLeftLeg.setRotateAngleX(mh_cos(par1 * 0.6662F + 3.141593F) * 1.4F * par2);
-		bipedRightLeg.setRotateAngleY(0.0F);
-		bipedLeftLeg.setRotateAngleY(0.0F);
+		setDefaultPause(par1, par2, pTicksExisted, pHeadYaw, pHeadPitch, par6, pEntityCaps);
 		
 		if (isRiding) {
 			// 乗り物に乗っている
@@ -204,72 +170,61 @@ public abstract class MMM_ModelLittleMaidBase extends MMM_ModelMultiMMMBase {
 		
 		
 		// アイテム持ってるときの腕振りを抑える+表示角オフセット
-		if (heldItemLeft != 0) {
+		if (heldItem[1] != 0) {
 			bipedLeftArm.setRotateAngleX(bipedLeftArm.getRotateAngleX() * 0.5F);
-			bipedLeftArm.addRotateAngleDegX(-18F * (float)heldItemLeft);
+			bipedLeftArm.addRotateAngleDegX(-18F * (float)heldItem[1]);
 		}
-		if (heldItemRight != 0) {
+		if (heldItem[0] != 0) {
 			bipedRightArm.setRotateAngleX(bipedRightArm.getRotateAngleX() * 0.5F);
-			bipedRightArm.addRotateAngleDegX(-18F * (float)heldItemRight);
+			bipedRightArm.addRotateAngleDegX(-18F * (float)heldItem[0]);
 		}
 		
 		bipedRightArm.setRotateAngleY(0.0F);
 		bipedLeftArm.setRotateAngleY(0.0F);
 		
-//		float[] lgrounds = null;
-//		float onGroundR = 0;
-//		float onGroundL = 0;
-//		lgrounds = (float[])MMM_ModelCapsHelper.getCapsValue(entityCaps, caps_Grounds);
-//		if (lgrounds != null) {
-//			onGroundR = lgrounds[0];
-//			onGroundL = lgrounds[1];
-//		}
-//		if (lgrounds == null) {
-//			onGroundR = onGround;
-//		}
-		float onGroundR = MMM_ModelCapsHelper.getCapsValueFloat(pEntityCaps, caps_Ground, 0, onGrounds);
-		float onGroundL = MMM_ModelCapsHelper.getCapsValueFloat(pEntityCaps, caps_Ground, 1, 0F);
-		if ((onGroundR > -9990F || onGroundL > -9990F) && !aimedBow) {
+		if ((onGrounds[0] > -9990F || onGrounds[1] > -9990F) && !aimedBow) {
 			// 腕振り
 			float f6, f7, f8;
-			f6 = mh_sin(mh_sqrt_float(onGroundR) * (float)Math.PI * 2.0F);
-			f7 = mh_sin(mh_sqrt_float(onGroundL) * (float)Math.PI * 2.0F);
-			bipedBody.setRotateAngleY((f6 - f7) * 0.2F);
-			Skirt.setRotateAngleY(bipedBody.rotateAngleY);
-			bipedRightArm.addRotateAngleY(bipedBody.rotateAngleY);
-			bipedLeftArm.addRotateAngleY(bipedBody.rotateAngleY);
+			f6 = mh_sin(mh_sqrt_float(onGrounds[0]) * (float)Math.PI * 2.0F);
+			f7 = mh_sin(mh_sqrt_float(onGrounds[1]) * (float)Math.PI * 2.0F);
+			bipedTorso.setRotateAngleY((f6 - f7) * 0.2F);
+			Skirt.addRotateAngleY(bipedTorso.rotateAngleY);
+			bipedRightArm.addRotateAngleY(bipedTorso.rotateAngleY);
+			bipedLeftArm.addRotateAngleY(bipedTorso.rotateAngleY);
+			bipedPelvic.addRotateAngleY(-bipedTorso.rotateAngleY);
+			bipedHead.addRotateAngleY(-bipedTorso.rotateAngleY);
 			// R
-			if (onGroundR > 0F) {
-				f6 = 1.0F - onGroundR;
+			if (onGrounds[0] > 0F) {
+				f6 = 1.0F - onGrounds[0];
 				f6 *= f6;
 				f6 *= f6;
 				f6 = 1.0F - f6;
 				f7 = mh_sin(f6 * (float)Math.PI);
-				f8 = mh_sin(onGroundR * (float)Math.PI) * -(bipedHead.rotateAngleX - 0.7F) * 0.75F;
+				f8 = mh_sin(onGrounds[0] * (float)Math.PI) * -(bipedHead.rotateAngleX - 0.7F) * 0.75F;
 				bipedRightArm.addRotateAngleX(-f7 * 1.2F - f8);
-				bipedRightArm.addRotateAngleY(bipedBody.rotateAngleY * 2.0F);
-				bipedRightArm.setRotateAngleZ(mh_sin(onGroundR * 3.141593F) * -0.4F);
+				bipedRightArm.addRotateAngleY(bipedTorso.rotateAngleY * 2.0F);
+				bipedRightArm.setRotateAngleZ(mh_sin(onGrounds[0] * 3.141593F) * -0.4F);
 			} else {
-				bipedRightArm.addRotateAngleX(bipedBody.rotateAngleY);
+				bipedRightArm.addRotateAngleX(bipedTorso.rotateAngleY);
 			}
 			// L
-			if (onGroundL > 0F) {
-				f6 = 1.0F - onGroundL;
+			if (onGrounds[1] > 0F) {
+				f6 = 1.0F - onGrounds[1];
 				f6 *= f6;
 				f6 *= f6;
 				f6 = 1.0F - f6;
 				f7 = mh_sin(f6 * (float)Math.PI);
-				f8 = mh_sin(onGroundL * (float)Math.PI) * -(bipedHead.rotateAngleX - 0.7F) * 0.75F;
+				f8 = mh_sin(onGrounds[1] * (float)Math.PI) * -(bipedHead.rotateAngleX - 0.7F) * 0.75F;
 				bipedLeftArm.rotateAngleX -= (double)f7 * 1.2D + (double)f8;
-				bipedLeftArm.rotateAngleY += bipedBody.rotateAngleY * 2.0F;
-				bipedLeftArm.setRotateAngleZ(mh_sin(onGroundL * 3.141593F) * 0.4F);
+				bipedLeftArm.rotateAngleY += bipedTorso.rotateAngleY * 2.0F;
+				bipedLeftArm.setRotateAngleZ(mh_sin(onGrounds[1] * 3.141593F) * 0.4F);
 			} else {
-				bipedLeftArm.rotateAngleX += bipedBody.rotateAngleY;
+				bipedLeftArm.rotateAngleX += bipedTorso.rotateAngleY;
 			}
 		}
 		if(isSneak) {
 			// しゃがみ
-			bipedBody.rotateAngleX += 0.5F;
+			bipedTorso.rotateAngleX += 0.5F;
 			bipedNeck.rotateAngleX -= 0.5F;
 			bipedRightArm.rotateAngleX += 0.2F;
 			bipedLeftArm.rotateAngleX += 0.2F;
@@ -335,24 +290,39 @@ public abstract class MMM_ModelLittleMaidBase extends MMM_ModelMultiMMMBase {
 				bipedLeftArm.addRotateAngleZ(-lc);
 			}
 		}
-
-		
-		//
-//		Arms[2].setRotateAngle(-0.78539816339744830961566084581988F - bipedRightArm.getRotateAngleX(), 0F, 0F);
-//		Arms[3].setRotateAngle(-0.78539816339744830961566084581988F - bipedLeftArm.getRotateAngleX(), 0F, 0F);
 	}
 
 	@Override
 	public void setDefaultPause() {
-		super.setDefaultPause();
+	}
+	
+	@Override
+	public void setDefaultPause(float par1, float par2, float pTicksExisted,
+			float pHeadYaw, float pHeadPitch, float par6, MMM_IModelCaps pEntityCaps) {
+		super.setDefaultPause(par1, par2, pTicksExisted, pHeadYaw, pHeadPitch, par6, pEntityCaps);
 		mainFrame.setRotationPoint(0F, 8F, 0F);
+		bipedTorso.setRotationPoint(0F, 0F, 0F).setRotateAngle(0F, 0F, 0F);
+		bipedNeck.setRotationPoint(0F, 0F, 0F).setRotateAngle(0F, 0F, 0F);
+		bipedPelvic.setRotationPoint(0F, 0F, 0F).setRotateAngle(0F, 0F, 0F);
 		bipedHead.setRotationPoint(0F, 0F, 0F);
-		bipedBody.setRotationPoint(0F, 0F, 0F);
+		bipedHead.setRotateAngleDegY(pHeadYaw);
+		bipedHead.setRotateAngleX(pHeadPitch / 57.29578F);
+		bipedBody.setRotationPoint(0F, 0F, 0F).setRotateAngle(0F, 0F, 0F);
 		bipedRightArm.setRotationPoint(-3.0F, 1.6F, 0F);
+		bipedRightArm.setRotateAngleX(mh_cos(par1 * 0.6662F + 3.141593F) * 2.0F * par2 * 0.5F);
+		bipedRightArm.setRotateAngleZ(0.0F);
 		bipedLeftArm.setRotationPoint(3.0F, 1.6F, 0F);
+		bipedLeftArm.setRotateAngleX(mh_cos(par1 * 0.6662F) * 2.0F * par2 * 0.5F);
+		bipedLeftArm.setRotateAngleZ(0.0F);
 		bipedRightLeg.setRotationPoint(-1F, 7F, 0F);
+		bipedRightLeg.setRotateAngleX(mh_cos(par1 * 0.6662F) * 1.4F * par2);
+		bipedRightLeg.setRotateAngleY(0.0F);
 		bipedLeftLeg.setRotationPoint(1F, 7F, 0F);
-		Skirt.setRotationPoint(0F, 7F, 0F);
+		bipedLeftLeg.setRotateAngleX(mh_cos(par1 * 0.6662F + 3.141593F) * 1.4F * par2);
+		bipedLeftLeg.setRotateAngleY(0.0F);
+		
+		Skirt.setRotationPoint(0F, 7F, 0F).setRotateAngle(0F, 0F, 0F);
+		
 	}
 
 	@Override

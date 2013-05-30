@@ -16,8 +16,7 @@ import org.lwjgl.opengl.GL11;
  */
 public abstract class MMM_ModelMultiBase extends MMM_ModelBase implements MMM_IModelCaps {
 
-	public float heldItemLeft;
-	public float heldItemRight;
+	public float heldItem[] = new float[] {0.0F, 0.0F};
 	public boolean aimedBow;
 	public boolean isSneak;
 	public boolean isWait;
@@ -59,8 +58,8 @@ public abstract class MMM_ModelMultiBase extends MMM_ModelBase implements MMM_IM
 	}
 
 	public MMM_ModelMultiBase(float pSizeAdjust, float pYOffset, int pTextureWidth, int pTextureHeight) {
-		heldItemLeft = 0;
-		heldItemRight = 0;
+//		heldItemLeft = 0;
+//		heldItemRight = 0;
 		isSneak = false;
 		aimedBow = false;
 		textureWidth = pTextureWidth;
@@ -90,7 +89,8 @@ public abstract class MMM_ModelMultiBase extends MMM_ModelBase implements MMM_IM
 	public abstract float[] getArmorModelsSize();
 
 	/**
-	 * モデル指定詞に依らずに使用するテクスチャパック名
+	 * モデル指定詞に依らずに使用するテクスチャパック名。
+	 * 一つのテクスチャに複数のモデルを割り当てる時に使う。
 	 * @return
 	 */
 	public String getUsingTexture() {
@@ -107,7 +107,6 @@ public abstract class MMM_ModelMultiBase extends MMM_ModelBase implements MMM_IM
 	public abstract float getWidth();
 	/**
 	 * モデルのYオフセット
-	 * PF用。
 	 */
 	public abstract float getyOffset();
 	/**
@@ -175,9 +174,9 @@ public abstract class MMM_ModelMultiBase extends MMM_ModelBase implements MMM_IM
 		case caps_isChild:
 			return isChild;
 		case caps_heldItemLeft:
-			return heldItemLeft;
+			return heldItem[1];
 		case caps_heldItemRight:
-			return heldItemRight;
+			return heldItem[0];
 		case caps_aimedBow:
 			return aimedBow;
 		case caps_entityIdFactor:
@@ -211,10 +210,10 @@ public abstract class MMM_ModelMultiBase extends MMM_ModelBase implements MMM_IM
 			isChild = (Boolean)pArg[0];
 			return true;
 		case caps_heldItemLeft:
-			heldItemLeft = (Integer)pArg[0];
+			heldItem[1] = (Integer)pArg[0];
 			return true;
 		case caps_heldItemRight:
-			heldItemRight = (Integer)pArg[0];
+			heldItem[0] = (Integer)pArg[0];
 			return true;
 		case caps_aimedBow:
 			aimedBow = (Boolean)pArg[0];
