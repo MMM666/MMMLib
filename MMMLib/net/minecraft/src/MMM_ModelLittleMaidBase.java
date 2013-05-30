@@ -79,16 +79,16 @@ public abstract class MMM_ModelLittleMaidBase extends MMM_ModelMultiMMMBase {
 		
 		bipedRightLeg = new MMM_ModelRenderer(this, 32, 19);
 		bipedRightLeg.addBox(-2F, 0F, -2F, 3, 9, 4, psize);
-		bipedRightLeg.setRotationPoint(-1F, 7F, 0F);
+		bipedRightLeg.setRotationPoint(-1F, 0F, 0F);
 		
 		bipedLeftLeg = new MMM_ModelRenderer(this, 32, 19);
 		bipedLeftLeg.setMirror(true);
 		bipedLeftLeg.addBox(-1F, 0F, -2F, 3, 9, 4, psize);
-		bipedLeftLeg.setRotationPoint(1F, 7F, 0F);
+		bipedLeftLeg.setRotationPoint(1F, 0F, 0F);
 		
 		Skirt = new MMM_ModelRenderer(this, 0, 16);
 		Skirt.addBox(-4F, -2F, -4F, 8, 8, 8, psize);
-		Skirt.setRotationPoint(0F, 7F, 0F);
+		Skirt.setRotationPoint(0F, 0F, 0F);
 		
 		bipedBody = new MMM_ModelRenderer(this, 32, 8);
 		bipedBody.addBox(-3F, 0F, -2F, 6, 7, 4, psize);
@@ -97,8 +97,7 @@ public abstract class MMM_ModelLittleMaidBase extends MMM_ModelMultiMMMBase {
 		bipedTorso = new MMM_ModelRenderer(this);
 		bipedNeck = new MMM_ModelRenderer(this);
 		bipedPelvic = new MMM_ModelRenderer(this);
-		
-		
+		bipedPelvic.setRotationPoint(0F, 7F, 0F);
 		mainFrame = new MMM_ModelRenderer(this, 0, 0);
 		mainFrame.setRotationPoint(0F, 0F + pyoffset + 8F, 0F);
 		mainFrame.addChild(bipedTorso);
@@ -179,8 +178,8 @@ public abstract class MMM_ModelLittleMaidBase extends MMM_ModelMultiMMMBase {
 			bipedRightArm.addRotateAngleDegX(-18F * (float)heldItem[0]);
 		}
 		
-		bipedRightArm.setRotateAngleY(0.0F);
-		bipedLeftArm.setRotateAngleY(0.0F);
+//		bipedRightArm.setRotateAngleY(0.0F);
+//		bipedLeftArm.setRotateAngleY(0.0F);
 		
 		if ((onGrounds[0] > -9990F || onGrounds[1] > -9990F) && !aimedBow) {
 			// òrêUÇË
@@ -229,30 +228,17 @@ public abstract class MMM_ModelLittleMaidBase extends MMM_ModelMultiMMMBase {
 			bipedRightArm.rotateAngleX += 0.2F;
 			bipedLeftArm.rotateAngleX += 0.2F;
 
-			bipedRightLeg.rotateAngleX -= 0.5F;
-			bipedLeftLeg.rotateAngleX -= 0.5F;
-			bipedRightLeg.rotationPointZ -= 0.6F;
-			bipedLeftLeg.rotationPointZ -= 0.6F;
-			bipedRightLeg.rotationPointY -= 0.5F;
-			bipedLeftLeg.rotationPointY -= 0.5F;
+			bipedPelvic.addRotationPointY(-0.5F);
+			bipedPelvic.addRotationPointZ(-0.6F);
+			bipedPelvic.addRotateAngleX(-0.5F);
 			bipedHead.rotationPointY = 1.0F;
 //			Skirt.setRotationPoint(0.0F, 5.8F, 2.7F);
-			Skirt.rotationPointY = 6.3F;
-			Skirt.rotationPointZ = -0.7F;
-			Skirt.setRotateAngleX(-0.3F);
-			bipedBody.rotationPointY += 1.00F;
+			Skirt.rotationPointY -= 0.25F;
+			Skirt.rotationPointZ += 0.00F;
+			Skirt.addRotateAngleX(0.2F);
+			bipedTorso.rotationPointY += 1.00F;
 		} else {
 			// í èÌóßÇø
-//			bipedBody.setRotateAngleX(0.0F);
-			bipedRightLeg.rotationPointZ = 0.0F;
-			bipedLeftLeg.rotationPointZ = 0.0F;
-//			bipedRightLeg.rotationPointY = 7F;
-//			bipedLeftLeg.rotationPointY = 7F;
-			bipedHead.rotationPointY = 0.0F;
-			Skirt.setRotationPoint(0.0F, 7.0F, 0.0F);
-//			Skirt.rotationPointY = 7.0F;
-//			Skirt.rotationPointZ = 0.0F;
-			Skirt.setRotateAngleX(0.0F);
 		}
 		if (isWait) {
 			//ë“ã@èÛë‘ÇÃì¡ï ï\é¶
@@ -263,7 +249,7 @@ public abstract class MMM_ModelLittleMaidBase extends MMM_ModelMultiMMMBase {
 			float la, lb, lc;
 			if (aimedBow) {
 				// ã|ç\Ç¶
-				float lonGround = onGrounds[MMM_ModelCapsHelper.getCapsValueInt(pEntityCaps, caps_dominantArm)];
+				float lonGround = onGrounds[dominantArm];
 				float f6 = mh_sin(lonGround * 3.141593F);
 				float f7 = mh_sin((1.0F - (1.0F - lonGround) * (1.0F - lonGround)) * 3.141593F);
 				la = 0.1F - f6 * 0.6F;
@@ -303,25 +289,21 @@ public abstract class MMM_ModelLittleMaidBase extends MMM_ModelMultiMMMBase {
 		mainFrame.setRotationPoint(0F, 8F, 0F);
 		bipedTorso.setRotationPoint(0F, 0F, 0F).setRotateAngle(0F, 0F, 0F);
 		bipedNeck.setRotationPoint(0F, 0F, 0F).setRotateAngle(0F, 0F, 0F);
-		bipedPelvic.setRotationPoint(0F, 0F, 0F).setRotateAngle(0F, 0F, 0F);
+		bipedPelvic.setRotationPoint(0F, 7F, 0F).setRotateAngle(0F, 0F, 0F);
 		bipedHead.setRotationPoint(0F, 0F, 0F);
 		bipedHead.setRotateAngleDegY(pHeadYaw);
-		bipedHead.setRotateAngleX(pHeadPitch / 57.29578F);
+		bipedHead.setRotateAngleDegX(pHeadPitch);
 		bipedBody.setRotationPoint(0F, 0F, 0F).setRotateAngle(0F, 0F, 0F);
 		bipedRightArm.setRotationPoint(-3.0F, 1.6F, 0F);
-		bipedRightArm.setRotateAngleX(mh_cos(par1 * 0.6662F + 3.141593F) * 2.0F * par2 * 0.5F);
-		bipedRightArm.setRotateAngleZ(0.0F);
+		bipedRightArm.setRotateAngle(mh_cos(par1 * 0.6662F + 3.141593F) * 2.0F * par2 * 0.5F, 0F, 0F);
 		bipedLeftArm.setRotationPoint(3.0F, 1.6F, 0F);
-		bipedLeftArm.setRotateAngleX(mh_cos(par1 * 0.6662F) * 2.0F * par2 * 0.5F);
-		bipedLeftArm.setRotateAngleZ(0.0F);
-		bipedRightLeg.setRotationPoint(-1F, 7F, 0F);
-		bipedRightLeg.setRotateAngleX(mh_cos(par1 * 0.6662F) * 1.4F * par2);
-		bipedRightLeg.setRotateAngleY(0.0F);
-		bipedLeftLeg.setRotationPoint(1F, 7F, 0F);
-		bipedLeftLeg.setRotateAngleX(mh_cos(par1 * 0.6662F + 3.141593F) * 1.4F * par2);
-		bipedLeftLeg.setRotateAngleY(0.0F);
+		bipedLeftArm.setRotateAngle(mh_cos(par1 * 0.6662F) * 2.0F * par2 * 0.5F, 0F, 0F);
+		bipedRightLeg.setRotationPoint(-1F, 0F, 0F);
+		bipedRightLeg.setRotateAngle(mh_cos(par1 * 0.6662F) * 1.4F * par2, 0F, 0F);
+		bipedLeftLeg.setRotationPoint(1F, 0F, 0F);
+		bipedLeftLeg.setRotateAngle(mh_cos(par1 * 0.6662F + 3.141593F) * 1.4F * par2, 0F, 0F);
 		
-		Skirt.setRotationPoint(0F, 7F, 0F).setRotateAngle(0F, 0F, 0F);
+		Skirt.setRotationPoint(0F, 0F, 0F).setRotateAngle(0F, 0F, 0F);
 		
 	}
 
@@ -343,19 +325,19 @@ public abstract class MMM_ModelLittleMaidBase extends MMM_ModelMultiMMMBase {
 		boolean f;
 		// äï
 		f = parts == 3 ? true : false;
-		bipedHead.isRendering = f;
+		bipedHead.setVisible(f);
 		// äZ
 		f = parts == 2 ? true : false;
-		bipedBody.isRendering = f;
-		bipedRightArm.isRendering = f;
-		bipedLeftArm.isRendering = f;
+		bipedBody.setVisible(f);
+		bipedRightArm.setVisible(f);
+		bipedLeftArm.setVisible(f);
 		// ãrçb
 		f = parts == 1 ? true : false;
-		Skirt.isRendering = f;
+		Skirt.setVisible(f);
 		// ‰aìñ
 		f = parts == 0 ? true : false;
-		bipedRightLeg.isRendering = f;
-		bipedLeftLeg.isRendering = f;
+		bipedRightLeg.setVisible(f);
+		bipedLeftLeg.setVisible(f);
 		
 		return -1;
 	}

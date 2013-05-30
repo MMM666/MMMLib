@@ -16,9 +16,9 @@ public abstract class MMM_ModelMultiMMMBase extends MMM_ModelMultiBase {
 	@Deprecated
 	public float onGround;
 	@Deprecated
-	public int heldItemLeft;
+	public float heldItemLeft;
 	@Deprecated
-	public int heldItemRight;
+	public float heldItemRight;
 
 
 	public MMM_ModelMultiMMMBase() {

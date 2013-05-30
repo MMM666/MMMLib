@@ -45,13 +45,12 @@ public class MMM_ModelRenderer {
 	public float scaleZ;
 	
 	
-	
-	
 //	public static final float radFactor = 57.295779513082320876798154814105F;
 	public static final float radFactor = 180F / (float)Math.PI;
 //	public static final float degFactor = 0.01745329251994329576923690768489F;
 	public static final float degFactor = (float)Math.PI / 180F;
 	
+	// SmartMoving‚É‡‚í‚¹‚é‚½‚ß‚É–¼Ì‚Ì•ÏX‚ª‚ ‚é‚©‚à‚µ‚ê‚Ü‚¹‚ñB
 	public int rotatePriority;
 	public static final int RotXYZ = 0;
 	public static final int RotXZY = 1;
@@ -60,11 +59,11 @@ public class MMM_ModelRenderer {
 	public static final int RotZXY = 4;
 	public static final int RotZYX = 5;
 	
-	public static final int ModeEquip = 0x000;
-	public static final int ModeInventory = 0x001;
-	public static final int ModeItemStack = 0x002;
-	public static final int ModeParts = 0x010;
-	public ItemStack itemstack;
+//	public static final int ModeEquip = 0x000;
+//	public static final int ModeInventory = 0x001;
+//	public static final int ModeItemStack = 0x002;
+//	public static final int ModeParts = 0x010;
+	protected ItemStack itemstack;
 	
 	public boolean adjust;
 	public FloatBuffer matrix;
@@ -436,10 +435,12 @@ public class MMM_ModelRenderer {
 			if (itemstack.hasTagCompound() && itemstack.getTagCompound().hasKey("SkullOwner")) {
 				lsowner = itemstack.getTagCompound().getString("SkullOwner");
 			}
+			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			TileEntitySkullRenderer.skullRenderer.func_82393_a(-0.5F, -0.25F, -0.5F, 1, 180.0F,
 					itemstack.getItemDamage(), lsowner);
 		} else if (pRealBlock && itemstack.getItem() instanceof ItemBlock) {
 			pRender.loadTexture("/terrain.png");
+//			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			GL11.glEnable(GL11.GL_CULL_FACE);
 			pRender.renderBlocks.renderBlockAsItem(
 					Block.blocksList[itemstack.itemID],
@@ -455,8 +456,7 @@ public class MMM_ModelRenderer {
 				float f17 = (float) (k >> 8 & 0xff) / 255F;
 				float f19 = (float) (k & 0xff) / 255F;
 				GL11.glColor4f(f15, f17, f19, 1.0F);
-				pRender.renderManager.itemRenderer.renderItem(pEntityLiving,
-						itemstack, j);
+				pRender.renderManager.itemRenderer.renderItem(pEntityLiving, itemstack, j);
 			}
 		}
 		

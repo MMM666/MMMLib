@@ -23,8 +23,9 @@ public interface MMM_IModelCaps {
 	// ModelBiped
 	public static final int caps_heldItemLeft		= 0x0010;
 	public static final int caps_heldItemRight		= 0x0011;
-	public static final int caps_isSneak			= 0x0012;
-	public static final int caps_aimedBow			= 0x0013;
+	public static final int caps_heldItems			= 0x0012;
+	public static final int caps_isSneak			= 0x0013;
+	public static final int caps_aimedBow			= 0x0014;
 	// EntityCaps
 	public static final int caps_Entity					= 0x0020;
 	public static final int caps_health					= 0x0021;

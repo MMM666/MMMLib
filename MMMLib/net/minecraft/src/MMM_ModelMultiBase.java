@@ -45,6 +45,7 @@ public abstract class MMM_ModelMultiBase extends MMM_ModelBase implements MMM_IM
 		put("aimedBow",			caps_aimedBow);
 		put("ScaleFactor", 		caps_ScaleFactor);
 		put("entityIdFactor",	caps_entityIdFactor);
+		put("dominantArm",	caps_dominantArm);
 	}};
 
 
@@ -185,6 +186,8 @@ public abstract class MMM_ModelMultiBase extends MMM_ModelBase implements MMM_IM
 			return entityTicksExisted;
 		case caps_ScaleFactor:
 			return scaleFactor;
+		case caps_dominantArm:
+			return dominantArm;
 		}
 		return null;
 	}
@@ -226,6 +229,9 @@ public abstract class MMM_ModelMultiBase extends MMM_ModelBase implements MMM_IM
 			return true;
 		case caps_ScaleFactor:
 			scaleFactor = (Float)pArg[0];
+			return true;
+		case caps_dominantArm:
+			dominantArm = (Integer)pArg[0];
 			return true;
 		}
 		
