@@ -33,12 +33,6 @@ public class MMM_ModelLittleMaid_Archetype extends MMM_ModelLittleMaidBase {
 
 	@Override
 	public void initModel(float psize, float pyoffset) {
-		heldItemLeft = 0;
-		heldItemRight = 0;
-		isSneak = false;
-		isWait = false;
-		aimedBow = false;
-
 		pyoffset += 8F;
 
 		// ëïîıà íu
@@ -212,32 +206,27 @@ public class MMM_ModelLittleMaid_Archetype extends MMM_ModelLittleMaidBase {
 			bipedLeftLeg.rotateAngleY = -0.3141593F;
 		}
 		// ÉAÉCÉeÉÄéùÇ¡ÇƒÇÈÇ∆Ç´ÇÃòrêUÇËÇó}Ç¶ÇÈ
-		if (heldItemLeft != 0) {
+		if (heldItem[1] != 0) {
 			bipedLeftArm.rotateAngleX = bipedLeftArm.rotateAngleX * 0.5F
-					- 0.3141593F * (float) heldItemLeft;
+					- 0.3141593F * (float) heldItem[1];
 		}
-		if (heldItemRight != 0) {
+		if (heldItem[0] != 0) {
 			bipedRightArm.rotateAngleX = bipedRightArm.rotateAngleX * 0.5F
-					- 0.3141593F * (float) heldItemRight;
+					- 0.3141593F * (float) heldItem[0];
 		}
 		
 		bipedRightArm.rotateAngleY = 0.0F;
 		bipedLeftArm.rotateAngleY = 0.0F;
-		float lonGround = Math.max(onGrounds[0], onGrounds[1]);
+		float lonGround = onGrounds[dominantArm];
 		if (lonGround > -9990F && !aimedBow) {
 			// òrêUÇË
 			float f6 = lonGround;
-			bipedBody.rotateAngleY = MathHelper
-					.sin(mh_sqrt_float(f6) * 3.141593F * 2.0F) * 0.2F;
+			bipedBody.rotateAngleY = mh_sin(mh_sqrt_float(f6) * 3.141593F * 2.0F) * 0.2F;
 			Skirt.rotateAngleY = bipedBody.rotateAngleY;
-			bipedRightArm.rotationPointZ = MathHelper
-					.sin(bipedBody.rotateAngleY) * 4F;
-			bipedRightArm.rotationPointX = -MathHelper
-					.cos(bipedBody.rotateAngleY) * 4F + 1.0F;
-			bipedLeftArm.rotationPointZ = -MathHelper
-					.sin(bipedBody.rotateAngleY) * 4F;
-			bipedLeftArm.rotationPointX = MathHelper
-					.cos(bipedBody.rotateAngleY) * 4F - 1.0F;
+			bipedRightArm.rotationPointZ = mh_sin(bipedBody.rotateAngleY) * 4F;
+			bipedRightArm.rotationPointX = -mh_cos(bipedBody.rotateAngleY) * 4F + 1.0F;
+			bipedLeftArm.rotationPointZ = -mh_sin(bipedBody.rotateAngleY) * 4F;
+			bipedLeftArm.rotationPointX = mh_cos(bipedBody.rotateAngleY) * 4F - 1.0F;
 			bipedRightArm.rotateAngleY += bipedBody.rotateAngleY;
 			bipedLeftArm.rotateAngleY += bipedBody.rotateAngleY;
 			bipedLeftArm.rotateAngleX += bipedBody.rotateAngleY;
@@ -306,14 +295,10 @@ public class MMM_ModelLittleMaid_Archetype extends MMM_ModelLittleMaidBase {
 				bipedLeftArm.rotateAngleX = -1.470796F;
 				bipedRightArm.rotateAngleX -= f6 * 1.2F - f7 * 0.4F;
 				bipedLeftArm.rotateAngleX -= f6 * 1.2F - f7 * 0.4F;
-				bipedRightArm.rotateAngleZ += MathHelper
-						.cos(pTicksExisted * 0.09F) * 0.05F + 0.05F;
-				bipedLeftArm.rotateAngleZ -= MathHelper
-						.cos(pTicksExisted * 0.09F) * 0.05F + 0.05F;
-				bipedRightArm.rotateAngleX += MathHelper
-						.sin(pTicksExisted * 0.067F) * 0.05F;
-				bipedLeftArm.rotateAngleX -= MathHelper
-						.sin(pTicksExisted * 0.067F) * 0.05F;
+				bipedRightArm.rotateAngleZ += mh_cos(pTicksExisted * 0.09F) * 0.05F + 0.05F;
+				bipedLeftArm.rotateAngleZ -= mh_cos(pTicksExisted * 0.09F) * 0.05F + 0.05F;
+				bipedRightArm.rotateAngleX += mh_sin(pTicksExisted * 0.067F) * 0.05F;
+				bipedLeftArm.rotateAngleX -= mh_sin(pTicksExisted * 0.067F) * 0.05F;
 				bipedRightArm.rotateAngleX += bipedHead.rotateAngleX;
 				bipedLeftArm.rotateAngleX += bipedHead.rotateAngleX;
 				bipedRightArm.rotateAngleY += bipedHead.rotateAngleY;
