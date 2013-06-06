@@ -41,11 +41,11 @@ public class MMM_Client {
 		switch (lmode) {
 		case MMM_Statics.Client_SetTextureIndex:
 			// 問い合わせたテクスチャパックの管理番号を受け取る
-			MMM_TextureManager.reciveFormServerSetTexturePackIndex(var2.data);
+			MMM_TextureManager.instance.reciveFormServerSetTexturePackIndex(var2.data);
 			break;
 		case MMM_Statics.Client_SetTexturePackName:
 			// 管理番号に登録されているテクスチャパックの情報を受け取る
-			MMM_TextureManager.reciveFromServerSetTexturePackName(var2.data);
+			MMM_TextureManager.instance.reciveFromServerSetTexturePackName(var2.data);
 			break;
 		}
 	}
@@ -53,10 +53,10 @@ public class MMM_Client {
 	public static void clientConnect(NetClientHandler var1) {
 		if (MMM_Helper.mc.isIntegratedServerRunning()) {
 			Debug("Localmode: InitTextureList.");
-			MMM_TextureManager.initTextureList(true);
+			MMM_TextureManager.instance.initTextureList(true);
 		} else {
 			Debug("Remortmode: ClearTextureList.");
-			MMM_TextureManager.initTextureList(false);
+			MMM_TextureManager.instance.initTextureList(false);
 		}
 	}
 
@@ -128,6 +128,13 @@ public class MMM_Client {
 			
 			RenderHelper.enableStandardItemLighting();
 		}
+	}
+
+	public static World getMCtheWorld() {
+		if (MMM_Helper.mc !=  null) {
+			return MMM_Helper.mc.theWorld;
+		}
+		return null;
 	}
 
 

@@ -7,7 +7,7 @@ import net.minecraft.client.Minecraft;
 
 public class mod_MMM_MMMLib extends BaseMod {
 
-	public static final String Revision = "3";
+	public static final String Revision = "4";
 	
 	@MLProp()
 	public static boolean isDebugView = false;
@@ -48,7 +48,7 @@ public class mod_MMM_MMMLib extends BaseMod {
 		Debug(MMM_Helper.isClient ? "Client" : "Server");
 		Debug(MMM_Helper.isForge ? "Forge" : "Modloader");
 		MMM_FileManager.init();
-		MMM_TextureManager.init();
+		MMM_TextureManager.instance.init();
 		MMM_StabilizerManager.init();
 		ModLoader.setInGameHook(this, true, true);
 		if (isDebugView) {
@@ -65,7 +65,7 @@ public class mod_MMM_MMMLib extends BaseMod {
 		MMM_Helper.replaceBaiomeSpawn();
 		
 		// テクスチャパックの構築
-		MMM_TextureManager.loadTextures();
+		MMM_TextureManager.instance.loadTextures();
 		// ロード
 		if (MMM_Helper.isClient) {
 			// テクスチャパックの構築
@@ -74,9 +74,9 @@ public class mod_MMM_MMMLib extends BaseMod {
 			MMM_Client.setArmorPrefix();
 			// テクスチャインデックスの構築
 			Debug("Localmode: InitTextureList.");
-			MMM_TextureManager.initTextureList(true);
+			MMM_TextureManager.instance.initTextureList(true);
 		} else {
-			MMM_TextureManager.loadTextureServer();
+			MMM_TextureManager.instance.loadTextureServer();
 		}
 		
 	}
@@ -112,7 +112,7 @@ public class mod_MMM_MMMLib extends BaseMod {
 		}
 		
 		// テクスチャ管理用
-		MMM_TextureManager.onUpdate();
+		MMM_TextureManager.instance.onUpdate();
 		
 		return true;
 	}
@@ -134,15 +134,15 @@ public class mod_MMM_MMMLib extends BaseMod {
 		switch (lmode) {
 		case MMM_Statics.Server_SetTexturePackIndex:
 			// サーバー側のEntityに対してテクスチャインデックスを設定する
-			MMM_TextureManager.reciveFromClientSetTexturePackIndex(lentity, var2.data);
+			MMM_TextureManager.instance.reciveFromClientSetTexturePackIndex(lentity, var2.data);
 			break;
 		case MMM_Statics.Server_GetTextureIndex:
 			// サーバー側での管理番号の問い合わせに対して応答する
-			MMM_TextureManager.reciveFromClientGetTexturePackIndex(var1, var2.data);
+			MMM_TextureManager.instance.reciveFromClientGetTexturePackIndex(var1, var2.data);
 			break;
 		case MMM_Statics.Server_GetTexturePackName:
 			// 管理番号に対応するテクスチャパック名を返す。
-			MMM_TextureManager.reciveFromClientGetTexturePackName(var1, var2.data);
+			MMM_TextureManager.instance.reciveFromClientGetTexturePackName(var1, var2.data);
 			break;
 		}
 	}
@@ -168,7 +168,7 @@ public class mod_MMM_MMMLib extends BaseMod {
 
 	// Forge
 	public void serverDisconnect() {
-		MMM_TextureManager.saveTextureServer();
+		MMM_TextureManager.instance.saveTextureServer();
 	}
 
 }

@@ -511,5 +511,4 @@ public class MMM_Helper {
 		}
 	}
 
-	
 }

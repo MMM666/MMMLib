@@ -218,6 +218,8 @@ public class MMM_ModelRenderer {
 			pearent.postRender(par1);
 		}
 		
+		GL11.glTranslatef(offsetX, offsetY, offsetZ);
+		
 		if (rotationPointX != 0.0F || rotationPointY != 0.0F || rotationPointZ != 0.0F) {
 			GL11.glTranslatef(rotationPointX * par1, rotationPointY * par1, rotationPointZ * par1);
 		}
