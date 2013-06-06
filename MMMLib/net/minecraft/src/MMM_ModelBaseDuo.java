@@ -181,4 +181,13 @@ public class MMM_ModelBaseDuo extends ModelBase implements MMM_IModelBaseMMM {
 		return false;
 	}
 
+	public void showAllParts() {
+		if (modelInner != null) {
+			modelInner.showAllParts();
+		}
+		if (modelOuter != null) {
+			modelOuter.showAllParts();
+		}
+	}
+
 }

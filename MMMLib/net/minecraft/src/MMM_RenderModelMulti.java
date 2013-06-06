@@ -51,6 +51,7 @@ public class MMM_RenderModelMulti extends RenderLiving {
 //		modelFATT.textureOuter = plittleMaid.textureArmor2;
 		modelMain.setEntityCaps(pEntityCaps);
 		modelMain.setRender(this);
+		modelMain.showAllParts();
 		modelMain.isAlphablend = true;
 		modelFATT.isAlphablend = true;
 		

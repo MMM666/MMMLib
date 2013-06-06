@@ -59,8 +59,6 @@ public abstract class MMM_ModelMultiBase extends MMM_ModelBase implements MMM_IM
 	}
 
 	public MMM_ModelMultiBase(float pSizeAdjust, float pYOffset, int pTextureWidth, int pTextureHeight) {
-//		heldItemLeft = 0;
-//		heldItemRight = 0;
 		isSneak = false;
 		aimedBow = false;
 		textureWidth = pTextureWidth;

@@ -76,7 +76,7 @@ public class MMM_EntityDummy extends Entity {
 		if (!isEnable) return;
 		if (!MMM_Helper.isClient) return;
 		
-		List<Entity> liste = entity.worldObj.getLoadedEntityList();
+		List<Entity> liste = entity.worldObj.loadedEntityList;
 		for (Entity entity1 : liste) {
 			if (entity1 instanceof MMM_EntityDummy) {
 				((MMM_EntityDummy)entity1).setOwnerdEntityDead(entity);

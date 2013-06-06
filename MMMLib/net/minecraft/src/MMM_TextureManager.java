@@ -148,6 +148,20 @@ public class MMM_TextureManager {
 		return null;
 	}
 
+	/**
+	 * 渡されたTextureBoxBaseを判定してTextureBoxを返す。
+	 * @param pBoxBase
+	 * @return
+	 */
+	public MMM_TextureBox getTextureBox(MMM_TextureBoxBase pBoxBase) {
+		if (pBoxBase instanceof MMM_TextureBox) {
+			return (MMM_TextureBox)pBoxBase;
+		} else if (pBoxBase instanceof MMM_TextureBoxServer) {
+			return getTextureBox(pBoxBase.textureName);
+		}
+		return null;
+	}
+
 	public MMM_TextureBoxServer getTextureBoxServer(String pName) {
 		for (MMM_TextureBoxServer lbox : textureServer) {
 			if (lbox.textureName.equals(pName)) {
@@ -1046,6 +1060,10 @@ public class MMM_TextureManager {
 	protected void sendToServerGetTexturePackName(int pIndex) {
 		// Client
 		// サーバー側へテクスチャパックの名称を問い合わせる
+		if (pIndex < 0) {
+			mod_MMM_MMMLib.Debug("request range out.");
+			return;
+		}
 		byte ldata[] = new byte[3];
 		ldata[0] = MMM_Statics.Server_GetTexturePackName;
 		MMM_Helper.setShort(ldata, 1, pIndex);
