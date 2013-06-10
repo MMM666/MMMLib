@@ -41,6 +41,8 @@ public class MMM_TextureBox extends MMM_TextureBoxBase {
 		textures = new HashMap<Integer, String>();
 		armors = new TreeMap<String, Map<Integer, String>>();
 		modelHeight = modelWidth = modelYOffset = modelMountedYOffset = 0.0F;
+		contractColor = -1;
+		wildColor = -1;
 	}
 
 	public MMM_TextureBox(String pTextureName, String[] pSearch) {
@@ -73,6 +75,8 @@ public class MMM_TextureBox extends MMM_TextureBoxBase {
 			if (textureDir != null) {
 				return (new StringBuilder()).append(textureDir[1]).append(fileName.replace('.', '/')).append(textures.get(pIndex)).toString();
 			}
+		} else if (pIndex >= MMM_TextureManager.tx_eye && pIndex < (16 + MMM_TextureManager.tx_eye)) {
+			return getTextureName(MMM_TextureManager.tx_oldeye);
 		}
 		return null;
 	}
@@ -118,26 +122,32 @@ public class MMM_TextureBox extends MMM_TextureBoxBase {
 	 */
 	@Override
 	public int getContractColorBits() {
-		int li = 0;
-		for (Integer i : textures.keySet()) {
-			if (i >= 0x00 && i <= 0x0f) {
-				li |= 1 << (i & 0x0f);
+		if (contractColor == -1) {
+			int li = 0;
+			for (Integer i : textures.keySet()) {
+				if (i >= 0x00 && i <= 0x0f) {
+					li |= 1 << (i & 0x0f);
+				}
 			}
+			contractColor = li;
 		}
-		return li;
+		return contractColor;
 	}
 	/**
 	 * 野生色の有無をビット配列にして返す
 	 */
 	@Override
 	public int getWildColorBits() {
-		int li = 0;
-		for (Integer i : textures.keySet()) {
-			if (i >= MMM_TextureManager.tx_wild && i <= (MMM_TextureManager.tx_wild + 0x0f)) {
-				li |= 1 << (i & 0x0f);
+		if (wildColor == -1) {
+			int li = 0;
+			for (Integer i : textures.keySet()) {
+				if (i >= MMM_TextureManager.tx_wild && i <= (MMM_TextureManager.tx_wild + 0x0f)) {
+					li |= 1 << (i & 0x0f);
+				}
 			}
+			wildColor = li;
 		}
-		return li;
+		return wildColor;
 	}
 
 	public boolean hasColor(int pIndex) {

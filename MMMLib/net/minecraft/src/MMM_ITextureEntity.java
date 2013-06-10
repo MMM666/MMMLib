@@ -21,4 +21,29 @@ public interface MMM_ITextureEntity {
 	 */
 	public void setTexturePackName(MMM_TextureBox[] pTextureBox);
 
+	/**
+	 * 現在のEntityに色を設定する。
+	 * @param pColor
+	 */
+	public void setColor(int pColor);
+
+	/**
+	 * 現在のEntityに設定されている色を返す。
+	 * @return
+	 */
+	public int getColor();
+
+	public void setContract(boolean pContract);
+	public boolean isContract();
+
+	public void setTextureBox(MMM_TextureBoxBase[] pTextureBox);
+	public MMM_TextureBoxBase[] getTextureBox();
+
+	public void setTextureIndex(int[] pTextureIndex);
+	public int[] getTextureIndex();
+
+	public void setTextures(int pIndex, String[] pNames);
+	public String[] getTextures(int pIndex);
+
+
 }

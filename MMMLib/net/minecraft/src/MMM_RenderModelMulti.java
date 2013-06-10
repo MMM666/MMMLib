@@ -44,11 +44,15 @@ public class MMM_RenderModelMulti extends RenderLiving {
 
 	public void setModelValues(EntityLiving par1EntityLiving, double par2,
 			double par4, double par6, float par8, float par9, MMM_IModelCaps pEntityCaps) {
-//		modelMain.modelInner = ((MMM_TextureBox)plittleMaid.textureBox[0]).models[0];
-//		modelFATT.modelInner = ((MMM_TextureBox)plittleMaid.textureBox[1]).models[1];
-//		modelFATT.modelOuter = ((MMM_TextureBox)plittleMaid.textureBox[1]).models[2];
-//		modelFATT.textureInner = plittleMaid.textureArmor1;
-//		modelFATT.textureOuter = plittleMaid.textureArmor2;
+		if (par1EntityLiving instanceof MMM_ITextureEntity) {
+			MMM_ITextureEntity ltentity = (MMM_ITextureEntity)par1EntityLiving;
+			modelMain.modelInner = ((MMM_TextureBox)ltentity.getTextureBox()[0]).models[0];
+			modelFATT.modelInner = ((MMM_TextureBox)ltentity.getTextureBox()[1]).models[1];
+			modelFATT.modelOuter = ((MMM_TextureBox)ltentity.getTextureBox()[1]).models[2];
+			modelMain.textureInner = ltentity.getTextures(0);
+			modelFATT.textureInner = ltentity.getTextures(1);
+			modelFATT.textureOuter = ltentity.getTextures(2);
+		}
 		modelMain.setEntityCaps(pEntityCaps);
 		modelMain.setRender(this);
 		modelMain.showAllParts();
@@ -60,10 +64,10 @@ public class MMM_RenderModelMulti extends RenderLiving {
 		modelMain.setCapsValue(MMM_IModelCaps.caps_onGround, renderSwingProgress(par1EntityLiving, par9));
 		modelMain.setCapsValue(MMM_IModelCaps.caps_isRiding, par1EntityLiving.isRiding());
 		modelMain.setCapsValue(MMM_IModelCaps.caps_isSneak, par1EntityLiving.isSneaking());
-//		modelMain.setCapsValue(MMM_IModelCaps.caps_aimedBow, par1EntityLiving.isAimebow());
-//		modelMain.setCapsValue(MMM_IModelCaps.caps_isWait, par1EntityLiving.isMaidWait());
+		modelMain.setCapsValue(MMM_IModelCaps.caps_aimedBow, false);
+		modelMain.setCapsValue(MMM_IModelCaps.caps_isWait, false);
 		modelMain.setCapsValue(MMM_IModelCaps.caps_isChild, par1EntityLiving.isChild());
-//		modelMain.setCapsValue(MMM_IModelCaps.caps_entityIdFactor, par1EntityLiving.entityIdFactor);
+		modelMain.setCapsValue(MMM_IModelCaps.caps_entityIdFactor, 0F);
 		modelMain.setCapsValue(MMM_IModelCaps.caps_ticksExisted, par1EntityLiving.ticksExisted);
 	}
 

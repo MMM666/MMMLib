@@ -125,6 +125,10 @@ public interface MMM_IModelCaps {
 	public static final int caps_Actors			= 0x0203;
 	public static final int caps_PartsStrings	= 0x0204;
 
+	// MMM_test
+	public static final int caps_changeModel	= 0x0300;
+
+
 	/**
 	 * モデルが実装している機能をリストに入れて返す。
 	 * @return

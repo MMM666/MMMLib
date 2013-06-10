@@ -1,4 +1,4 @@
-MMMのMOD用ライブラリ MMMLib 1.5.2 Rev4
+MMMのMOD用ライブラリ MMMLib 1.5.2 Rev5
 
 拙作のMODで使用されるライブラリです。
 とりあえず一緒に入れておいて下さい。
@@ -31,15 +31,21 @@ MMMのMOD用ライブラリ MMMLib 1.5.2 Rev4
 
 
 変更点
+	20130611.1	1.5.2 Rev5 更新
+				EntityLiving用のEntityCapsを追加。
+				モデル選択GUIをこちらへ移動。
+				IModelCapsにパラメーターを追加。
+				テクスチャ管理対応用インターフェースITextureEntityを大幅改装。
+				SlotArmor修正。
+				TextureBoxのカラービット管理を修正。
+
+
+
 	20130606.1	1.5.2 Rev4 更新
 				TextureManagerをインスタンスで扱うように変更。
 				マルチ用修正。
 				Entity乗っとり処理を微修正、一部を二重登録してnullEntityの生成を防ぐようにした。
 				ModelMultiBaseのshowAllPartsを実装。
-
-
-
-
 	20130531.1	1.5.2 Rev3 更新
 				ModelBase類の機能絞込み。
 				IModelCapsで取得できる値の追加。

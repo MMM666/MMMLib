@@ -20,7 +20,7 @@ public class MMM_SlotArmor extends SlotArmor {
 		// Ç‡Å[
 		if (MMM_Helper.isForge) {
 			try {
-				MMM_Helper.getNameOfClass("Item").getMethod("isValidArmor", ItemStack.class, int.class).invoke(litem, par1ItemStack, armorType);
+				Item.class.getMethod("isValidArmor", ItemStack.class, int.class).invoke(litem, par1ItemStack, armorType);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

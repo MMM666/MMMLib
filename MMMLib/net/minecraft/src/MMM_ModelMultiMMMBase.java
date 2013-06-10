@@ -106,4 +106,15 @@ public abstract class MMM_ModelMultiMMMBase extends MMM_ModelMultiBase {
 		setDefaultPause();
 	}
 
+	@Override
+	public boolean setCapsValue(int pIndex, Object... pArg) {
+		switch (pIndex) {
+		case caps_changeModel:
+			changeModel((MMM_IModelCaps)pArg[0]);
+			return true;
+		}
+		return super.setCapsValue(pIndex, pArg);
+	}
+
+
 }

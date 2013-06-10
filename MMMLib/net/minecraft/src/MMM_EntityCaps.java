@@ -133,29 +133,29 @@ public class MMM_EntityCaps implements MMM_IModelCaps {
 			return owner.isSprinting();
 		case caps_PosBlockID:
 			return owner.worldObj.getBlockId(
-					MathHelper.floor_double(owner.posX + (Double)pArg[0] + 0.5D),
+					MathHelper.floor_double(owner.posX + (Double)pArg[0]),
 					MathHelper.floor_double(owner.posY + (Double)pArg[1]),
-					MathHelper.floor_double(owner.posZ + (Double)pArg[2] + 0.5D));
+					MathHelper.floor_double(owner.posZ + (Double)pArg[2]));
 		case caps_PosBlockMeta:
 			return owner.worldObj.getBlockMetadata(
-					MathHelper.floor_double(owner.posX + (Double)pArg[0] + 0.5D),
+					MathHelper.floor_double(owner.posX + (Double)pArg[0]),
 					MathHelper.floor_double(owner.posY + (Double)pArg[1]),
-					MathHelper.floor_double(owner.posZ + (Double)pArg[2] + 0.5D));
+					MathHelper.floor_double(owner.posZ + (Double)pArg[2]));
 		case caps_PosBlockAir:
 			return owner.worldObj.isAirBlock(
-					MathHelper.floor_double(owner.posX + (Double)pArg[0] + 0.5D),
+					MathHelper.floor_double(owner.posX + (Double)pArg[0]),
 					MathHelper.floor_double(owner.posY + (Double)pArg[1]),
-					MathHelper.floor_double(owner.posZ + (Double)pArg[2] + 0.5D));
+					MathHelper.floor_double(owner.posZ + (Double)pArg[2]));
 		case caps_PosBlockLight:
 			return owner.worldObj.getBlockLightValue(
-					MathHelper.floor_double(owner.posX + (Double)pArg[0] + 0.5D),
+					MathHelper.floor_double(owner.posX + (Double)pArg[0]),
 					MathHelper.floor_double(owner.posY + (Double)pArg[1]),
-					MathHelper.floor_double(owner.posZ + (Double)pArg[2] + 0.5D));
+					MathHelper.floor_double(owner.posZ + (Double)pArg[2]));
 		case caps_PosBlockPower:
 			return owner.worldObj.getBlockPowerInput(
-					MathHelper.floor_double(owner.posX + (Double)pArg[0] + 0.5D),
+					MathHelper.floor_double(owner.posX + (Double)pArg[0]),
 					MathHelper.floor_double(owner.posY + (Double)pArg[1]),
-					MathHelper.floor_double(owner.posZ + (Double)pArg[2] + 0.5D));
+					MathHelper.floor_double(owner.posZ + (Double)pArg[2]));
 		case caps_boundingBox:
 			if (pArg == null) {
 				return owner.boundingBox;

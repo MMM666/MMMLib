@@ -7,7 +7,7 @@ import net.minecraft.client.Minecraft;
 
 public class mod_MMM_MMMLib extends BaseMod {
 
-	public static final String Revision = "4";
+	public static final String Revision = "5";
 	
 	@MLProp()
 	public static boolean isDebugView = false;
@@ -86,8 +86,10 @@ public class mod_MMM_MMMLib extends BaseMod {
 		if (isDebugView) {
 			var1.put(net.minecraft.src.MMM_EntityDummy.class, new MMM_RenderDummy());
 		}
-		//RenderItem
+		// RenderItem
 		var1.put(EntityItem.class, new MMM_RenderItem());
+		// RenderSelect
+		var1.put(MMM_EntitySelect.class, new MMM_RenderModelMulti(0.0F));
 	}
 
 	@Override

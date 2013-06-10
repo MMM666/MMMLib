@@ -56,14 +56,14 @@ public abstract class MMM_TextureBoxBase {
 	 * 野生のメイドの色をランダムで返す
 	 */
 	public int getRandomWildColor(Random pRand) {
-		return getRandomColor(wildColor, pRand);
+		return getRandomColor(getWildColorBits(), pRand);
 	}
 
 	/**
 	 * 契約のメイドの色をランダムで返す
 	 */
 	public int getRandomContractColor(Random pRand) {
-		return getRandomColor(contractColor, pRand);
+		return getRandomColor(getContractColorBits(), pRand);
 	}
 
 	public float getHeight() {
