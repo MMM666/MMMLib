@@ -91,6 +91,7 @@ public class MMM_ModelMulti_Stef extends MMM_ModelMulti_Steve {
 		bipedPelvic.addChild(bipedLeftLeg);
 		bipedRightArm.addChild(Arms[0]);
 		bipedLeftArm.addChild(Arms[1]);
+		bipedBody.addChild(bust);
 		bipedBody.addChild(bipedCloak);
 		
 		bipedEars.showModel = false;

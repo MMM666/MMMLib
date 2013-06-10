@@ -1,5 +1,7 @@
 package net.minecraft.src;
 
+import java.lang.reflect.InvocationTargetException;
+
 public class MMM_SlotArmor extends SlotArmor {
 
 	protected final Container parent;
@@ -13,12 +15,23 @@ public class MMM_SlotArmor extends SlotArmor {
 	}
 
 	public boolean isItemValid(ItemStack par1ItemStack) {
-		return par1ItemStack == null ?
-				false : (par1ItemStack.getItem() instanceof ItemArmor ?
-						((ItemArmor) par1ItemStack.getItem()).armorType == this.armorType
-						: (par1ItemStack.getItem().itemID != Block.pumpkin.blockID
-								&& par1ItemStack.getItem().itemID != Item.skull.itemID ?
-										false : this.armorType == 0));
+		if (par1ItemStack == null) return false;
+		Item litem = par1ItemStack.getItem();
+		// Ç‡Å[
+		if (MMM_Helper.isForge) {
+			try {
+				MMM_Helper.getNameOfClass("Item").getMethod("isValidArmor", ItemStack.class, int.class).invoke(litem, par1ItemStack, armorType);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		if (litem instanceof ItemArmor) {
+			return ((ItemArmor)litem).armorType == armorType;
+		}
+		if (litem.itemID == Block.pumpkin.blockID || litem.itemID == Item.skull.itemID) {
+			return armorType == 0;
+		}
+		return false;
 	}
 
 }

@@ -421,19 +421,6 @@ public class MMM_Helper {
 	}
 
 	/**
-	 * Forge対策用のメソッド
-	 */
-	public static ItemStack getSmeltingResult(ItemStack pItemstack) {
-		if (methGetSmeltingResultForge != null) {
-			try {
-				return (ItemStack)methGetSmeltingResultForge.invoke(FurnaceRecipes.smelting(), pItemstack);
-			}catch (Exception e) {
-			}
-		}
-		return FurnaceRecipes.smelting().getSmeltingResult(pItemstack.itemID);
-	}
-
-	/**
 	 * EntityListに登録されていいるEntityを置き換える。
 	 */
 	public static void replaceEntityList(Class pSrcClass, Class pDestClass) {
@@ -558,6 +545,40 @@ public class MMM_Helper {
 			}
 		}
 		return ltarget;
+	}
+
+
+	// Forge対策
+
+	/**
+	 * Forge対策用のメソッド
+	 */
+	public static ItemStack getSmeltingResult(ItemStack pItemstack) {
+		if (methGetSmeltingResultForge != null) {
+			try {
+				return (ItemStack)methGetSmeltingResultForge.invoke(FurnaceRecipes.smelting(), pItemstack);
+			}catch (Exception e) {
+			}
+		}
+		return FurnaceRecipes.smelting().getSmeltingResult(pItemstack.itemID);
+	}
+
+	/**
+	 * アイテムに追加効果が在るかを判定する。
+	 * Forge対策。
+	 * @param pItemStack
+	 * @return
+	 */
+	public static boolean hasEffect(ItemStack pItemStack) {
+		// マジClientSIDEとか辞めてほしい。
+		if (pItemStack != null) {
+			Item litem = pItemStack.getItem();
+			if (litem instanceof ItemPotion) {
+				List llist = ((ItemPotion)litem).getEffects(pItemStack);
+				return llist != null && !llist.isEmpty();
+			}
+		}
+		return false;
 	}
 
 }

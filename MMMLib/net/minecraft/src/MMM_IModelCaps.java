@@ -32,6 +32,48 @@ public interface MMM_IModelCaps {
 	public static final int caps_ticksExisted			= 0x0022;
 	public static final int caps_currentEquippedItem	= 0x0023;
 	public static final int caps_currentArmor			= 0x0024;
+	
+	public static final int caps_isWet					= 0x0030;
+	public static final int caps_isDead					= 0x0031;
+	public static final int caps_isJumping				= 0x0032;
+	public static final int caps_isInWeb				= 0x0033;
+	public static final int caps_isSwingInProgress		= 0x0034;
+//	public static final int caps_isBlocking				= 0x0035;
+	public static final int caps_isBurning				= 0x0036;
+	public static final int caps_isInWater				= 0x0037;
+	public static final int caps_isInvisible			= 0x0038;
+	public static final int caps_isSprinting			= 0x0039;
+	
+	public static final int caps_posX					= 0x0060;
+	public static final int caps_posY					= 0x0061;
+	public static final int caps_posZ					= 0x0062;
+	public static final int caps_pos					= 0x0063;
+	public static final int caps_motionX				= 0x0064;
+	public static final int caps_motionY				= 0x0065;
+	public static final int caps_motionZ				= 0x0066;
+	public static final int caps_motion					= 0x0067;
+	public static final int caps_boundingBox			= 0x0068;
+	
+	/** Entityの位置にオフセットした座標のBlockを取得する [0]:offsetX, [1]:offsetY, [2]:offsetZ **/
+//	public static final int caps_PosBlock				= 0x0080;
+	/** Entityの位置にオフセットした座標のBlockIDを取得する [0]:offsetX, [1]:offsetY, [2]:offsetZ **/
+	public static final int caps_PosBlockID				= 0x0081;
+	/** Entityの位置にオフセットした座標のBlockMetaDataを取得する [0]:offsetX, [1]:offsetY, [2]:offsetZ **/
+	public static final int caps_PosBlockMeta			= 0x0082;
+	/** Entityの位置にオフセットした座標のBlockが空気ブロックかを取得する [0]:offsetX, [1]:offsetY, [2]:offsetZ **/
+	public static final int caps_PosBlockAir			= 0x0083;
+	/** Entityの位置にオフセットした座標のBlockが空気ブロックかを取得する [0]:offsetX, [1]:offsetY, [2]:offsetZ **/
+	public static final int caps_PosBlockLight			= 0x0084;
+	/** Entityの位置にオフセットした座標のBlockが空気ブロックかを取得する [0]:offsetX, [1]:offsetY, [2]:offsetZ **/
+	public static final int caps_PosBlockPower			= 0x0085;
+	/** playerに乗っているかを判定**/
+	public static final int caps_isRidingPlayer			= 0x0086;
+
+	// WorldData
+	public static final int caps_WorldTotalTime			= 0xff00;
+	public static final int caps_WorldTime				= 0xff01;
+	public static final int caps_MoonPhase				= 0xff02;
+
 	// littleMaid
 	public static final int caps_isRendering		= 0x0100;
 	public static final int caps_isBloodsuck		= 0x0101;
