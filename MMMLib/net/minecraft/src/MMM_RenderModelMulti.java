@@ -4,7 +4,7 @@ import org.lwjgl.opengl.GL11;
 
 public class MMM_RenderModelMulti extends RenderLiving {
 
-	public MMM_ModelBaseDuo modelMain;
+	public MMM_ModelBaseSolo modelMain;
 	public MMM_ModelBaseDuo modelFATT;
 
 
@@ -12,10 +12,10 @@ public class MMM_RenderModelMulti extends RenderLiving {
 	public MMM_RenderModelMulti(float pShadowSize) {
 		super(null, pShadowSize);
 		modelFATT = new MMM_ModelBaseDuo(this);
-		modelFATT.isModelAlphablend = mod_LMM_littleMaidMob.AlphaBlend;
+		modelFATT.isModelAlphablend = mod_MMM_MMMLib.isModelAlphaBlend;
 		modelFATT.isRendering = true;
-		modelMain = new MMM_ModelBaseDuo(this);
-		modelMain.isModelAlphablend = mod_LMM_littleMaidMob.AlphaBlend;
+		modelMain = new MMM_ModelBaseSolo(this);
+		modelMain.isModelAlphablend = mod_MMM_MMMLib.isModelAlphaBlend;
 		modelMain.capsLink = modelFATT;
 		mainModel = modelMain;
 		setRenderPassModel(modelFATT);
@@ -46,10 +46,10 @@ public class MMM_RenderModelMulti extends RenderLiving {
 			double par4, double par6, float par8, float par9, MMM_IModelCaps pEntityCaps) {
 		if (par1EntityLiving instanceof MMM_ITextureEntity) {
 			MMM_ITextureEntity ltentity = (MMM_ITextureEntity)par1EntityLiving;
-			modelMain.modelInner = ((MMM_TextureBox)ltentity.getTextureBox()[0]).models[0];
+			modelMain.model = ((MMM_TextureBox)ltentity.getTextureBox()[0]).models[0];
+			modelMain.textures = ltentity.getTextures(0);
 			modelFATT.modelInner = ((MMM_TextureBox)ltentity.getTextureBox()[1]).models[1];
 			modelFATT.modelOuter = ((MMM_TextureBox)ltentity.getTextureBox()[1]).models[2];
-			modelMain.textureInner = ltentity.getTextures(0);
 			modelFATT.textureInner = ltentity.getTextures(1);
 			modelFATT.textureOuter = ltentity.getTextures(2);
 		}
@@ -104,7 +104,7 @@ public class MMM_RenderModelMulti extends RenderLiving {
 
 	@Override
 	protected void renderArrowsStuckInEntity(EntityLiving par1EntityLiving, float par2) {
-		MMM_Client.renderArrowsStuckInEntity(par1EntityLiving, par2, this, modelMain.modelInner);
+		MMM_Client.renderArrowsStuckInEntity(par1EntityLiving, par2, this, modelMain.model);
 	}
 
 }

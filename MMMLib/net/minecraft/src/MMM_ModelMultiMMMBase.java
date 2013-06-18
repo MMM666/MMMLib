@@ -8,15 +8,25 @@ import org.lwjgl.opengl.GL11;
 /**
  * MMMの実験コードを含む部分。
  * ModelMultiBaseに追加するに足りるかをここで実験。
+ * このクラスにある機能は予告なく削除される恐れが有るためご留意下さい。
  */
 public abstract class MMM_ModelMultiMMMBase extends MMM_ModelMultiBase {
 
 	public Map<String, MMM_EquippedStabilizer> stabiliser;
 
+	/**
+	 * 削除予定変数使わないで下さい。
+	 */
 	@Deprecated
 	public float onGround;
+	/**
+	 * 削除予定変数使わないで下さい。
+	 */
 	@Deprecated
 	public float heldItemLeft;
+	/**
+	 * 削除予定変数使わないで下さい。
+	 */
 	@Deprecated
 	public float heldItemRight;
 
@@ -112,9 +122,44 @@ public abstract class MMM_ModelMultiMMMBase extends MMM_ModelMultiBase {
 		case caps_changeModel:
 			changeModel((MMM_IModelCaps)pArg[0]);
 			return true;
+		case caps_renderFace:
+			renderFace((MMM_IModelCaps)pArg[0], (Float)pArg[1], (Float)pArg[2], (Float)pArg[3],
+				(Float)pArg[4], (Float)pArg[5], (Float)pArg[6], (Boolean)pArg[7]);
+			return true;
+		case caps_renderBody:
+			renderBody((MMM_IModelCaps)pArg[0], (Float)pArg[1], (Float)pArg[2], (Float)pArg[3],
+				(Float)pArg[4], (Float)pArg[5], (Float)pArg[6], (Boolean)pArg[7]);
+			return true;
 		}
 		return super.setCapsValue(pIndex, pArg);
 	}
 
+	@Override
+	public Object getCapsValue(int pIndex, Object... pArg) {
+		switch (pIndex) {
+		case caps_setFaceTexture:
+			return setFaceTexture((Integer)pArg[0]);
+		}
+		return super.getCapsValue(pIndex, pArg);
+	}
+
+	// Actors実験区画
+	// このへん未だ未整理
+	public void renderFace(MMM_IModelCaps pEntityCaps, float par2, float par3, float ticksExisted,
+			float pheadYaw, float pheadPitch, float par7, boolean pIsRender) {
+	}
+	public void renderBody(MMM_IModelCaps pEntityCaps, float par2, float par3, float ticksExisted,
+			float pheadYaw, float pheadPitch, float par7, boolean pIsRender) {
+	}
+	/**
+	 * 表情をテクスチャのUVマップを変えることで表現
+	 * @param pIndex
+	 */
+	public int setFaceTexture(int pIndex) {
+		// u = (int)(pIndex % 2) * 32 / 64
+		// v = (int)(pIndex / 2) * 32 / 32
+		GL11.glTranslatef(((pIndex & 0x01) * 32) / textureWidth, (((pIndex >>> 1) & 0x01) * 16) / textureHeight , 0F);
+		return pIndex / 4;
+	}
 
 }

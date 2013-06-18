@@ -80,11 +80,6 @@ public class MMM_ModelBaseDuo extends MMM_ModelBaseNihil implements MMM_IModelBa
 		isAlphablend = false;
 	}
 
-//	@Override
-//	public ModelRenderer getRandomModelBox(Random par1Random) {
-//		return modelArmorInner.getRandomModelBox(par1Random);
-//	}
-
 	@Override
 	public TextureOffset getTextureOffset(String par1Str) {
 		return modelInner.getTextureOffset(par1Str);

@@ -7,7 +7,7 @@ import net.minecraft.client.Minecraft;
 
 public class mod_MMM_MMMLib extends BaseMod {
 
-	public static final String Revision = "5";
+	public static final String Revision = "6";
 	
 	@MLProp()
 	public static boolean isDebugView = false;
@@ -17,6 +17,8 @@ public class mod_MMM_MMMLib extends BaseMod {
 	public static boolean renderHacking = true;
 	@MLProp(info = "starting auto assigned ID.")
 	public static int startVehicleEntityID = 2176;
+	@MLProp(info="true: AlphaBlend(request power), false: AlphaTest(more fast)")
+	public static boolean isModelAlphaBlend = true;
 
 
 

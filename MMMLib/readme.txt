@@ -1,4 +1,4 @@
-MMMのMOD用ライブラリ MMMLib 1.5.2 Rev5
+MMMのMOD用ライブラリ MMMLib 1.5.2 Rev6
 
 拙作のMODで使用されるライブラリです。
 とりあえず一緒に入れておいて下さい。
@@ -10,10 +10,13 @@ MMMのMOD用ライブラリ MMMLib 1.5.2 Rev5
 	・ただし、商用利用は除く。
 	・あと、いかなる意味でも作者は責任をとりませぬ。
 
+
 使い方
 	・要Modloader。
 	・%appdata%/.mincraft/mods/にZIPのまま放りこんで下さい。
 	・%appdata%/.mincraft/config/mod_MMM_MMMLib.cfgができるので設定はそちらで。
+	・サーバー側で動作させた場合、クライアントで使用されたテクスチャパックのリストとして、
+	　%appdata%/.mincraft/config/mod_MMM_textureList.cfgが作成されます。
 
 
 設定
@@ -23,6 +26,7 @@ MMMのMOD用ライブラリ MMMLib 1.5.2 Rev5
 	・「isDebugMessage」はMMMLibが出力するデバッグメッセージの設定をします。
 	・「startVehicleEntityID」は内部で使用される非生物系のEntityIDを
 	　獲得するときの先頭番号を指定します。
+	　Forge環境下ではあまり意味はありません。
 
 
 注意
@@ -31,6 +35,14 @@ MMMのMOD用ライブラリ MMMLib 1.5.2 Rev5
 
 
 変更点
+	20130618.1	1.5.2 Rev6 更新
+				モデル表示用のクラスとしてModelBaseSoloの追加。
+				IModelCapsにパラメーターを追加。
+				ドキュメントの一部をLMMから移動。
+				AlphaBlendの設定をLMMから移動。
+
+
+
 	20130611.1	1.5.2 Rev5 更新
 				EntityLiving用のEntityCapsを追加。
 				モデル選択GUIをこちらへ移動。
@@ -38,9 +50,6 @@ MMMのMOD用ライブラリ MMMLib 1.5.2 Rev5
 				テクスチャ管理対応用インターフェースITextureEntityを大幅改装。
 				SlotArmor修正。
 				TextureBoxのカラービット管理を修正。
-
-
-
 	20130606.1	1.5.2 Rev4 更新
 				TextureManagerをインスタンスで扱うように変更。
 				マルチ用修正。

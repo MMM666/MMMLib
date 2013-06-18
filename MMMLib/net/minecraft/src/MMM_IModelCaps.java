@@ -15,6 +15,7 @@ public interface MMM_IModelCaps {
 	/*
 	 * 機能名称群、取り敢えず書いてあるけど別に被らなければ何でも良し。
 	 * 一応予約値ってことで。
+	 * 独自追加の場合は0x00010000以上を使って下さい。
 	 */
 	// ModelBase
 	public static final int caps_onGround			= 0x0001;
@@ -94,6 +95,8 @@ public interface MMM_IModelCaps {
 	public static final int caps_isMasked			= 0x0110;
 	public static final int caps_isCamouflage		= 0x0111;
 	public static final int caps_isPlanter			= 0x0112;
+	public static final int caps_isOverdrive		= 0x0113;
+	public static final int caps_isOverdriveDelay	= 0x0114;
 	public static final int caps_entityIdFactor		= 0x0120;
 	public static final int caps_height				= 0x0121;
 	public static final int caps_width				= 0x0122;
@@ -127,6 +130,9 @@ public interface MMM_IModelCaps {
 
 	// MMM_test
 	public static final int caps_changeModel	= 0x0300;
+	public static final int caps_renderFace		= 0x0310;
+	public static final int caps_renderBody		= 0x0311;
+	public static final int caps_setFaceTexture	= 0x0312;
 
 
 	/**

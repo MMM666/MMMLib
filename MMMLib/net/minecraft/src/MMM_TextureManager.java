@@ -114,8 +114,10 @@ public class MMM_TextureManager {
 		// 検索対象ファイル名を登録します。
 		// パターンを登録しない場合、独自名称のMODファイル、テクスチャディレクトリ、クラスが読み込まれません。
 		MMM_FileManager.getModFile("MMMLib", "MMMLib");
+		MMM_FileManager.getModFile("MMMLib", "ModelMulti");
 		addSearch("MMMLib", "/mob/ModelMulti/", "ModelMulti_");
 		addSearch("MMMLib", "/mob/littleMaid/", "ModelLittleMaid_");
+
 		MMM_FileManager.getModFile("littleMaidMob", "littleMaidMob");
 		addSearch("littleMaidMob", "/mob/littleMaid/", "ModelLittleMaid_");
 	}

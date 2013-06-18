@@ -11,6 +11,11 @@ public class MMM_ModelBaseNihil extends ModelBase {
 	protected boolean isRendering;
 
 
+//	@Override
+//	public ModelRenderer getRandomModelBox(Random par1Random) {
+//		return modelArmorInner.getRandomModelBox(par1Random);
+//	}
+
 	public void showAllParts() {
 	}
 

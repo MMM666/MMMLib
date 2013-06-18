@@ -32,12 +32,14 @@ public class MMM_ModelBaseSolo extends MMM_ModelBaseNihil implements MMM_IModelB
 		}
 		if (textures.length > 2 && textures[2] != null) {
 			// Actors用
+			model.setRotationAngles(par2, par3, par4, par5, par6, par7, entityCaps);
 			// Face
+			// TODO:テクスチャのロードはなんか考える。
 			renderLiving.loadTexture(textures[2]);
-			model.render(entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
+			model.setCapsValue(caps_renderFace, entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
 			// Body
 			renderLiving.loadTexture(textures[0]);
-			model.render(entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
+			model.setCapsValue(caps_renderBody, entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
 		} else {
 			// 通常
 			if (textures[0] != null) {
@@ -60,21 +62,17 @@ public class MMM_ModelBaseSolo extends MMM_ModelBaseNihil implements MMM_IModelB
 				GL11.glDepthMask(true);
 			}
 			
-			char var5 = 61680;
-			int var6 = var5 % 65536;
-			int var7 = var5 / 65536;
-			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit,
-					(float) var6 / 1.0F, (float) var7 / 1.0F);
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			MMM_Client.setLightmapTextureCoords(61680);
+//			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, var4);
 			model.render(entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
+			
+			MMM_Client.setLightmapTextureCoords(par1Entity.getBrightnessForRender(par2));
+			
+			GL11.glDisable(GL11.GL_BLEND);
+			GL11.glEnable(GL11.GL_ALPHA_TEST);
 		}
 	}
-
-//	@Override
-//	public ModelRenderer getRandomModelBox(Random par1Random) {
-//		return modelArmorInner.getRandomModelBox(par1Random);
-//	}
 
 	@Override
 	public TextureOffset getTextureOffset(String par1Str) {
