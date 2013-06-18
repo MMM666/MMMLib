@@ -20,6 +20,7 @@ ModelMultiBase
 	検索されたファイルとクライアントのJarファイルを検索し、以下の文字列を含むMMM_ModelMultiBase継承クラスをマルチモデルとして読み込みます。
 		・ModelMulti_
 		・ModelLittleMaid_
+		※MMM_*のように先頭にMMM_とつける必要はありません。
 
 	検索文字列は、mod独自に追加することができます。
 

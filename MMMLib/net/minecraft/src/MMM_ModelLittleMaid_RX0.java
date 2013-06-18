@@ -80,6 +80,36 @@ public class MMM_ModelLittleMaid_RX0 extends MMM_ModelLittleMaidBase {
 		SkirtLB = new MMM_ModelRenderer(this);
 		SkirtLB.setTextureOffset(0, 0).addBox(0F, 0F, -4F, 4, 8, 8);
 		
+		mainFrame = new MMM_ModelRenderer(this);
+		bipedNeck = new MMM_ModelRenderer(this);
+		bipedTorso = new MMM_ModelRenderer(this);
+		bipedPelvic = new MMM_ModelRenderer(this);
+		
+		
+		mainFrame.addChild(bipedTorso);
+		bipedTorso.addChild(bipedNeck);
+		bipedNeck.addChild(bipedNeck);
+		bipedNeck.addChild(bipedHead);
+		bipedNeck.addChild(bipedRightArm);
+		bipedRightArm.addChild(bipedForearmRight);
+		bipedNeck.addChild(bipedLeftArm);
+		bipedLeftArm.addChild(bipedForearmLeft);
+		bipedTrunc.addChild(bipedHipRight);
+		bipedHipRight.addChild(bipedRightLeg);
+		bipedRightLeg.addChild(bipedShinRight);
+		bipedShinRight.addChild(bipedShinRight1);
+		bipedShinRight1.addChild(bipedShinRight2);
+		bipedTrunc.addChild(bipedHipLeft);
+		bipedHipLeft.addChild(bipedLeftLeg);
+		bipedLeftLeg.addChild(bipedShinLeft);
+		bipedShinLeft.addChild(bipedShinLeft1);
+		bipedShinLeft1.addChild(bipedShinLeft2);
+		bipedTrunc.addChild(Skirt);
+		Skirt.addChild(SkirtRU);
+		SkirtRU.addChild(SkirtRB);
+		Skirt.addChild(SkirtLU);
+		SkirtLU.addChild(SkirtLB);
+		
 	}
 
 	@Override
