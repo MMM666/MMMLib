@@ -82,7 +82,7 @@ public class MMM_ModelBaseDuo extends MMM_ModelBaseNihil implements MMM_IModelBa
 
 	@Override
 	public TextureOffset getTextureOffset(String par1Str) {
-		return modelInner.getTextureOffset(par1Str);
+		return modelInner == null ? null : modelInner.getTextureOffset(par1Str);
 	}
 
 	@Override

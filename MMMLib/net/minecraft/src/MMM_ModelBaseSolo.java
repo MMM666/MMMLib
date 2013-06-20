@@ -16,12 +16,18 @@ public class MMM_ModelBaseSolo extends MMM_ModelBaseNihil implements MMM_IModelB
 
 	@Override
 	public void setLivingAnimations(EntityLiving par1EntityLiving, float par2, float par3, float par4) {
-		model.setLivingAnimations(entityCaps, par2, par3, par4);
+		if (model != null) {
+			model.setLivingAnimations(entityCaps, par2, par3, par4);
+		}
 		isAlphablend = true;
 	}
 
 	@Override
 	public void render(Entity par1Entity, float par2, float par3, float par4, float par5, float par6, float par7) {
+		if (model == null) {
+			isAlphablend = false;
+			return;
+		}
 		if (isAlphablend) {
 			if (isModelAlphablend) {
 				GL11.glEnable(GL11.GL_BLEND);
@@ -76,13 +82,15 @@ public class MMM_ModelBaseSolo extends MMM_ModelBaseNihil implements MMM_IModelB
 
 	@Override
 	public TextureOffset getTextureOffset(String par1Str) {
-		return model.getTextureOffset(par1Str);
+		return model == null ? null : model.getTextureOffset(par1Str);
 	}
 
 	@Override
 	public void setRotationAngles(float par1, float par2, float par3,
 			float par4, float par5, float par6, Entity par7Entity) {
-		model.setRotationAngles(par1, par2, par3, par4, par5, par6, entityCaps);
+		if (model != null) {
+			model.setRotationAngles(par1, par2, par3, par4, par5, par6, entityCaps);
+		}
 	}
 
 
@@ -90,12 +98,16 @@ public class MMM_ModelBaseSolo extends MMM_ModelBaseNihil implements MMM_IModelB
 
 	@Override
 	public void renderItems(EntityLiving pEntity, Render pRender) {
-		model.renderItems(entityCaps);
+		if (model != null) {
+			model.renderItems(entityCaps);
+		}
 	}
 
 	@Override
 	public void showArmorParts(int pParts) {
-		model.showArmorParts(pParts, 0);
+		if (model != null) {
+			model.showArmorParts(pParts, 0);
+		}
 	}
 
 	/**
@@ -112,7 +124,9 @@ public class MMM_ModelBaseSolo extends MMM_ModelBaseNihil implements MMM_IModelB
 
 	@Override
 	public void setRender(Render pRender) {
-		model.render = pRender;
+		if (model != null) {
+			model.render = pRender;
+		}
 	}
 
 	@Override
@@ -125,12 +139,12 @@ public class MMM_ModelBaseSolo extends MMM_ModelBaseNihil implements MMM_IModelB
 
 	@Override
 	public Map<String, Integer> getModelCaps() {
-		return model.getModelCaps();
+		return model == null ? null : model.getModelCaps();
 	}
 
 	@Override
 	public Object getCapsValue(int pIndex, Object ... pArg) {
-		return model.getCapsValue(pIndex, pArg);
+		return model == null ? null : model.getCapsValue(pIndex, pArg);
 	}
 
 	@Override
@@ -138,13 +152,17 @@ public class MMM_ModelBaseSolo extends MMM_ModelBaseNihil implements MMM_IModelB
 		if (capsLink != null) {
 			capsLink.setCapsValue(pIndex, pArg);
 		}
-		model.setCapsValue(pIndex, pArg);
+		if (model != null) {
+			model.setCapsValue(pIndex, pArg);
+		}
 		return false;
 	}
 
 	@Override
 	public void showAllParts() {
-		model.showAllParts();
+		if (model != null) {
+			model.showAllParts();
+		}
 	}
 
 

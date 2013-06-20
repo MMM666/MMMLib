@@ -7,7 +7,7 @@ import net.minecraft.client.Minecraft;
 
 public class mod_MMM_MMMLib extends BaseMod {
 
-	public static final String Revision = "6";
+	public static final String Revision = "6a";
 	
 	@MLProp()
 	public static boolean isDebugView = false;
