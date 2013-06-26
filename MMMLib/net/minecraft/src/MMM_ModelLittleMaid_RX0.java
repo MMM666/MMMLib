@@ -14,11 +14,11 @@ public class MMM_ModelLittleMaid_RX0 extends MMM_ModelLittleMaidBase {
 	public MMM_ModelRenderer bipedForearmRight;
 	public MMM_ModelRenderer bipedForearmLeft;
 	public MMM_ModelRenderer bipedShinRight;
-	public MMM_ModelRenderer bipedShinRight1;
-	public MMM_ModelRenderer bipedShinRight2;
+	public MMM_ModelRenderer bipedTiptoeRight;
+	public MMM_ModelRenderer bipedHeelRight;
 	public MMM_ModelRenderer bipedShinLeft;
-	public MMM_ModelRenderer bipedShinLeft1;
-	public MMM_ModelRenderer bipedShinLeft2;
+	public MMM_ModelRenderer bipedTiptoeLeft;
+	public MMM_ModelRenderer bipedHeelLeft;
 	public MMM_ModelRenderer bipedRibbon;
 	public MMM_ModelRenderer bipedRibbon1;
 	public MMM_ModelRenderer bipedRibbon2;
@@ -27,10 +27,17 @@ public class MMM_ModelLittleMaid_RX0 extends MMM_ModelLittleMaidBase {
 	public MMM_ModelRenderer SkirtRB;
 	public MMM_ModelRenderer SkirtLU;
 	public MMM_ModelRenderer SkirtLB;
-	
 
-	
-	
+	public MMM_ModelRenderer test;
+	public MMM_ModelRenderer test1;
+	public MMM_ModelRenderer test2;
+	public MMM_ModelRenderer test3;
+	public MMM_ModelRenderer test4;
+	public MMM_ModelRenderer test5;
+	public MMM_ModelRenderer test6;
+
+
+
 	public MMM_ModelLittleMaid_RX0() {
 		this(0.0F);
 	}
@@ -63,7 +70,7 @@ public class MMM_ModelLittleMaid_RX0 extends MMM_ModelLittleMaidBase {
 		bipedBody = new MMM_ModelRenderer(this);
 		bipedBody.setTextureOffset(32, 1).addBox(-3F, 0F, -1F, 6, 3, 3);
 		bipedBreast = new MMM_ModelRenderer(this);
-		bipedBreast.setTextureOffset(32, 7).addBox(-3F, -2.5F, 0F, 6, 4, 3);
+		bipedBreast.setTextureOffset(32, 7).addBox(-3F, -2.5F, 0F, 6, 4, 3, -0.05F);
 		
 		bipedRightArm = new MMM_ModelRenderer(this);
 		bipedRightArm.setTextureOffset(8, 47).addBox(-2F, -0.5F, -1F, 2, 7, 2);
@@ -85,19 +92,19 @@ public class MMM_ModelLittleMaid_RX0 extends MMM_ModelLittleMaidBase {
 		bipedRightLeg.setTextureOffset(0, 29).addBox(-3F, 0F, -2F, 3, 7, 4);
 		bipedShinRight = new MMM_ModelRenderer(this);
 		bipedShinRight.setTextureOffset(0, 16).addBox(-3F, 0F, -3F, 3, 9, 4, -0.2F);
-		bipedShinRight1 = new MMM_ModelRenderer(this);
-		bipedShinRight1.setTextureOffset(12, 26).addBox(-1.5F, 0F, -4F, 3, 2, 4);
-		bipedShinRight2 = new MMM_ModelRenderer(this);
-		bipedShinRight2.setTextureOffset(24, 0).addBox(-1F, 0.25F, -3.25F, 2, 1, 3, 0.25F);
+		bipedTiptoeRight = new MMM_ModelRenderer(this);
+		bipedTiptoeRight.setTextureOffset(12, 26).addBox(-1.5F, 0F, -4F, 3, 2, 4);
+		bipedHeelRight = new MMM_ModelRenderer(this);
+		bipedHeelRight.setTextureOffset(24, 0).addBox(-1F, 0.25F, -3.25F, 2, 1, 3, 0.25F);
 		
 		bipedLeftLeg = new MMM_ModelRenderer(this);
 		bipedLeftLeg.setTextureOffset(50, 29).addBox(0F, 0F, -2F, 3, 7, 4);
 		bipedShinLeft = new MMM_ModelRenderer(this);
 		bipedShinLeft.setTextureOffset(50, 16).addBox(0F, 0F, -3F, 3, 9, 4, -0.2F);
-		bipedShinLeft1 = new MMM_ModelRenderer(this);
-		bipedShinLeft1.setTextureOffset(38, 26).addBox(-1.5F, 0F, -4F, 3, 2, 4);
-		bipedShinLeft2 = new MMM_ModelRenderer(this);
-		bipedShinLeft2.setTextureOffset(24, 4).addBox(-1F, 0.25F, -3.25F, 2, 1, 3, 0.25F);
+		bipedTiptoeLeft = new MMM_ModelRenderer(this);
+		bipedTiptoeLeft.setTextureOffset(38, 26).addBox(-1.5F, 0F, -4F, 3, 2, 4);
+		bipedHeelLeft = new MMM_ModelRenderer(this);
+		bipedHeelLeft.setTextureOffset(24, 4).addBox(-1F, 0.25F, -3.25F, 2, 1, 3, 0.25F);
 		
 		Skirt = new MMM_ModelRenderer(this);
 		Skirt.setTextureOffset(20, 26).addBox(-3F, 0F, -3F, 6, 8, 6, 0.05F);
@@ -112,6 +119,7 @@ public class MMM_ModelLittleMaid_RX0 extends MMM_ModelLittleMaidBase {
 		
 		mainFrame = new MMM_ModelRenderer(this);
 		bipedNeck = new MMM_ModelRenderer(this);
+		bipedNeck.setTextureOffset(30, 14).addBox(-1.5F, -0.5F, -2.0F, 3, 3, 3);
 		bipedTorso = new MMM_ModelRenderer(this);
 		bipedPelvic = new MMM_ModelRenderer(this);
 		
@@ -146,12 +154,12 @@ public class MMM_ModelLittleMaid_RX0 extends MMM_ModelLittleMaidBase {
 		bipedTrunc.addChild(bipedPelvic);
 		bipedPelvic.addChild(bipedRightLeg);
 		bipedRightLeg.addChild(bipedShinRight);
-		bipedShinRight.addChild(bipedShinRight1);
-		bipedShinRight1.addChild(bipedShinRight2);
+		bipedShinRight.addChild(bipedTiptoeRight);
+		bipedTiptoeRight.addChild(bipedHeelRight);
 		bipedPelvic.addChild(bipedLeftLeg);
 		bipedLeftLeg.addChild(bipedShinLeft);
-		bipedShinLeft.addChild(bipedShinLeft1);
-		bipedShinLeft1.addChild(bipedShinLeft2);
+		bipedShinLeft.addChild(bipedTiptoeLeft);
+		bipedTiptoeLeft.addChild(bipedHeelLeft);
 		bipedPelvic.addChild(Skirt);
 		Skirt.addChild(SkirtRU);
 		SkirtRU.addChild(SkirtRB);
@@ -162,6 +170,30 @@ public class MMM_ModelLittleMaid_RX0 extends MMM_ModelLittleMaidBase {
 		bipedForearmLeft.addChild(Arms[1]);
 		bipedHead.addChild(HeadTop);
 		bipedHead.addChild(HeadMount);
+		
+		
+		test = new MMM_ModelRenderer(this);
+		test1 = new MMM_ModelRenderer(this);
+		test2 = new MMM_ModelRenderer(this);
+		test3 = new MMM_ModelRenderer(this);
+		test4 = new MMM_ModelRenderer(this);
+		test5 = new MMM_ModelRenderer(this);
+		test6 = new MMM_ModelRenderer(this);
+		test1.setTextureOffset(8, 8).addPlate(-4F, -4F, -4F, 8, 8, MMM_ModelPlate.planeXYFront);
+		test2.setTextureOffset(8, 8).addPlate(-4F, -4F, 4F, 8, 8, MMM_ModelPlate.planeXYBack);
+		test3.setTextureOffset(8, 8).addPlate(-4F, -4F, -4F, 8, 8, MMM_ModelPlate.planeZYRight);
+		test4.setTextureOffset(8, 8).addPlate(4F, -4F, -4F, 8, 8, MMM_ModelPlate.planeZYLeft);
+		test5.setTextureOffset(8, 8).addPlate(-4F, -4F, -4F, 8, 8, MMM_ModelPlate.planeXZTop);
+		test6.setTextureOffset(8, 8).addPlate(-4F, 4F, -4F, 8, 8, MMM_ModelPlate.planeXZBottom);
+		test.setRotationPoint(0F, -10F, 0F);
+		test.addChild(test1);
+		test.addChild(test2);
+		test.addChild(test3);
+		test.addChild(test4);
+		test.addChild(test5);
+		test.addChild(test6);
+		
+		HeadTop.addChild(test);
 	}
 
 	@Override
@@ -169,12 +201,28 @@ public class MMM_ModelLittleMaid_RX0 extends MMM_ModelLittleMaidBase {
 			float pHeadYaw, float pHeadPitch, float par6, MMM_IModelCaps pEntityCaps) {
 		// TODO Auto-generated method stub
 		super.setDefaultPause(par1, par2, pTicksExisted, pHeadYaw, pHeadPitch, par6, pEntityCaps);
-		Skirt.setVisible(true);
+		int lvisible = MMM_ModelCapsHelper.getCapsValueInt(pEntityCaps, caps_PartsVisible);
+		
+		test1.setVisible(true);
+		test2.setVisible(true);
+		test3.setVisible(true);
+		test4.setVisible(true);
+		test5.setVisible(true);
+		test6.setVisible(true);
+		
+		
+		
+		
+		
+		
+		Skirt.setVisible((lvisible & 0x0004) == 0);
 		bipedRightLeg.setVisible(true);
 		bipedLeftLeg.setVisible(true);
 //		GL11.glScalef(0.85F, 0.85F, 0.85F);
 		scaleFactor = 0.80F;
-		if (!MMM_ModelCapsHelper.getCapsValueBoolean(pEntityCaps, caps_isOverdriveDelay) && true) {
+		if ((!MMM_ModelCapsHelper.getCapsValueBoolean(pEntityCaps, caps_isOverdriveDelay) &&
+				!MMM_ModelCapsHelper.getCapsValueBoolean(pEntityCaps, caps_isBloodsuck) &&
+				((lvisible & 0x0001) == 0)) && true) {
 			// bansheeMode
 			bipedBreast.setRotationPoint(0F, 2.5F, -2F);
 			bipedBreast.setRotateAngleDegX(-0F);
@@ -209,19 +257,20 @@ public class MMM_ModelLittleMaid_RX0 extends MMM_ModelLittleMaidBase {
 			bipedRightLeg.setRotateAngleDegZ(0F);
 			bipedShinRight.setRotationPoint(0F, 0F, 1F);
 			bipedShinRight.setRotateAngleDeg(0F, 0F, 0F);
-			bipedShinRight1.setRotationPoint(-1.5F, 7F, 1F);
-			bipedShinRight1.setRotateAngleDegX(0F);
-			bipedShinRight2.setRotationPoint(0F, 0F, 0F);
-			bipedShinRight2.setRotateAngleDegX(0F);
+			bipedTiptoeRight.setRotationPoint(-1.5F, 7F, 1F);
+			bipedTiptoeRight.setRotateAngleDeg(0F, 0F, 0F);
+			bipedHeelRight.setRotationPoint(0F, 0F, -0.05F);
+			bipedHeelRight.setRotateAngleDeg(0F, 0F, 0F);
 
 			bipedLeftLeg.setRotationPoint(0F, 0F, 0F);
 			bipedLeftLeg.setRotateAngleDegZ(0F);
 			bipedShinLeft.setRotationPoint(0F, 0F, 1F);
 			bipedShinLeft.setRotateAngleDeg(0F, 0F, 0F);
-			bipedShinLeft1.setRotationPoint(1.5F, 7F, 1F);
-			bipedShinLeft1.setRotateAngleDegX(0F);
-			bipedShinLeft2.setRotationPoint(0F, 0F, 0F);
-			bipedShinLeft2.setRotateAngleDegX(0F);
+			bipedTiptoeLeft.setRotationPoint(1.5F, 7F, 1F);
+			bipedTiptoeLeft.setRotateAngleDeg(0F, 0F, 0F);
+			bipedHeelLeft.setRotationPoint(0F, 0F, -0.05F);
+			bipedHeelLeft.setRotateAngleDeg(0F, 0F, 0F);
+			
 			bipedPelvic.setRotationPoint(0F, 7F, 0F);
 			
 			Skirt.setRotationPoint(0F, -2F, 0F);
@@ -268,45 +317,58 @@ public class MMM_ModelLittleMaid_RX0 extends MMM_ModelLittleMaidBase {
 			bipedHipLeft.setRotationPoint(3F, 4.5F, 0.45F);
 			bipedHipRight.setRotateAngleDeg(15F, 0F, 15F);
 			bipedHipLeft.setRotateAngleDeg(15F, 0F, -15F);
-//			bipedHipRight.setRotateAngleDeg(20F, 0F, 12F);
-//			bipedHipLeft.setRotateAngleDeg(20F, 0F, -12F);
 
 			bipedRightLeg.setRotationPoint(-0.7F, -0.5F, 1.0F);
 			bipedRightLeg.addRotateAngleDegX(-5F);
 			bipedRightLeg.addRotateAngleDegZ(-6F);
 			bipedShinRight.setRotationPoint(-0.1F, 6.5F, 1F);
 			bipedShinRight.setRotateAngleDeg(5F, 0F, 4F);
-			bipedShinRight1.setRotationPoint(-1.5F, 7F, -0.5F);
-			bipedShinRight1.setRotateAngleDeg(30F, 0F, 4F);//6F
-			bipedShinRight2.setRotationPoint(0F, 0F, 0F);
-			bipedShinRight2.setRotateAngleDegX(60F);
+			bipedTiptoeRight.setRotationPoint(-1.5F, 7F, -0.5F);
+			bipedTiptoeRight.setRotateAngleDeg(30F, 0F, 2F);//6F
+			bipedHeelRight.setRotationPoint(0F, 0F, -0.05F);
+			bipedHeelRight.setRotateAngleDegX(60F);
 			bipedLeftLeg.setRotationPoint(0.7F, -0.5F, 1.0F);
 			bipedLeftLeg.addRotateAngleDegX(-5F);
 			bipedLeftLeg.addRotateAngleDegZ(6F);
 			bipedShinLeft.setRotationPoint(0.1F, 6.5F, 1F);
 			bipedShinLeft.setRotateAngleDeg(5F, 0F, -4F);
-			bipedShinLeft1.setRotationPoint(1.5F, 7F, -0.5F);
-			bipedShinLeft1.setRotateAngleDeg(30F, 0F, -4F);
-			bipedShinLeft2.setRotationPoint(0F, 0F, 0F);
-			bipedShinLeft2.setRotateAngleDegX(60F);
+			bipedTiptoeLeft.setRotationPoint(1.5F, 7F, -0.5F);
+			bipedTiptoeLeft.setRotateAngleDeg(30F, 0F, -2F);
+			bipedHeelLeft.setRotationPoint(0F, 0F, -0.05F);
+			bipedHeelLeft.setRotateAngleDegX(60F);
 			bipedPelvic.setRotationPoint(0F, 7F, 0F);
 			
 			Skirt.setRotationPoint(0F, -4.5F, 0.2F);
 			SkirtRU.setRotationPoint(-5F, -1F, 0F);
 			SkirtRU.setRotateAngleDegZ(13F);
-			SkirtRB.setRotationPoint(5F, 7F, 0F);
 			SkirtLU.setRotationPoint(5F, -1F, 0F);
 			SkirtLU.setRotateAngleDegZ(-13F);
-			SkirtLB.setRotationPoint(-5F, 7F, 0F);
+			if ((lvisible & 0x0002) > 0) {
+				SkirtRB.setRotationPoint(5F, 1F, 0F);
+				SkirtLB.setRotationPoint(-5F, 1F, 0F);
+			} else {
+				SkirtRB.setRotationPoint(5F, 7F, 0F);
+				SkirtLB.setRotationPoint(-5F, 7F, 0F);
+			}
 			
-//			bipedTorso.setRotationPointY(-11F);
-//			bipedTorso.setRotationPointY(-7.5F);
+			
 			bipedTorso.setRotationPointY(-12F);
+			bipedRightArm.setRotationPoint(-3F, 1F, 0F);
+			bipedLeftArm.setRotationPoint(3F, 1F, 0F);
 			bipedRightArm.addRotateAngleDegZ(-15F);
 			bipedLeftArm.addRotateAngleDegZ(15F);
 		}
 	}
-	
-	
+
+	@Override
+	public Object getCapsValue(int pIndex, Object... pArg) {
+		switch (pIndex) {
+		case caps_PartsStrings:
+			return "DestroyMode,mimiSkirt,noSkirt";
+		}
+		
+		return super.getCapsValue(pIndex, pArg);
+	}
+
 
 }

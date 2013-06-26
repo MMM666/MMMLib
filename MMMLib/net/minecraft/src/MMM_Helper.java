@@ -4,6 +4,7 @@ import static net.minecraft.src.mod_MMM_MMMLib.Debug;
 import java.io.ByteArrayInputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -580,5 +581,38 @@ public class MMM_Helper {
 		}
 		return false;
 	}
+
+	/**
+	 * Blockのインスタンスを置き換える。
+	 * static finalの変数に対して行うのでForgeでは無効。
+	 * @param pOriginal
+	 * @param pReplace
+	 * @return
+	 */
+	public static boolean replaceBlock(Block pOriginal, Block pReplace) {
+		if (isForge) {
+			return false;
+		}
+		try {
+			// Blockのstatic final分の置換え
+			Field[] lfield = Block.class.getDeclaredFields();
+			for (int li = 0; li < lfield.length; li++) {
+				if (!Modifier.isStatic(lfield[li].getModifiers())) {
+					// static以外は対象外
+					continue;
+				}
+				
+				Object lobject = lfield[li].get(null);
+				if (lobject == pOriginal) {
+					ModLoader.setPrivateValue(Block.class, null, li, pReplace);
+					return true;
+				}
+			}
+		}
+		catch(Exception exception) {
+		}
+		return false;
+	}
+
 
 }

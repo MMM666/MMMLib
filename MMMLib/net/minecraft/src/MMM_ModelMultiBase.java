@@ -99,31 +99,73 @@ public abstract class MMM_ModelMultiBase extends MMM_ModelBase implements MMM_IM
 	/**
 	 *  身長
 	 */
+	@Deprecated
 	public abstract float getHeight();
+	/**
+	 *  身長
+	 */
+	public float getHeight(MMM_IModelCaps pEntityCaps) {
+		return getHeight();
+	}
 	/**
 	 * 横幅
 	 */
+	@Deprecated
 	public abstract float getWidth();
+	/**
+	 * 横幅
+	 */
+	public float getWidth(MMM_IModelCaps pEntityCaps) {
+		return getWidth();
+	}
 	/**
 	 * モデルのYオフセット
 	 */
+	@Deprecated
 	public abstract float getyOffset();
+	/**
+	 * モデルのYオフセット
+	 */
+	public float getyOffset(MMM_IModelCaps pEntityCaps) {
+		return getyOffset();
+	}
 	/**
 	 * 上に乗せる時のオフセット高
 	 */
+	@Deprecated
 	public abstract float getMountedYOffset();
+	/**
+	 * 上に乗せる時のオフセット高
+	 */
+	public float getMountedYOffset(MMM_IModelCaps pEntityCaps) {
+		return getMountedYOffset();
+	}
 
 	/**
 	 * アイテムを持っているときに手を前に出すかどうか。
 	 */
+	@Deprecated
 	public boolean isItemHolder() {
 		return false;
+	}
+	/**
+	 * アイテムを持っているときに手を前に出すかどうか。
+	 */
+	public boolean isItemHolder(MMM_IModelCaps pEntityCaps) {
+		return isItemHolder();
 	}
 
 	/**
 	 * 表示すべきすべての部品
 	 */
+	@Deprecated
 	public void showAllParts() {
+	}
+	/**
+	 * 表示すべきすべての部品
+	 */
+	public void showAllParts(MMM_IModelCaps pEntityCaps) {
+		showAllParts();
 	}
 
 	/**
