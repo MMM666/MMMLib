@@ -76,7 +76,7 @@ public class MMM_EntitySelect extends EntityLiving implements MMM_IModelCaps, MM
 		textureBox[0] = MMM_TextureManager.instance.getTextureBoxServer(textureIndex[0]);
 		textureBox[1] = MMM_TextureManager.instance.getTextureBoxServer(textureIndex[1]);
 		// サイズの変更
-		setSize(textureBox[0].modelWidth, textureBox[0].modelHeight);
+		setSize(textureBox[0].getWidth(entityCaps), textureBox[0].getHeight(entityCaps));
 	}
 
 	@Override
@@ -86,7 +86,7 @@ public class MMM_EntitySelect extends EntityLiving implements MMM_IModelCaps, MM
 		textureBox[1] = pTextureBox[1];
 		setTextureNames();
 		// 身長変更用
-		setSize(textureBox[0].getWidth(), textureBox[0].getHeight());
+		setSize(textureBox[0].getWidth(null), textureBox[0].getHeight(null));
 		setPosition(posX, posY, posZ);
 		// モデルの初期化
 		((MMM_TextureBox)textureBox[0]).models[0].setCapsValue(MMM_IModelCaps.caps_changeModel, this);

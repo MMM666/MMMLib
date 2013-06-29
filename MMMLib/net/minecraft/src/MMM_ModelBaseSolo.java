@@ -67,6 +67,8 @@ public class MMM_ModelBaseSolo extends MMM_ModelBaseNihil implements MMM_IModelB
 			} else {
 				GL11.glDepthMask(true);
 			}
+			GL11.glEnable(GL11.GL_ALPHA_TEST);
+//			GL11.glDepthMask(true);
 			
 			MMM_Client.setLightmapTextureCoords(61680);
 //			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);

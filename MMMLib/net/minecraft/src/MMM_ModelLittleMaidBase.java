@@ -133,7 +133,7 @@ public abstract class MMM_ModelLittleMaidBase extends MMM_ModelMultiMMMBase {
 
 	@Override
 	public float getyOffset() {
-		return 1.215F;
+		return getHeight() * 0.9F;
 	}
 
 	@Override

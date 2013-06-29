@@ -45,6 +45,10 @@ public class MMM_TextureManager {
 	public static final int tx_armor1		= 0x40; //64;
 	public static final int tx_armor2		= 0x50; //80;
 	public static final int tx_eye			= 0x60; //96;
+	public static final int tx_eyecontract	= 0x60; //96;
+	public static final int tx_eyewild		= 0x70; //112;
+	public static final int tx_armor1light	= 0x80; //128;
+	public static final int tx_armor2light	= 0x90; //144;
 	public static String[] armorFilenamePrefix;
 	/**
 	 * 旧タイプのファイル名
@@ -376,10 +380,10 @@ public class MMM_TextureManager {
 						"%04x,%04x,%f,%f,%f,%f,%s",
 						lbox.getContractColorBits(),
 						lbox.getWildColorBits(),
-						lbox.getHeight(),
-						lbox.getWidth(),
-						lbox.getYOffset(),
-						lbox.getMountedYOffset(),
+						lbox.getHeight(null),
+						lbox.getWidth(null),
+						lbox.getYOffset(null),
+						lbox.getMountedYOffset(null),
 						lbox.textureName));
 				bw.newLine();
 			}
@@ -973,10 +977,10 @@ public class MMM_TextureManager {
 		ldata[1] = (byte)pBufIndex;
 		MMM_Helper.setShort(ldata, 2, pBox.getContractColorBits());
 		MMM_Helper.setShort(ldata, 4, pBox.getWildColorBits());
-		MMM_Helper.setFloat(ldata, 6, pBox.getHeight());
-		MMM_Helper.setFloat(ldata, 10, pBox.getWidth());
-		MMM_Helper.setFloat(ldata, 14, pBox.getYOffset());
-		MMM_Helper.setFloat(ldata, 18, pBox.getMountedYOffset());
+		MMM_Helper.setFloat(ldata, 6, pBox.getHeight(null));
+		MMM_Helper.setFloat(ldata, 10, pBox.getWidth(null));
+		MMM_Helper.setFloat(ldata, 14, pBox.getYOffset(null));
+		MMM_Helper.setFloat(ldata, 18, pBox.getMountedYOffset(null));
 		MMM_Helper.setStr(ldata, 22, pBox.textureName);
 		MMM_Client.sendToServer(ldata);
 		mod_MMM_MMMLib.Debug("Server_GetTextureIndex: %s", pBox.textureName);
@@ -1084,10 +1088,10 @@ public class MMM_TextureManager {
 		MMM_Helper.setShort(ldata, 1, lindex);
 		MMM_Helper.setShort(ldata, 3, lboxserver.getContractColorBits());
 		MMM_Helper.setShort(ldata, 5, lboxserver.getWildColorBits());
-		MMM_Helper.setFloat(ldata, 7, lboxserver.getHeight());
-		MMM_Helper.setFloat(ldata, 11, lboxserver.getWidth());
-		MMM_Helper.setFloat(ldata, 15, lboxserver.getYOffset());
-		MMM_Helper.setFloat(ldata, 19, lboxserver.getMountedYOffset());
+		MMM_Helper.setFloat(ldata, 7, lboxserver.getHeight(null));
+		MMM_Helper.setFloat(ldata, 11, lboxserver.getWidth(null));
+		MMM_Helper.setFloat(ldata, 15, lboxserver.getYOffset(null));
+		MMM_Helper.setFloat(ldata, 19, lboxserver.getMountedYOffset(null));
 		MMM_Helper.setStr(ldata, 23, lboxserver.textureName);
 		mod_MMM_MMMLib.sendToClient(pHandler, ldata);
 		mod_MMM_MMMLib.Debug("SetTexturePackName:%04x - %s", lindex, lboxserver.textureName);

@@ -10,7 +10,11 @@ public class MMM_ModelPlate extends MMM_ModelBoxBase {
 	public static final int planeZYInv	= 5;
 	public static final int planeXZInv	= 6;
 
-	// こちらを使用して下さい。
+	/*
+	 * こちらを使用して下さい。
+	 * ボックスを作った時と同じマッピングになるように調整してます。
+	 * マッピング的に左右の面は自力で移動しなければ反転されません、前後が逆になります。
+	 */
 	public static final int planeXYFront	= 0x10;
 	public static final int planeXYBack		= 0x14;
 	public static final int planeZYRight	= 0x11;
@@ -131,32 +135,40 @@ public class MMM_ModelPlate extends MMM_ModelBoxBase {
 		case planeXYFront:
 		case planeZYRight:
 			vertexPositions = new PositionTextureVertex[] {
-					new PositionTextureVertex(pX, pY, lz, 0F, 0F),
-					new PositionTextureVertex(lx, pY, pZ, 0F, 8F),
-					new PositionTextureVertex(lx, ly, pZ, 8F, 8F),
-					new PositionTextureVertex(pX, ly, lz, 8F, 0F)
+					new PositionTextureVertex(pX, pY, lz, getU(modelrenderer, pTextureX), getV(modelrenderer, pTextureY)),
+					new PositionTextureVertex(pX, ly, lz, getU(modelrenderer, pTextureX), getV(modelrenderer, pTextureY + pHeight)),
+					new PositionTextureVertex(lx, ly, pZ, getU(modelrenderer, pTextureX + pWidth), getV(modelrenderer, pTextureY + pHeight)),
+					new PositionTextureVertex(lx, pY, pZ, getU(modelrenderer, pTextureX + pWidth), getV(modelrenderer, pTextureY))
 			};
 			lotherplane = false;
 			break;
 		case planeXYBack:
 		case planeZYLeft:
 			vertexPositions = new PositionTextureVertex[] {
-					new PositionTextureVertex(lx, pY, lz, 0F, 0F),
-					new PositionTextureVertex(pX, pY, pZ, 0F, 8F),
-					new PositionTextureVertex(pX, ly, pZ, 8F, 8F),
-					new PositionTextureVertex(lx, ly, lz, 8F, 0F)
+					new PositionTextureVertex(lx, pY, pZ, getU(modelrenderer, pTextureX), getV(modelrenderer, pTextureY)),
+					new PositionTextureVertex(lx, ly, pZ, getU(modelrenderer, pTextureX), getV(modelrenderer, pTextureY + pHeight)),
+					new PositionTextureVertex(pX, ly, lz, getU(modelrenderer, pTextureX + pWidth), getV(modelrenderer, pTextureY + pHeight)),
+					new PositionTextureVertex(pX, pY, lz, getU(modelrenderer, pTextureX + pWidth), getV(modelrenderer, pTextureY))
 			};
 			lotherplane = false;
 			break;
 		case planeXZTop:
+			vertexPositions = new PositionTextureVertex[] {
+					new PositionTextureVertex(pX, pY, lz, getU(modelrenderer, pTextureX), getV(modelrenderer, pTextureY)),
+					new PositionTextureVertex(pX, ly, pZ, getU(modelrenderer, pTextureX), getV(modelrenderer, pTextureY + pHeight)),
+					new PositionTextureVertex(lx, ly, pZ, getU(modelrenderer, pTextureX + pWidth), getV(modelrenderer, pTextureY + pHeight)),
+					new PositionTextureVertex(lx, pY, lz, getU(modelrenderer, pTextureX + pWidth), getV(modelrenderer, pTextureY))
+			};
+			lotherplane = false;
+			break;
 		case planeXZBottom:
 			vertexPositions = new PositionTextureVertex[] {
-					new PositionTextureVertex(pX, pY, lz, 0F, 8F),
-					new PositionTextureVertex(lx, pY, lz, 8F, 8F),
-					new PositionTextureVertex(lx, ly, pZ, 0F, 0F),
-					new PositionTextureVertex(pX, ly, pZ, 8F, 0F)
+					new PositionTextureVertex(lx, pY, lz, getU(modelrenderer, pTextureX + pWidth), getV(modelrenderer, pTextureY)),
+					new PositionTextureVertex(lx, ly, pZ, getU(modelrenderer, pTextureX + pWidth), getV(modelrenderer, pTextureY + pHeight)),
+					new PositionTextureVertex(pX, ly, pZ, getU(modelrenderer, pTextureX), getV(modelrenderer, pTextureY + pHeight)),
+					new PositionTextureVertex(pX, pY, lz, getU(modelrenderer, pTextureX), getV(modelrenderer, pTextureY))
 			};
-//			lotherplane = false;
+			lotherplane = false;
 			break;
 		case planeXY:
 		case planeZY:
@@ -174,28 +186,50 @@ public class MMM_ModelPlate extends MMM_ModelBoxBase {
 			break;
 		}
 		
-		if (lotherplane) {
-			// 逆周り
+		if ((pPlane & 0x0010) > 0) {
 			quadList[0] = new TexturedQuad(
 					new PositionTextureVertex[] {
 							vertexPositions[0],
 							vertexPositions[1],
 							vertexPositions[2],
-							vertexPositions[3] },
-					pTextureX, pTextureY, pTextureX + pWidth, pTextureY + pHeight,
-					modelrenderer.textureWidth,
-					modelrenderer.textureHeight);
+							vertexPositions[3] });
+			if (modelrenderer.mirror) {
+				quadList[0].flipFace();
+			}
 		} else {
-			quadList[0] = new TexturedQuad(
-					new PositionTextureVertex[] {
-							vertexPositions[1],
-							vertexPositions[0],
-							vertexPositions[3],
-							vertexPositions[2] },
-					pTextureX, pTextureY, pTextureX + pWidth, pTextureY + pHeight,
-					modelrenderer.textureWidth,
-					modelrenderer.textureHeight);
+			if (lotherplane) {
+				// 逆周り
+				quadList[0] = new TexturedQuad(
+						new PositionTextureVertex[] {
+								vertexPositions[0],
+								vertexPositions[1],
+								vertexPositions[2],
+								vertexPositions[3] },
+						pTextureX, pTextureY, pTextureX + pWidth, pTextureY + pHeight,
+						modelrenderer.textureWidth,
+						modelrenderer.textureHeight);
+			} else {
+				quadList[0] = new TexturedQuad(
+						new PositionTextureVertex[] {
+								vertexPositions[1],
+								vertexPositions[0],
+								vertexPositions[3],
+								vertexPositions[2] },
+						pTextureX, pTextureY, pTextureX + pWidth, pTextureY + pHeight,
+						modelrenderer.textureWidth,
+						modelrenderer.textureHeight);
+			}
 		}
+	}
+
+	public float getU(MMM_ModelRenderer pRender, int pU) {
+		float lf = (float)pU / pRender.textureWidth;
+		return lf;
+	}
+
+	public float getV(MMM_ModelRenderer pRender, int pV) {
+		float lf = (float)pV / pRender.textureHeight;
+		return lf;
 	}
 
 }

@@ -66,19 +66,19 @@ public abstract class MMM_TextureBoxBase {
 		return getRandomColor(getContractColorBits(), pRand);
 	}
 
-	public float getHeight() {
+	public float getHeight(MMM_IModelCaps pEntityCaps) {
 		return modelHeight;
 	}
 
-	public float getWidth() {
+	public float getWidth(MMM_IModelCaps pEntityCaps) {
 		return modelWidth;
 	}
 
-	public float getYOffset() {
+	public float getYOffset(MMM_IModelCaps pEntityCaps) {
 		return modelYOffset;
 	}
 
-	public float getMountedYOffset() {
+	public float getMountedYOffset(MMM_IModelCaps pEntityCaps) {
 		return modelMountedYOffset;
 	}
 

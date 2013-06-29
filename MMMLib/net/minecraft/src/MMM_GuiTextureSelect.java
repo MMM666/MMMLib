@@ -8,11 +8,9 @@ import org.lwjgl.opengl.GL11;
 public class MMM_GuiTextureSelect extends GuiScreen {
 
 	private String screenTitle = "Texture Select";
-	private boolean lastDebug;
 	protected GuiScreen owner;
 	protected MMM_GuiTextureSlot selectPanel;
 	protected GuiButton modeButton[] = new GuiButton[2];
-//	protected LMM_EntityLittleMaid theMaid;
 	protected MMM_ITextureEntity target;
 	public int canSelectColor;
 	public int selectColor;
@@ -25,8 +23,6 @@ public class MMM_GuiTextureSelect extends GuiScreen {
 		canSelectColor = pColor;
 		selectColor = pTarget.getColor();
 		toServer = pToServer;
-//		lastDebug = mod_LMM_littleMaidMob.DebugMessage;
-//		mod_LMM_littleMaidMob.DebugMessage = false;
 	}
 
 	@Override
@@ -47,12 +43,6 @@ public class MMM_GuiTextureSelect extends GuiScreen {
 	}
 
 	@Override
-	public void onGuiClosed() {
-		super.onGuiClosed();
-//		mod_LMM_littleMaidMob.DebugMessage = lastDebug;
-	}
-
-	@Override
 	public void drawScreen(int par1, int par2, float par3) {
 		drawDefaultBackground();
 		selectPanel.drawScreen(par1, par2, par3);
@@ -70,7 +60,6 @@ public class MMM_GuiTextureSelect extends GuiScreen {
 		MMM_TextureBox lbox = selectPanel.getSelectedBox();
 		GL11.glTranslatef(width / 2 - 115F, height - 5F, 100F);
 		GL11.glScalef(60F, -60F, 60F);
-//		selectPanel.maid.maidContract = true;
 		selectPanel.entity.renderYawOffset = -25F;
 		selectPanel.entity.rotationYawHead = -10F;
 		String ltex[];
@@ -111,7 +100,6 @@ public class MMM_GuiTextureSelect extends GuiScreen {
 			selectPanel.setMode(true);
 			break;
 		case 200:
-//			mod_LMM_littleMaidMob.DebugMessage = lastDebug;
 			boolean lflag = false;
 			target.setColor(selectColor);
 			if (selectPanel.texsel[0] > -1) {
@@ -120,8 +108,8 @@ public class MMM_GuiTextureSelect extends GuiScreen {
 			if (selectPanel.texsel[1] > -1) {
 				target.getTextureBox()[1] = selectPanel.getSelectedBox(true);
 			}
-//			theMaid.setTextureNames();
 			if (toServer) {
+/*
 				if (selectColor != selectPanel.color) {
 					// Fî•ñ‚Ìİ’è
 //					theMaid.maidColor = selectPanel.color | 0x010000 | (selectColor << 8);
@@ -131,12 +119,11 @@ public class MMM_GuiTextureSelect extends GuiScreen {
 					ldata[1] = (byte)selectColor;
 					LMM_Net.sendToServer(ldata);
 				}
+				*/
 				MMM_TextureManager.instance.postSetTexturePack(target, selectColor, target.getTextureBox());
 //				theMaid.sendTextureToServer();
 			} else {
 				MMM_TextureBox lboxs[] = new MMM_TextureBox[2];
-//				lboxs[0] = (MMM_TextureBox)selectPanel.entity.getTextureBox()[0];
-//				lboxs[1] = (MMM_TextureBox)selectPanel.entity.getTextureBox()[1];
 				lboxs[0] = (MMM_TextureBox)target.getTextureBox()[0];
 				lboxs[1] = (MMM_TextureBox)target.getTextureBox()[1];
 				target.setTexturePackName(lboxs);
@@ -147,12 +134,6 @@ public class MMM_GuiTextureSelect extends GuiScreen {
 			mc.displayGuiScreen(owner);
 			break;
 		}
-	}
-
-	@Override
-	protected void mouseClicked(int par1, int par2, int par3) {
-		super.mouseClicked(par1, par2, par3);
-		
 	}
 
 }
