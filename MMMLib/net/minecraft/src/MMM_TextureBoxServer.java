@@ -10,10 +10,12 @@ public class MMM_TextureBoxServer extends MMM_TextureBoxBase {
 	}
 
 	public MMM_TextureBoxServer(MMM_TextureBox pBox) {
+		localBox		= pBox;
 		contractColor	= pBox.getContractColorBits();
 		wildColor		= pBox.getWildColorBits();
 		textureName		= pBox.textureName;
-		localBox		= pBox;
+		isUpdateSize = (pBox.models != null && pBox.models[0] != null) ?
+				MMM_ModelCapsHelper.getCapsValueBoolean(pBox.models[0], MMM_IModelCaps.caps_isUpdateSize) : false;
 /*
 		if (pBox.models != null) {
 			modelHeight			= pBox.models[0].getHeight(null);

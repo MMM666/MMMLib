@@ -339,8 +339,8 @@ public class MMM_TextureManager {
 							lbox = new MMM_TextureBoxServer();
 							textureServer.add(lbox);
 						}
-						lbox.contractColor	= Integer.valueOf(lt[0], 16);
-						lbox.wildColor		= Integer.valueOf(lt[1], 16);
+						lbox.contractColor	= MMM_Helper.getHexToInt(lt[0]);
+						lbox.wildColor		= MMM_Helper.getHexToInt(lt[1]);
 						lbox.setModelSize(
 								Float.valueOf(lt[2]),
 								Float.valueOf(lt[3]),

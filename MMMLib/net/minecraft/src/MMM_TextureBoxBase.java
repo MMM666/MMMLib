@@ -13,6 +13,7 @@ public abstract class MMM_TextureBoxBase {
 	protected float modelWidth;
 	protected float modelYOffset;
 	protected float modelMountedYOffset;
+	protected boolean isUpdateSize;
 
 
 	public void setModelSize(float pHeight, float pWidth, float pYOffset, float pMountedYOffset) {
@@ -69,17 +70,29 @@ public abstract class MMM_TextureBoxBase {
 	public float getHeight(MMM_IModelCaps pEntityCaps) {
 		return modelHeight;
 	}
+	public float getHeight() {
+		return getHeight(null);
+	}
 
 	public float getWidth(MMM_IModelCaps pEntityCaps) {
 		return modelWidth;
+	}
+	public float getWidth() {
+		return getWidth(null);
 	}
 
 	public float getYOffset(MMM_IModelCaps pEntityCaps) {
 		return modelYOffset;
 	}
+	public float getYOffset() {
+		return getYOffset(null);
+	}
 
 	public float getMountedYOffset(MMM_IModelCaps pEntityCaps) {
 		return modelMountedYOffset;
+	}
+	public float getMountedYOffset() {
+		return getMountedYOffset(null);
 	}
 
 }

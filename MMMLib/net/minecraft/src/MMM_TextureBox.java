@@ -64,6 +64,7 @@ public class MMM_TextureBox extends MMM_TextureBoxBase {
 		modelName = pModelName;
 		models = pModels == null ? pDefModels : pModels;
 		textureName = (new StringBuilder()).append(packegeName).append("_").append(modelName).toString();
+		isUpdateSize = (models != null && models[0] != null) ? MMM_ModelCapsHelper.getCapsValueBoolean(models[0], MMM_IModelCaps.caps_isUpdateSize) : false;
 	}
 
 	/**
@@ -192,6 +193,7 @@ public class MMM_TextureBox extends MMM_TextureBoxBase {
 		lbox.textures = textures;
 		lbox.armors = armors;
 		lbox.models = models;
+		lbox.isUpdateSize = lbox.isUpdateSize;
 		
 		return lbox;
 	}

@@ -8,6 +8,7 @@ public class MMM_ModelBaseSolo extends MMM_ModelBaseNihil implements MMM_IModelB
 
 	public MMM_ModelMultiBase model;
 	public String[] textures;
+	public static final String[] blanks = new String[0];
 
 
 	public MMM_ModelBaseSolo(RenderLiving pRender) {
@@ -48,7 +49,7 @@ public class MMM_ModelBaseSolo extends MMM_ModelBaseNihil implements MMM_IModelB
 			model.setCapsValue(caps_renderBody, entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
 		} else {
 			// ’Êí
-			if (textures[0] != null) {
+			if (textures.length > 0 && textures[0] != null) {
 				renderLiving.loadTexture(textures[0]);
 			}
 			model.render(entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
@@ -59,27 +60,30 @@ public class MMM_ModelBaseSolo extends MMM_ModelBaseNihil implements MMM_IModelB
 			renderLiving.loadTexture(textures[1]);
 			float var4 = 1.0F;
 			GL11.glEnable(GL11.GL_BLEND);
-			GL11.glDisable(GL11.GL_ALPHA_TEST);
+//			GL11.glDisable(GL11.GL_ALPHA_TEST);
+			GL11.glEnable(GL11.GL_ALPHA_TEST);
 			GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
+//			GL11.glDisable(GL11.GL_LIGHTING);
 			
 			if (par1Entity.isInvisible()) {
 				GL11.glDepthMask(false);
 			} else {
 				GL11.glDepthMask(true);
 			}
-			GL11.glEnable(GL11.GL_ALPHA_TEST);
 //			GL11.glDepthMask(true);
 			
-			MMM_Client.setLightmapTextureCoords(61680);
+			MMM_Client.setLightmapTextureCoords(0x00f0);//61680
 //			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, var4);
 			model.render(entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
 			
 			MMM_Client.setLightmapTextureCoords(par1Entity.getBrightnessForRender(par2));
 			
+//			GL11.glEnable(GL11.GL_LIGHTING);
 			GL11.glDisable(GL11.GL_BLEND);
 			GL11.glEnable(GL11.GL_ALPHA_TEST);
 		}
+		textures = blanks;
 	}
 
 	@Override

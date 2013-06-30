@@ -21,6 +21,8 @@ public interface MMM_IModelCaps {
 	public static final int caps_onGround			= 0x0001;
 	public static final int caps_isRiding			= 0x0002;
 	public static final int caps_isChild			= 0x0003;
+	/** リアルタイムでEntityのサイズを更新する **/
+	public static final int caps_isUpdateSize		= 0x0004;
 	// ModelBiped
 	public static final int caps_heldItemLeft		= 0x0010;
 	public static final int caps_heldItemRight		= 0x0011;

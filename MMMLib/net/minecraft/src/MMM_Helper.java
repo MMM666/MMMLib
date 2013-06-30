@@ -614,5 +614,18 @@ public class MMM_Helper {
 		return false;
 	}
 
+	/**
+	 * 16i”‚Ì•¶š—ñ‚ğInt‚Ö•ÏŠ·‚·‚éB
+	 * 0xffffffff‘ÎôB
+	 * @param pValue
+	 * @return
+	 */
+	public static int getHexToInt(String pValue) {
+		String ls = "00000000".concat(pValue);
+		int llen = ls.length();
+		int li = Integer.parseInt(ls.substring(llen - 4, llen), 16);
+		int lj = Integer.parseInt(ls.substring(llen - 8, llen - 4), 16);
+		return (lj << 16) | li;
+	}
 
 }

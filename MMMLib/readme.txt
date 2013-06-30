@@ -1,4 +1,4 @@
-MMMのMOD用ライブラリ MMMLib 1.5.2 Rev6
+MMMのMOD用ライブラリ MMMLib 1.5.2 Rev7
 
 拙作のMODで使用されるライブラリです。
 とりあえず一緒に入れておいて下さい。
@@ -35,14 +35,21 @@ MMMのMOD用ライブラリ MMMLib 1.5.2 Rev6
 
 
 変更点
+	20130630.1	1.5.2 Rev7 更新
+				ModelPlate調整。
+				発光パーツの透過処理を変更。
+				発光テクスチャ用にパラメータ追加、処理は未だ未実装。
+				可変モデル対応用に一部関数を変更。
+				ModelMultiBaseの取得パラメーター関数を追加変更。
+				MMM_HelperにreplaceBlockを追加。
+
+
+
 	20130618.1	1.5.2 Rev6 更新
 				モデル表示用のクラスとしてModelBaseSoloの追加。
 				IModelCapsにパラメーターを追加。
 				ドキュメントの一部をLMMから移動。
 				AlphaBlendの設定をLMMから移動。
-
-
-
 	20130611.1	1.5.2 Rev5 更新
 				EntityLiving用のEntityCapsを追加。
 				モデル選択GUIをこちらへ移動。

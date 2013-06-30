@@ -385,6 +385,8 @@ public class MMM_ModelLittleMaid_RX0 extends MMM_ModelLittleMaidBase {
 		switch (pIndex) {
 		case caps_PartsStrings:
 			return "DestroyMode,mimiSkirt,noSkirt";
+		case caps_isUpdateSize:
+			return true;
 		}
 		
 		return super.getCapsValue(pIndex, pArg);
