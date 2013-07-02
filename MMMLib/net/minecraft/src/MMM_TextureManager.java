@@ -277,9 +277,9 @@ public class MMM_TextureManager {
 			}
 		}
 		mod_MMM_MMMLib.Debug("Loaded Texture Lists.(%d)", textures.size());
-//		for (MMM_TextureBox lbox : textures) {
-//			mod_MMM_MMMLib.Debug("texture: %s(%s) - hasModel:%b", lbox.textureName, lbox.fileName, lbox.models != null);
-//		}
+		for (MMM_TextureBox lbox : textures) {
+			mod_MMM_MMMLib.Debug("texture: %s(%s) - hasModel:%b", lbox.textureName, lbox.fileName, lbox.models != null);
+		}
 		for (int li = textures.size() - 1; li >= 0; li--) {
 			if (textures.get(li).models == null) {
 				textures.remove(li);
