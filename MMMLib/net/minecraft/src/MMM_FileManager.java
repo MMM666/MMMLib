@@ -4,17 +4,14 @@ import java.io.File;
 import java.net.JarURLConnection;
 import java.net.URI;
 import java.net.URL;
-import java.net.URLConnection;
 import java.security.CodeSource;
 import java.security.ProtectionDomain;
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.jar.JarFile;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.server.MinecraftServer;
 
 /**
@@ -31,7 +28,7 @@ public class MMM_FileManager {
 	public static void init() {
 		// 初期化
 		if (MMM_Helper.isClient) {
-			minecraftDir = MMM_Helper.mc.getMinecraftDir();
+			minecraftDir = MMM_Helper.mc.mcDataDir;
 		} else {
 			minecraftDir = MinecraftServer.getServer().getFile("");
 		}
@@ -95,9 +92,9 @@ public class MMM_FileManager {
 		// modsディレクトリの獲得
 		File lmod;
 		if (MMM_Helper.isClient) {
-			lmod = new File(MMM_Helper.mc.getMinecraftDir(), "/mods/");
+			lmod = new File(minecraftDir, "/mods/");
 		} else {
-			lmod = MinecraftServer.getServer().getFile("mods/");
+			lmod = new File(minecraftDir, "mods/");
 		}
 		
 		mod_MMM_MMMLib.Debug("getModFile:[%s]:%s", pname, lmod.getAbsolutePath());

@@ -23,10 +23,7 @@ public class MMM_RenderItem extends RenderItem {
 		if (!lirm.isRenderItemWorld()) return false;
 		
 		// テクスチャ
-		String ltex = lirm.getRenderTexture();
-		if (ltex != null) {
-			MMM_Helper.mc.renderEngine.bindTexture(ltex);
-		}
+		MMM_Client.setTexture(lirm.getRenderTexture());
 		// 描画
 		random.setSeed(187L);
 		GL11.glPushMatrix();
@@ -76,6 +73,7 @@ public class MMM_RenderItem extends RenderItem {
 		super.doRender(entity, d, d1, d2, f, f1);
 	}
 
+	/*
 	@Override
 	public void renderItemIntoGUI(FontRenderer pFontrenderer, RenderEngine pRenderengine, ItemStack pItemStack, int pX, int pY) {
 		try {
@@ -88,5 +86,5 @@ public class MMM_RenderItem extends RenderItem {
 		}
 		super.renderItemIntoGUI(pFontrenderer, pRenderengine, pItemStack, pX, pY);
 	}
-
+*/
 }

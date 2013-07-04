@@ -7,8 +7,8 @@ import org.lwjgl.opengl.GL11;
 public class MMM_ModelBaseSolo extends MMM_ModelBaseNihil implements MMM_IModelBaseMMM {
 
 	public MMM_ModelMultiBase model;
-	public String[] textures;
-	public static final String[] blanks = new String[0];
+	public ResourceLocation[] textures;
+	public static final ResourceLocation[] blanks = new ResourceLocation[0];
 
 
 	public MMM_ModelBaseSolo(RenderLiving pRender) {
@@ -16,7 +16,7 @@ public class MMM_ModelBaseSolo extends MMM_ModelBaseNihil implements MMM_IModelB
 	}
 
 	@Override
-	public void setLivingAnimations(EntityLiving par1EntityLiving, float par2, float par3, float par4) {
+	public void setLivingAnimations(EntityLivingBase par1EntityLiving, float par2, float par3, float par4) {
 		if (model != null) {
 			model.setLivingAnimations(entityCaps, par2, par3, par4);
 		}
@@ -42,22 +42,22 @@ public class MMM_ModelBaseSolo extends MMM_ModelBaseNihil implements MMM_IModelB
 			model.setRotationAngles(par2, par3, par4, par5, par6, par7, entityCaps);
 			// Face
 			// TODO:テクスチャのロードはなんか考える。
-			renderLiving.loadTexture(textures[2]);
+			MMM_Client.setTexture(textures[2]);
 			model.setCapsValue(caps_renderFace, entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
 			// Body
-			renderLiving.loadTexture(textures[0]);
+			MMM_Client.setTexture(textures[0]);
 			model.setCapsValue(caps_renderBody, entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
 		} else {
 			// 通常
 			if (textures.length > 0 && textures[0] != null) {
-				renderLiving.loadTexture(textures[0]);
+				MMM_Client.setTexture(textures[0]);
 			}
 			model.render(entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
 		}
 		isAlphablend = false;
 		if (textures.length > 1 && textures[1] != null) {
 			// 発光パーツ
-			renderLiving.loadTexture(textures[1]);
+			MMM_Client.setTexture(textures[1]);
 			float var4 = 1.0F;
 			GL11.glEnable(GL11.GL_BLEND);
 //			GL11.glDisable(GL11.GL_ALPHA_TEST);
@@ -103,7 +103,7 @@ public class MMM_ModelBaseSolo extends MMM_ModelBaseNihil implements MMM_IModelB
 	// IModelMMM追加分
 
 	@Override
-	public void renderItems(EntityLiving pEntity, Render pRender) {
+	public void renderItems(EntityLivingBase pEntity, Render pRender) {
 		if (model != null) {
 			model.renderItems(entityCaps);
 		}

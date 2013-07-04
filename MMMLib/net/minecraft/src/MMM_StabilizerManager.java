@@ -4,8 +4,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
-import net.minecraft.client.Minecraft;
-
 /**
  * 追加パーツたるスタビライザーを管理する
  */

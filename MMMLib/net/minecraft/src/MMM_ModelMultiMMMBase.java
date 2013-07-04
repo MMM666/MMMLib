@@ -83,7 +83,7 @@ public abstract class MMM_ModelMultiMMMBase extends MMM_ModelMultiBase {
 			if (les != null && les.equipPoint != null) {
 				MMM_ModelStabilizerBase lsb = les.stabilizer;
 				if (lsb.isLoadAnotherTexture()) {
-					render.loadTexture(lsb.getTexture());
+					MMM_Client.setTexture(lsb.getTexture());
 				}
 				les.equipPoint.loadMatrix();
 				lsb.render(this, null, par2, par3, ticksExisted, pheadYaw, pheadPitch, par7);

@@ -8,8 +8,8 @@ public abstract class MMM_ModelStabilizerBase extends MMM_ModelBase {
 	/**
 	 * 使用されるテクスチャを返す。
 	 */
-	public String getTexture() {
-		return "";
+	public ResourceLocation getTexture() {
+		return null;
 	}
 
 	/**

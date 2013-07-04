@@ -21,8 +21,7 @@ public class MMM_RenderModelMulti extends RenderLiving {
 		setRenderPassModel(modelFATT);
 	}
 
-	@Override
-	protected int shouldRenderPass(EntityLiving par1EntityLiving, int par2, float par3) {
+	protected int showArmorParts(EntityLiving par1EntityLiving, int par2, float par3) {
 		// アーマーの表示設定
 		modelFATT.renderParts = par2;
 		ItemStack is = par1EntityLiving.getCurrentArmor(par2);
@@ -33,9 +32,13 @@ public class MMM_RenderModelMulti extends RenderLiving {
 		
 		return -1;
 	}
+	@Override
+	protected int shouldRenderPass(EntityLivingBase par1EntityLiving, int par2, float par3) {
+		return showArmorParts((EntityLiving)par1EntityLiving, par2, par3);
+	}
 
 	@Override
-	protected void preRenderCallback(EntityLiving entityliving, float f) {
+	protected void preRenderCallback(EntityLivingBase entityliving, float f) {
 		Float lscale = (Float)modelMain.getCapsValue(MMM_IModelCaps.caps_ScaleFactor);
 		if (lscale != null) {
 			GL11.glScalef(lscale, lscale, lscale);
@@ -84,7 +87,7 @@ public class MMM_RenderModelMulti extends RenderLiving {
 	}
 
 	@Override
-	protected void renderModel(EntityLiving par1EntityLiving, float par2,
+	protected void renderModel(EntityLivingBase par1EntityLiving, float par2,
 			float par3, float par4, float par5, float par6, float par7) {
 		if (!par1EntityLiving.isInvisible()) {
 			modelMain.setArmorRendering(true);
@@ -96,15 +99,21 @@ public class MMM_RenderModelMulti extends RenderLiving {
 	}
 
 	@Override
-	protected void renderEquippedItems(EntityLiving par1EntityLiving, float par2) {
+	protected void renderEquippedItems(EntityLivingBase par1EntityLiving, float par2) {
 		// ハードポイントの描画
 		modelMain.renderItems(par1EntityLiving, this);
 		renderArrowsStuckInEntity(par1EntityLiving, par2);
 	}
 
 	@Override
-	protected void renderArrowsStuckInEntity(EntityLiving par1EntityLiving, float par2) {
+	protected void renderArrowsStuckInEntity(EntityLivingBase par1EntityLiving, float par2) {
 		MMM_Client.renderArrowsStuckInEntity(par1EntityLiving, par2, this, modelMain.model);
+	}
+
+	@Override
+	protected ResourceLocation func_110775_a(Entity var1) {
+		// テクスチャリソースを返すところだけれど、基本的に使用しない。
+		return null;
 	}
 
 }

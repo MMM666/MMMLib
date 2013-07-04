@@ -301,13 +301,11 @@ public class MMM_TextureManager {
 		MMM_TextureBox lbox = new MMM_TextureBox("Crafter_Steve", new String[] {"", "", ""});
 		lbox.fileName = "";
 		
-		lbox.textures.put(0x0c, "/mob/char.png");
+		lbox.addTexture(0x0c, "textures/entity", "/steve.png");
 		if (armorFilenamePrefix != null && armorFilenamePrefix.length > 0) {
 			for (String ls : armorFilenamePrefix) {
-				Map<Integer, String> lmap = new HashMap<Integer, String>();
-				lbox.armors.put(ls, lmap);
-				lmap.put(tx_armor1, (new StringBuilder()).append("/armor/").append(ls).append("_2.png").toString());
-				lmap.put(tx_armor2, (new StringBuilder()).append("/armor/").append(ls).append("_1.png").toString());
+				lbox.addTexture(tx_armor1, "textures/models/armor", (new StringBuilder()).append("/").append(ls).append("_2.png").toString());
+				lbox.addTexture(tx_armor2, "textures/models/armor", (new StringBuilder()).append("/").append(ls).append("_1.png").toString());
 			}
 		}
 		
@@ -473,19 +471,19 @@ public class MMM_TextureManager {
 				String pn = fname.substring(pSearch[1].length(), i);
 				pn = pn.replace('/', '.');
 				String fn = fname.substring(i);
-				int j = getIndex(fn);
-				if (j > -1) {
+				int lindex = getIndex(fn);
+				if (lindex > -1) {
 					String an = null;
-					if (j == tx_oldarmor1) {
-						j = tx_armor1;
+					if (lindex == tx_oldarmor1) {
+						lindex = tx_armor1;
 						an = "default";
 					}
-					if (j == tx_oldarmor2) {
-						j = tx_armor2;
+					if (lindex == tx_oldarmor2) {
+						lindex = tx_armor2;
 						an = "default";
 					}
-					if (j == tx_oldwild) {
-						j = tx_wild + 12;
+					if (lindex == tx_oldwild) {
+						lindex = tx_wild + 12;
 					}
 					MMM_TextureBox lts = getTextureBox(pn);
 					if (lts == null) {
@@ -493,7 +491,9 @@ public class MMM_TextureManager {
 						textures.add(lts);
 						mod_MMM_MMMLib.Debug("getTextureName-append-texturePack-%s", pn);
 					}
-					if (j >= 0x40 && j <= 0x5f) {
+					lts.addTexture(lindex, pn, fn);
+					/*
+					if (lindex >= 0x40 && lindex <= 0x5f) {
 						// ダメージドアーマー
 						Map<String, Map<Integer, String>> s = lts.armors;
 						if (an == null) an = fn.substring(1, fn.lastIndexOf('_'));
@@ -502,12 +502,13 @@ public class MMM_TextureManager {
 							ss = new HashMap<Integer, String>();
 							s.put(an, ss);
 						}
-						ss.put(j, fn);
+						ss.put(lindex, fn);
 					} else {
 						// 通常のテクスチャ
 						Map<Integer, String> s = lts.textures;
-						s.put(j, fn);
+						s.put(lindex, fn);
 					}
+					*/
 				}
 			}
 		}

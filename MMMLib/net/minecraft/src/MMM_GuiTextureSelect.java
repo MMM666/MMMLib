@@ -28,7 +28,7 @@ public class MMM_GuiTextureSelect extends GuiScreen {
 	@Override
 	public void initGui() {
 		selectPanel = new MMM_GuiTextureSlot(this);
-		selectPanel.registerScrollButtons(buttonList, 3, 4);
+		selectPanel.func_110509_d(3, 4);
 		buttonList.add(modeButton[0] = new GuiButton(100, width / 2 - 55, height - 55, 80, 20, "Texture"));
 		buttonList.add(modeButton[1] = new GuiButton(101, width / 2 + 30, height - 55, 80, 20, "Armor"));
 		buttonList.add(new GuiButton(200, width / 2 - 10, height - 30, 120, 20, "Select"));
@@ -62,14 +62,14 @@ public class MMM_GuiTextureSelect extends GuiScreen {
 		GL11.glScalef(60F, -60F, 60F);
 		selectPanel.entity.renderYawOffset = -25F;
 		selectPanel.entity.rotationYawHead = -10F;
-		String ltex[];
+		ResourceLocation ltex[];
 		if (selectPanel.mode) {
 			selectPanel.entity.textureBox[0] = selectPanel.blankBox;
 			selectPanel.entity.textureBox[1] = lbox;
 			ltex = selectPanel.entity.getTextures(1);
-			ltex[0] = ltex[1] = ltex[2] = ltex[3] = lbox.getArmorTextureName(true, "default", 0);
+			ltex[0] = ltex[1] = ltex[2] = ltex[3] = lbox.getArmorTextureName(MMM_TextureManager.tx_armor1, "default", 0);
 			ltex = selectPanel.entity.getTextures(2);
-			ltex[0] = ltex[1] = ltex[2] = ltex[3] = lbox.getArmorTextureName(false, "default", 0);
+			ltex[0] = ltex[1] = ltex[2] = ltex[3] = lbox.getArmorTextureName(MMM_TextureManager.tx_armor2, "default", 0);
 		} else {
 			selectPanel.entity.textureBox[0] = lbox;
 			selectPanel.entity.textureBox[1] = selectPanel.blankBox;

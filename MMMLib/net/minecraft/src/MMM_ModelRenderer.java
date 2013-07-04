@@ -441,7 +441,7 @@ public class MMM_ModelRenderer {
 			TileEntitySkullRenderer.skullRenderer.func_82393_a(-0.5F, -0.25F, -0.5F, 1, 180.0F,
 					itemstack.getItemDamage(), lsowner);
 		} else if (pRealBlock && itemstack.getItem() instanceof ItemBlock) {
-			pRender.loadTexture("/terrain.png");
+//			pRender.loadTexture("/terrain.png");
 //			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			GL11.glEnable(GL11.GL_CULL_FACE);
 			pRender.renderBlocks.renderBlockAsItem(
@@ -450,7 +450,7 @@ public class MMM_ModelRenderer {
 			GL11.glDisable(GL11.GL_CULL_FACE);
 		} else {
 			// アイテムに色付け
-			pRender.loadTexture("/gui/items.png");
+//			pRender.loadTexture("/gui/items.png");
 			for (int j = 0; j <= (itemstack.getItem()
 					.requiresMultipleRenderPasses() ? 1 : 0); j++) {
 				int k = itemstack.getItem().getColorFromItemStack(itemstack, j);

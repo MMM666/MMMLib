@@ -1,22 +1,16 @@
 package net.minecraft.src;
 
 import static net.minecraft.src.mod_MMM_MMMLib.Debug;
-import java.io.ByteArrayInputStream;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.swing.DebugGraphics;
-
-import net.minecraft.client.Minecraft;
 
 public class MMM_Helper {
 

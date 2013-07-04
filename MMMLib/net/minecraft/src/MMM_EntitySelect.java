@@ -9,16 +9,17 @@ public class MMM_EntitySelect extends EntityLiving implements MMM_IModelCaps, MM
 	public MMM_TextureBoxBase textureBox[] = new MMM_TextureBoxBase[] {
 			new MMM_TextureBox(), new MMM_TextureBox() };
 	public boolean contract;
-	public String textures[] = new String[2];
-	public String texturesInner[] = new String[] { "", "" , "" , "" };
-	public String texturesOuter[] = new String[] { "", "" , "" , "" };
+	public ResourceLocation textures[][] = new ResourceLocation[][] {
+			{ null, null },
+			{ null, null , null , null },
+			{ null, null , null , null }
+	};
 	protected MMM_EntityCaps entityCaps;
 
 
 
 	public MMM_EntitySelect(World par1World) {
 		super(par1World);
-		textures[0] = super.texture;
 		entityCaps = new MMM_EntityCaps(this);
 	}
 
@@ -32,16 +33,12 @@ public class MMM_EntitySelect extends EntityLiving implements MMM_IModelCaps, MM
 		dataWatcher.addObject(20, Integer.valueOf(0));
 	}
 
-	@Override
-	public String getTexture() {
-		return textures[0];
-	}
-
+/*
 	@Override
 	public int getMaxHealth() {
 		return 20;
 	}
-
+*/
 	@Override
 	public float getBrightness(float par1) {
 		return worldObj == null ? 0.0F : super.getBrightness(par1);
@@ -96,15 +93,16 @@ public class MMM_EntitySelect extends EntityLiving implements MMM_IModelCaps, MM
 	 * テクスチャのファイル名を獲得
 	 */
 	protected void setTextureNames() {
-		textures[0] = ((MMM_TextureBox)textureBox[0]).getTextureName(color + (contract ? 0 : MMM_TextureManager.tx_wild));
-		texturesInner[0] = ((MMM_TextureBox)textureBox[1]).getArmorTextureName(true, getCurrentArmor(0));
-		texturesInner[1] = ((MMM_TextureBox)textureBox[1]).getArmorTextureName(true, getCurrentArmor(1));
-		texturesInner[2] = ((MMM_TextureBox)textureBox[1]).getArmorTextureName(true, getCurrentArmor(2));
-		texturesInner[3] = ((MMM_TextureBox)textureBox[1]).getArmorTextureName(true, getCurrentArmor(3));
-		texturesOuter[0] = ((MMM_TextureBox)textureBox[1]).getArmorTextureName(false, getCurrentArmor(0));
-		texturesOuter[1] = ((MMM_TextureBox)textureBox[1]).getArmorTextureName(false, getCurrentArmor(1));
-		texturesOuter[2] = ((MMM_TextureBox)textureBox[1]).getArmorTextureName(false, getCurrentArmor(2));
-		texturesOuter[3] = ((MMM_TextureBox)textureBox[1]).getArmorTextureName(false, getCurrentArmor(3));
+		textures[0][0] = ((MMM_TextureBox)textureBox[0]).getTextureName(color + (contract ? 0 : MMM_TextureManager.tx_wild));
+		textures[0][1] = ((MMM_TextureBox)textureBox[0]).getTextureName(color + (contract ? MMM_TextureManager.tx_eyecontract : MMM_TextureManager.tx_eyewild));
+		textures[1][0] = ((MMM_TextureBox)textureBox[1]).getArmorTextureName(MMM_TextureManager.tx_armor1, getCurrentArmor(0));
+		textures[1][1] = ((MMM_TextureBox)textureBox[1]).getArmorTextureName(MMM_TextureManager.tx_armor1, getCurrentArmor(1));
+		textures[1][2] = ((MMM_TextureBox)textureBox[1]).getArmorTextureName(MMM_TextureManager.tx_armor1, getCurrentArmor(2));
+		textures[1][3] = ((MMM_TextureBox)textureBox[1]).getArmorTextureName(MMM_TextureManager.tx_armor1, getCurrentArmor(3));
+		textures[2][0] = ((MMM_TextureBox)textureBox[1]).getArmorTextureName(MMM_TextureManager.tx_armor2, getCurrentArmor(0));
+		textures[2][1] = ((MMM_TextureBox)textureBox[1]).getArmorTextureName(MMM_TextureManager.tx_armor2, getCurrentArmor(1));
+		textures[2][2] = ((MMM_TextureBox)textureBox[1]).getArmorTextureName(MMM_TextureManager.tx_armor2, getCurrentArmor(2));
+		textures[2][3] = ((MMM_TextureBox)textureBox[1]).getArmorTextureName(MMM_TextureManager.tx_armor2, getCurrentArmor(3));
 	}
 
 	@Override
@@ -138,28 +136,13 @@ public class MMM_EntitySelect extends EntityLiving implements MMM_IModelCaps, MM
 	}
 
 	@Override
-	public void setTextures(int pIndex, String[] pNames) {
-		switch (pIndex) {
-		case 0:
-			textures = pNames;
-		case 1:
-			texturesInner = pNames;
-		case 2:
-			texturesOuter = pNames;
-		}
+	public void setTextures(int pIndex, ResourceLocation[] pNames) {
+		textures[pIndex] = pNames;
 	}
 
 	@Override
-	public String[] getTextures(int pIndex) {
-		switch (pIndex) {
-		case 0:
-			return textures;
-		case 1:
-			return texturesInner;
-		case 2:
-			return texturesOuter;
-		}
-		return null;
+	public ResourceLocation[] getTextures(int pIndex) {
+		return textures[pIndex];
 	}
 
 	@Override

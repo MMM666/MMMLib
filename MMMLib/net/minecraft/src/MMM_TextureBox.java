@@ -13,11 +13,11 @@ public class MMM_TextureBox extends MMM_TextureBoxBase {
 	/**
 	 * テクスチャファイルのファイル名リスト。
 	 */
-	public Map<Integer, String> textures;
+	public Map<Integer, ResourceLocation> textures;
 	/**
 	 * アーマーファイルのファイル名リスト。
 	 */
-	public Map<String, Map<Integer, String>> armors;
+	public Map<String, Map<Integer, ResourceLocation>> armors;
 	/**
 	 * モデル指定詞
 	 */
@@ -38,8 +38,8 @@ public class MMM_TextureBox extends MMM_TextureBoxBase {
 
 
 	public MMM_TextureBox() {
-		textures = new HashMap<Integer, String>();
-		armors = new TreeMap<String, Map<Integer, String>>();
+		textures = new HashMap<Integer, ResourceLocation>();
+		armors = new TreeMap<String, Map<Integer, ResourceLocation>>();
 		modelHeight = modelWidth = modelYOffset = modelMountedYOffset = 0.0F;
 		contractColor = -1;
 		wildColor = -1;
@@ -71,19 +71,20 @@ public class MMM_TextureBox extends MMM_TextureBoxBase {
 	 * テクスチャのフルパスを返す。
 	 * 登録インデックスが無い場合はNULLを返す。
 	 */
-	public String getTextureName(int pIndex) {
+	public ResourceLocation getTextureName(int pIndex) {
 		if (textures.containsKey(pIndex)) {
-			if (textureDir != null) {
-				return (new StringBuilder()).append(textureDir[1]).append(fileName.replace('.', '/')).append(textures.get(pIndex)).toString();
-			}
-		} else if (pIndex >= MMM_TextureManager.tx_eye && pIndex < (16 + MMM_TextureManager.tx_eye)) {
+			return textures.get(pIndex);
+		} else if (pIndex >= MMM_TextureManager.tx_eyecontract && pIndex < (16 + MMM_TextureManager.tx_eyecontract)) {
+			return getTextureName(MMM_TextureManager.tx_oldeye);
+		} else if (pIndex >= MMM_TextureManager.tx_eyewild && pIndex < (16 + MMM_TextureManager.tx_eyewild)) {
 			return getTextureName(MMM_TextureManager.tx_oldeye);
 		}
 		return null;
 	}
 
-	public String getArmorTextureName(boolean pInner, ItemStack itemstack) {
+	public ResourceLocation getArmorTextureName(int pIndex, ItemStack itemstack) {
 		// indexは0x40,0x50番台
+		// lightも追加
 		if (armors.isEmpty() || itemstack == null) return null;
 		if (!(itemstack.getItem() instanceof ItemArmor)) return null;
 		
@@ -91,13 +92,13 @@ public class MMM_TextureBox extends MMM_TextureBoxBase {
 		if (itemstack.getMaxDamage() > 0) {
 			l = (10 * itemstack.getItemDamage() / itemstack.getMaxDamage());
 		}
-		return getArmorTextureName(pInner, MMM_TextureManager.armorFilenamePrefix[((ItemArmor)itemstack.getItem()).renderIndex], l);
+		return getArmorTextureName(pIndex, MMM_TextureManager.armorFilenamePrefix[((ItemArmor)itemstack.getItem()).renderIndex], l);
 	}
-	public String getArmorTextureName(boolean pInner, String pArmorPrefix, int pDamage) {
+	public ResourceLocation getArmorTextureName(int pIndex, String pArmorPrefix, int pDamage) {
 		// indexは0x40,0x50番台
 		if (armors.isEmpty() || pArmorPrefix == null) return null;
 		
-		Map<Integer, String> m = armors.get(pArmorPrefix);
+		Map<Integer, ResourceLocation> m = armors.get(pArmorPrefix);
 		if (m == null) {
 			m = armors.get("default");
 			if (m == null) {
@@ -105,17 +106,13 @@ public class MMM_TextureBox extends MMM_TextureBoxBase {
 				m = (Map)armors.values().toArray()[0];
 			}
 		}
-		String ls = null;
-		int lindex = pInner ? MMM_TextureManager.tx_armor1 : MMM_TextureManager.tx_armor2;
-		for (int i = lindex + pDamage; i >= lindex; i--) {
+		ResourceLocation ls = null;
+//		int lindex = pInner ? MMM_TextureManager.tx_armor1 : MMM_TextureManager.tx_armor2;
+		for (int i = pIndex + pDamage; i >= pIndex; i--) {
 			ls = m.get(i);
 			if (ls != null) break;
 		}
-		if (ls == null) {
-			return null;
-		} else {
-			return (new StringBuilder()).append(textureDir[1]).append(fileName.replace('.', '/')).append(ls).toString();
-		}
+		return ls;
 	}
 
 	/**
@@ -196,6 +193,33 @@ public class MMM_TextureBox extends MMM_TextureBoxBase {
 		lbox.isUpdateSize = lbox.isUpdateSize;
 		
 		return lbox;
+	}
+
+	public boolean addTexture(int pIndex, String pLocation, String pName) {
+		boolean lflag = false;
+		switch ((pIndex & 0xfff0)) {
+		case MMM_TextureManager.tx_armor1:
+		case MMM_TextureManager.tx_armor2:
+		case MMM_TextureManager.tx_armor1light:
+		case MMM_TextureManager.tx_armor2light:
+		case MMM_TextureManager.tx_oldarmor1:
+		case MMM_TextureManager.tx_oldarmor2:
+			String ls = pName.substring(1, pName.lastIndexOf("_"));
+			Map<Integer, ResourceLocation> lmap;
+			if (armors.containsKey(ls)) {
+				lmap = armors.get(ls);
+			} else {
+				lmap = new HashMap<Integer, ResourceLocation>();
+				armors.put(ls, lmap);
+			}
+			lmap.put(pIndex, new ResourceLocation(pLocation + pName));
+			break;
+			
+		default:
+			textures.put(pIndex, new ResourceLocation(pLocation + pName));
+			return true;
+		}
+		return lflag;
 	}
 
 }

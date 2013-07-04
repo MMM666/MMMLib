@@ -6,8 +6,6 @@ import java.util.Map;
 
 import org.lwjgl.opengl.GL11;
 
-import net.minecraft.client.Minecraft;
-
 public class MMM_GuiTextureSlot extends GuiSlot {
 
 	public MMM_GuiTextureSelect owner;
@@ -100,7 +98,7 @@ public class MMM_GuiTextureSlot extends GuiSlot {
 	}
 
 	@Override
-	protected void drawBackground() {
+	protected void func_130003_c() {
 		// TODO Auto-generated method stub
 
 	}
@@ -146,16 +144,16 @@ public class MMM_GuiTextureSlot extends GuiSlot {
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 240.0F);
 		if (mode) {
 			// アーマー
-			String ltxname[];
+			ResourceLocation ltxname[];
 			GL11.glTranslatef(1F, 0, 0);
-			Map<Integer, String> lmap = lbox.armors.get("default");
+			Map<Integer, ResourceLocation> lmap = lbox.armors.get("default");
 			if (lmap != null) {
 				ltxname = entity.getTextures(1);
 				ltxname[0] = ltxname[1] = ltxname[2] = ltxname[3] =
-						lbox.getArmorTextureName(true, "default", 0);
+						lbox.getArmorTextureName(MMM_TextureManager.tx_armor1, "default", 0);
 				ltxname = entity.getTextures(2);
 				ltxname[0] = ltxname[1] = ltxname[2] = ltxname[3] =
-						lbox.getArmorTextureName(false, "default", 0);
+						lbox.getArmorTextureName(MMM_TextureManager.tx_armor2, "default", 0);
 				RenderManager.instance.renderEntityWithPosYaw(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F);
 			}
 			for (String ls : MMM_TextureManager.armorFilenamePrefix) {
@@ -163,10 +161,10 @@ public class MMM_GuiTextureSlot extends GuiSlot {
 				if (lbox.armors.containsKey(ls)) {
 					ltxname = entity.getTextures(1);
 					ltxname[0] = ltxname[1] = ltxname[2] = ltxname[3] =
-							lbox.getArmorTextureName(true, ls, 0);
+							lbox.getArmorTextureName(MMM_TextureManager.tx_armor1, ls, 0);
 					ltxname = entity.getTextures(2);
 					ltxname[0] = ltxname[1] = ltxname[2] = ltxname[3] =
-							lbox.getArmorTextureName(false, ls, 0);
+							lbox.getArmorTextureName(MMM_TextureManager.tx_armor2, ls, 0);
 					RenderManager.instance.renderEntityWithPosYaw(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F);
 				}
 			}

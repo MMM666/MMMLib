@@ -3,11 +3,9 @@ package net.minecraft.src;
 import java.util.Iterator;
 import java.util.Map;
 
-import net.minecraft.client.Minecraft;
-
 public class mod_MMM_MMMLib extends BaseMod {
 
-	public static final String Revision = "7";
+	public static final String Revision = "1";
 	
 	@MLProp()
 	public static boolean isDebugView = false;
@@ -36,7 +34,7 @@ public class mod_MMM_MMMLib extends BaseMod {
 
 	@Override
 	public String getVersion() {
-		return "1.5.2-" + Revision;
+		return "1.6.1-" + Revision;
 	}
 	
 	@Override
@@ -89,7 +87,9 @@ public class mod_MMM_MMMLib extends BaseMod {
 			var1.put(net.minecraft.src.MMM_EntityDummy.class, new MMM_RenderDummy());
 		}
 		// RenderItem
-		var1.put(EntityItem.class, new MMM_RenderItem());
+		if (renderHacking && MMM_Helper.isClient) {
+			var1.put(EntityItem.class, new MMM_RenderItem());
+		}
 		// RenderSelect
 		var1.put(MMM_EntitySelect.class, new MMM_RenderModelMulti(0.0F));
 	}

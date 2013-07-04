@@ -69,7 +69,9 @@ public class MMM_EntityCaps implements MMM_IModelCaps {
 		case caps_Entity:
 			return owner;
 		case caps_health:
-			return owner.getHealth();
+			return (int)owner.func_110143_aJ();
+		case caps_healthFloat:
+			return owner.func_110143_aJ();
 		case caps_ticksExisted:
 			return owner.ticksExisted;
 		case caps_heldItems:
@@ -121,8 +123,8 @@ public class MMM_EntityCaps implements MMM_IModelCaps {
 			return owner.isSwingInProgress;
 		case caps_isSneak:
 			return owner.isSneaking();
-		case caps_isBlocking:
-			return owner.isBlocking();
+//		case caps_isBlocking:
+//			return owner.isBlocking();
 		case caps_isBurning:
 			return owner.isBurning();
 		case caps_isInWater:

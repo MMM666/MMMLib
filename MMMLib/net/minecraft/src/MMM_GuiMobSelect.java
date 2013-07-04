@@ -71,7 +71,7 @@ public abstract class MMM_GuiMobSelect extends GuiScreen {
 	@Override
 	public void initGui() {
 		selectPanel = new MMM_GuiSlotMobSelect(mc, this);
-		selectPanel.registerScrollButtons(buttonList, 3, 4);
+		selectPanel.func_110509_d(3, 4);
 	}
 
 	@Override

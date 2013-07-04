@@ -6,10 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.minecraft.client.Minecraft;
-
-import org.lwjgl.opengl.GL11;
-
 public class MMM_ItemRenderManager {
 
 	protected static Map<Object, MMM_ItemRenderManager> classList = new HashMap<Object, MMM_ItemRenderManager>();
@@ -90,7 +86,7 @@ public class MMM_ItemRenderManager {
 
 
 
-	public boolean renderItem(EntityLiving pEntity, ItemStack pItemstack, int pIndex) {
+	public boolean renderItem(EntityLivingBase pEntity, ItemStack pItemstack, int pIndex) {
 		if (exRender != null) {
 			return exRender.renderItem(pEntity, pItemstack, pIndex);
 		} else if (frenderItem != null) {
@@ -114,12 +110,12 @@ public class MMM_ItemRenderManager {
 		return false;
 	}
 
-	public String getRenderTexture() {
+	public ResourceLocation getRenderTexture() {
 		if (exRender != null) {
 			return exRender.getRenderTexture();
 		} else if (fgetRenderTexture != null) {
 			try {
-				return (String)fgetRenderTexture.invoke(fobject);
+				return (ResourceLocation)fgetRenderTexture.invoke(fobject);
 			} catch (Exception e) {
 			}
 		}

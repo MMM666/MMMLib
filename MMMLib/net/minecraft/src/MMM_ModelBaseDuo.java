@@ -18,12 +18,12 @@ public class MMM_ModelBaseDuo extends MMM_ModelBaseNihil implements MMM_IModelBa
 	 * 部位毎のアーマーテクスチャの指定。
 	 * 外側。
 	 */
-	public String[] textureOuter;
+	public ResourceLocation[] textureOuter;
 	/**
 	 * 部位毎のアーマーテクスチャの指定。
 	 * 内側。
 	 */
-	public String[] textureInner;
+	public ResourceLocation[] textureInner;
 	/**
 	 * 描画されるアーマーの部位。
 	 * shouldRenderPassとかで指定する。
@@ -37,7 +37,7 @@ public class MMM_ModelBaseDuo extends MMM_ModelBaseNihil implements MMM_IModelBa
 	}
 
 	@Override
-	public void setLivingAnimations(EntityLiving par1EntityLiving, float par2, float par3, float par4) {
+	public void setLivingAnimations(EntityLivingBase par1EntityLiving, float par2, float par3, float par4) {
 		if (modelInner != null) {
 			modelInner.setLivingAnimations(entityCaps, par2, par3, par4);
 		}
@@ -62,7 +62,7 @@ public class MMM_ModelBaseDuo extends MMM_ModelBaseNihil implements MMM_IModelBa
 				if (textureInner[renderParts] == null) {
 					break;
 				}
-				renderLiving.loadTexture(textureInner[renderParts]);
+				MMM_Client.setTexture(textureInner[renderParts]);
 			}
 			modelInner.render(entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
 			break;
@@ -72,7 +72,7 @@ public class MMM_ModelBaseDuo extends MMM_ModelBaseNihil implements MMM_IModelBa
 				if (textureOuter[renderParts] == null) {
 					break;
 				}
-				renderLiving.loadTexture(textureOuter[renderParts]);
+				MMM_Client.setTexture(textureOuter[renderParts]);
 			}
 			modelOuter.render(entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
 			break;
@@ -100,7 +100,7 @@ public class MMM_ModelBaseDuo extends MMM_ModelBaseNihil implements MMM_IModelBa
 	// IModelMMM追加分
 
 	@Override
-	public void renderItems(EntityLiving pEntity, Render pRender) {
+	public void renderItems(EntityLivingBase pEntity, Render pRender) {
 		if (modelInner != null) {
 			modelInner.renderItems(entityCaps);
 		}

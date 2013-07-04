@@ -42,8 +42,8 @@ public interface MMM_ITextureEntity {
 	public void setTextureIndex(int[] pTextureIndex);
 	public int[] getTextureIndex();
 
-	public void setTextures(int pIndex, String[] pNames);
-	public String[] getTextures(int pIndex);
+	public void setTextures(int pIndex, ResourceLocation[] pNames);
+	public ResourceLocation[] getTextures(int pIndex);
 
 
 }

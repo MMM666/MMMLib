@@ -6,9 +6,9 @@ package net.minecraft.src;
  */
 public interface MMM_IItemRenderManager {
 
-	public boolean renderItem(EntityLiving pEntityLiving, ItemStack pItemStack, int pIndex);
+	public boolean renderItem(EntityLivingBase pEntityLiving, ItemStack pItemStack, int pIndex);
 	public boolean renderItemInFirstPerson(float pDeltaTimepRenderPhatialTick, MMM_ItemRenderer pItemRenderer);
-	public String getRenderTexture();
+	public ResourceLocation getRenderTexture();
 	public boolean isRenderItemWorld();
 
 }

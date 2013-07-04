@@ -4,11 +4,13 @@ import org.lwjgl.opengl.GL11;
 
 public class MMM_ModelStabilizer_WitchHat extends MMM_ModelStabilizerBase {
 
+	public static ResourceLocation ftex = new ResourceLocation("/mob/littleMaid/ALTERNATIVE/Stabilizer_MagicHat.png");
 	public MMM_ModelRenderer WitchHat;
 	public MMM_ModelRenderer WitchHat1;
 	public MMM_ModelRenderer WitchHat2;
 	public MMM_ModelRenderer WitchHat3;
-	
+
+
 	public MMM_ModelStabilizer_WitchHat() {
 		// ‚Ü‚¶‚å‚±‚Ú‚¤
 		textureWidth = 64;
@@ -36,8 +38,8 @@ public class MMM_ModelStabilizer_WitchHat extends MMM_ModelStabilizerBase {
 	}
 	
 	@Override
-	public String getTexture() {
-		return "/mob/littleMaid/ALTERNATIVE/Stabilizer_MagicHat.png";
+	public ResourceLocation getTexture() {
+		return ftex;
 	}
 	
 	@Override

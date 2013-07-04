@@ -35,6 +35,7 @@ public interface MMM_IModelCaps {
 	public static final int caps_ticksExisted			= 0x0022;
 	public static final int caps_currentEquippedItem	= 0x0023;
 	public static final int caps_currentArmor			= 0x0024;
+	public static final int caps_healthFloat			= 0x0025;
 	
 	public static final int caps_isWet					= 0x0030;
 	public static final int caps_isDead					= 0x0031;
