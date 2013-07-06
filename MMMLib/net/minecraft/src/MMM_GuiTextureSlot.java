@@ -98,9 +98,9 @@ public class MMM_GuiTextureSlot extends GuiSlot {
 	}
 
 	@Override
-	protected void func_130003_c() {
+	protected void drawBackground() {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override

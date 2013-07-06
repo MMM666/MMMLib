@@ -37,7 +37,7 @@ public class MMM_GuiSlotMobSelect extends GuiSlot {
 	}
 
 	@Override
-	protected void func_130003_c() {
+	protected void drawBackground() {
 		ownerGui.drawDefaultBackground();
 	}
 

@@ -75,14 +75,6 @@ public class MMM_Client {
 		return MMM_Helper.mc.isIntegratedServerRunning();
 	}
 
-	public static void setArmorPrefix() {
-		// アーマープリフィックスを設定
-		try {
-			ModLoader.setPrivateValue(RenderBiped.class, null, 4, ModLoader.getPrivateValue(RenderPlayer.class, null, 3));
-		} catch (Exception e) {
-		}
-	}
-
 	/**
 	 * Duoを使う時は必ずRender側のこの関数を置き換えること。
 	 * @param par1EntityLiving

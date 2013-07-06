@@ -71,7 +71,6 @@ public class mod_MMM_MMMLib extends BaseMod {
 			// テクスチャパックの構築
 //			MMM_TextureManager.loadTextures();
 			MMM_StabilizerManager.loadStabilizer();
-			MMM_Client.setArmorPrefix();
 			// テクスチャインデックスの構築
 			Debug("Localmode: InitTextureList.");
 			MMM_TextureManager.instance.initTextureList(true);
