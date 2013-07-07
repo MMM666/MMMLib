@@ -195,7 +195,14 @@ public class MMM_TextureBox extends MMM_TextureBoxBase {
 		return lbox;
 	}
 
-	public boolean addTexture(int pIndex, String pLocation, String pName) {
+	public boolean addTexture(int pIndex, String pLocation) {
+		String ls;
+		ls = "/assets/minecraft/";
+		if (pLocation.startsWith(ls)) {
+			pLocation = pLocation.substring(ls.length());
+		} else {
+			pLocation = "../../" + pLocation;
+		}
 		boolean lflag = false;
 		switch ((pIndex & 0xfff0)) {
 		case MMM_TextureManager.tx_armor1:
@@ -204,7 +211,7 @@ public class MMM_TextureBox extends MMM_TextureBoxBase {
 		case MMM_TextureManager.tx_armor2light:
 		case MMM_TextureManager.tx_oldarmor1:
 		case MMM_TextureManager.tx_oldarmor2:
-			String ls = pName.substring(1, pName.lastIndexOf("_"));
+			ls = pLocation.substring(pLocation.lastIndexOf("/"), pLocation.lastIndexOf("_"));
 			Map<Integer, ResourceLocation> lmap;
 			if (armors.containsKey(ls)) {
 				lmap = armors.get(ls);
@@ -212,11 +219,11 @@ public class MMM_TextureBox extends MMM_TextureBoxBase {
 				lmap = new HashMap<Integer, ResourceLocation>();
 				armors.put(ls, lmap);
 			}
-			lmap.put(pIndex, new ResourceLocation(pLocation + pName));
+			lmap.put(pIndex, new ResourceLocation(pLocation));
 			break;
 			
 		default:
-			textures.put(pIndex, new ResourceLocation(pLocation + pName));
+			textures.put(pIndex, new ResourceLocation(pLocation));
 			return true;
 		}
 		return lflag;

@@ -2,7 +2,7 @@ package net.minecraft.src;
 
 public class MMM_ModelBaseNihil extends ModelBase {
 
-	public RenderLiving renderLiving;
+	public RendererLivingEntity rendererLivingEntity;
 
 	public boolean isAlphablend;
 	public boolean isModelAlphablend;

@@ -346,7 +346,7 @@ public class MMM_ModelRenderer {
 		ItemStack[] litemstacks = (ItemStack[])MMM_ModelCapsHelper.getCapsValue(pEntityCaps, caps_Items);
 		if (litemstacks == null) return false;
 		EnumAction[] lactions = (EnumAction[])MMM_ModelCapsHelper.getCapsValue(pEntityCaps, caps_Actions);
-		EntityLiving lentity = (EntityLiving)pEntityCaps.getCapsValue(caps_Entity);
+		EntityLivingBase lentity = (EntityLivingBase)pEntityCaps.getCapsValue(caps_Entity);
 		
 		renderItems(lentity, pModelMulti.render, pRealBlock, lactions[pIndex], litemstacks[pIndex]);
 		return true;
@@ -354,18 +354,18 @@ public class MMM_ModelRenderer {
 
 	public void renderItemsHead(MMM_ModelMultiBase pModelMulti, MMM_IModelCaps pEntityCaps) {
 		ItemStack lis = (ItemStack)pEntityCaps.getCapsValue(caps_HeadMount);
-		EntityLiving lentity = (EntityLiving)pEntityCaps.getCapsValue(caps_Entity);
+		EntityLivingBase lentity = (EntityLivingBase)pEntityCaps.getCapsValue(caps_Entity);
 		
 		renderItems(lentity, pModelMulti.render, true, null, lis);
 	}
 
-	protected void renderItems(EntityLiving pEntityLiving, Render pRender,
+	protected void renderItems(EntityLivingBase pEntityLiving, Render pRender,
 			boolean pRealBlock, EnumAction pAction, ItemStack pItemStack) {
 		itemstack = pItemStack;
 		renderItems(pEntityLiving, pRender, pRealBlock, pAction);
 	}
 
-	protected void renderItems(EntityLiving pEntityLiving, Render pRender, boolean pRealBlock, EnumAction pAction) {
+	protected void renderItems(EntityLivingBase pEntityLiving, Render pRender, boolean pRealBlock, EnumAction pAction) {
 		if (itemstack == null) return;
 		
 		// アイテムのレンダリング

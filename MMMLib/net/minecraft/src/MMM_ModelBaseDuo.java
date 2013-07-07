@@ -31,8 +31,8 @@ public class MMM_ModelBaseDuo extends MMM_ModelBaseNihil implements MMM_IModelBa
 	public int renderParts;
 
 
-	public MMM_ModelBaseDuo(RenderLiving pRender) {
-		renderLiving = pRender;
+	public MMM_ModelBaseDuo(RendererLivingEntity pRender) {
+		rendererLivingEntity = pRender;
 		renderParts = 0;
 	}
 

@@ -11,8 +11,8 @@ public class MMM_ModelBaseSolo extends MMM_ModelBaseNihil implements MMM_IModelB
 	public static final ResourceLocation[] blanks = new ResourceLocation[0];
 
 
-	public MMM_ModelBaseSolo(RenderLiving pRender) {
-		renderLiving = pRender;
+	public MMM_ModelBaseSolo(RendererLivingEntity pRender) {
+		rendererLivingEntity = pRender;
 	}
 
 	@Override
