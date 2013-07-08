@@ -506,7 +506,7 @@ public class MMM_Helper {
 	 * ŒŸ’m—Ìˆæ‚ÌŠg‘å”ÍˆÍ
 	 * @return
 	 */
-	public static Entity getRayTraceEntity(EntityLiving pEntity, double pRange, float pDelta, float pExpand) {
+	public static Entity getRayTraceEntity(EntityLivingBase pEntity, double pRange, float pDelta, float pExpand) {
 		Vec3 lvpos = pEntity.worldObj.getWorldVec3Pool().getVecFromPool(
 				pEntity.posX, pEntity.posY + pEntity.getEyeHeight(), pEntity.posZ);
 //		Vec3 lvpos = pEntity.getPosition(pDelta).addVector(0D, pEntity.getEyeHeight(), 0D);
@@ -620,6 +620,12 @@ public class MMM_Helper {
 		int li = Integer.parseInt(ls.substring(llen - 4, llen), 16);
 		int lj = Integer.parseInt(ls.substring(llen - 8, llen - 4), 16);
 		return (lj << 16) | li;
+	}
+
+	// ƒAƒCƒeƒ€‚ÉÝ’è‚³‚ê‚½UŒ‚—Í‚ðŒ©‚é
+	public static double getAttackVSEntity(ItemStack pItemStack) {
+		AttributeModifier lam = (AttributeModifier)pItemStack.func_111283_C().get(SharedMonsterAttributes.field_111264_e.func_111108_a());
+		return lam == null ? 0 : lam.func_111164_d();
 	}
 
 }
