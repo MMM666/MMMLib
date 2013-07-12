@@ -20,6 +20,7 @@ public class MMM_ItemRenderer extends ItemRenderer {
 			// きらめきテクスチャの確保
 			texGlint = (ResourceLocation)ModLoader.getPrivateValue(ItemRenderer.class, null, 0);
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -41,7 +42,6 @@ public class MMM_ItemRenderer extends ItemRenderer {
 
 	@Override
 	public void renderItem(EntityLivingBase entityliving, ItemStack itemstack, int i) {
-		TextureManager ltm = mc.func_110434_K();
 		Item litem = itemstack.getItem();
 		if (MMM_ItemRenderManager.isEXRender(litem)) {
 			// 特殊レンダラ
@@ -54,7 +54,7 @@ public class MMM_ItemRenderer extends ItemRenderer {
 				if (itemstack != null && itemstack.hasEffect() && i == 0) {
 					GL11.glDepthFunc(GL11.GL_EQUAL);
 					GL11.glDisable(GL11.GL_LIGHTING);
-					ltm.func_110577_a(texGlint);
+					MMM_Client.setTexture(texGlint);
 					GL11.glEnable(GL11.GL_BLEND);
 					GL11.glBlendFunc(GL11.GL_SRC_COLOR, GL11.GL_ONE);
 					float var14 = 0.76F;
@@ -106,10 +106,11 @@ public class MMM_ItemRenderer extends ItemRenderer {
 		
 		try {
 			// ローカル変数を確保
-			itemToRender = (ItemStack)ModLoader.getPrivateValue(ItemRenderer.class, this, 1);
-			equippedProgress = (Float)ModLoader.getPrivateValue(ItemRenderer.class, this, 2);
-			prevEquippedProgress = (Float)ModLoader.getPrivateValue(ItemRenderer.class, this, 3);
+			itemToRender = (ItemStack)ModLoader.getPrivateValue(ItemRenderer.class, this, 4);
+			equippedProgress = (Float)ModLoader.getPrivateValue(ItemRenderer.class, this, 5);
+			prevEquippedProgress = (Float)ModLoader.getPrivateValue(ItemRenderer.class, this, 6);
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		
 		if (itemToRender != null) {

@@ -21,10 +21,10 @@ public class MMM_RenderModelMulti extends RenderLiving {
 		setRenderPassModel(modelFATT);
 	}
 
-	protected int showArmorParts(EntityLiving par1EntityLiving, int par2, float par3) {
+	protected int showArmorParts(EntityLivingBase par1EntityLiving, int par2, float par3) {
 		// アーマーの表示設定
 		modelFATT.renderParts = par2;
-		ItemStack is = par1EntityLiving.getCurrentArmor(par2);
+		ItemStack is = par1EntityLiving.getCurrentItemOrArmor(par2 + 1);
 		if (is != null && is.stackSize > 0) {
 			modelFATT.showArmorParts(par2);
 			return is.isItemEnchanted() ? 15 : 1;

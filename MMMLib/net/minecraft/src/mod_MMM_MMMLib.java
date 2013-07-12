@@ -34,7 +34,7 @@ public class mod_MMM_MMMLib extends BaseMod {
 
 	@Override
 	public String getVersion() {
-		return "1.6.1-" + Revision;
+		return "1.6.2-" + Revision;
 	}
 	
 	@Override

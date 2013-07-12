@@ -1,4 +1,4 @@
-MMMのMOD用ライブラリ MMMLib 1.5.2 Rev7
+MMMのMOD用ライブラリ MMMLib 1.6.2 Rev1
 
 拙作のMODで使用されるライブラリです。
 とりあえず一緒に入れておいて下さい。
@@ -13,7 +13,7 @@ MMMのMOD用ライブラリ MMMLib 1.5.2 Rev7
 
 使い方
 	・要Modloader。
-	・%appdata%/.mincraft/mods/にZIPのまま放りこんで下さい。
+	・%appdata%/.mincraft/versions/1.6.2ML/mods/にZIPのまま放りこんで下さい。
 	・%appdata%/.mincraft/config/mod_MMM_MMMLib.cfgができるので設定はそちらで。
 	・サーバー側で動作させた場合、クライアントで使用されたテクスチャパックのリストとして、
 	　%appdata%/.mincraft/config/mod_MMM_textureList.cfgが作成されます。
@@ -35,6 +35,11 @@ MMMのMOD用ライブラリ MMMLib 1.5.2 Rev7
 
 
 変更点
+	20130713.1	1.6.2 Rev1 バージョンアップ
+				仕様変更に対する補助関数の追加。
+
+
+
 	20130630.1	1.5.2 Rev7 更新
 				ModelPlate調整。
 				発光パーツの透過処理を変更。
@@ -42,9 +47,6 @@ MMMのMOD用ライブラリ MMMLib 1.5.2 Rev7
 				可変モデル対応用に一部関数を変更。
 				ModelMultiBaseの取得パラメーター関数を追加変更。
 				MMM_HelperにreplaceBlockを追加。
-
-
-
 	20130618.1	1.5.2 Rev6 更新
 				モデル表示用のクラスとしてModelBaseSoloの追加。
 				IModelCapsにパラメーターを追加。

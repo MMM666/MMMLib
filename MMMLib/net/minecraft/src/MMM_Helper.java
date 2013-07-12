@@ -2,6 +2,7 @@ package net.minecraft.src;
 
 import static net.minecraft.src.mod_MMM_MMMLib.Debug;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -622,7 +623,11 @@ public class MMM_Helper {
 		return (lj << 16) | li;
 	}
 
-	// アイテムに設定された攻撃力を見る
+	/**
+	 *  アイテムに設定された攻撃力を見る
+	 * @param pItemStack
+	 * @return
+	 */
 	public static double getAttackVSEntity(ItemStack pItemStack) {
 		AttributeModifier lam = (AttributeModifier)pItemStack.func_111283_C().get(SharedMonsterAttributes.field_111264_e.func_111108_a());
 		return lam == null ? 0 : lam.func_111164_d();

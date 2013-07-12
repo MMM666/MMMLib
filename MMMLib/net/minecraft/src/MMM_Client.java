@@ -144,4 +144,7 @@ public class MMM_Client {
 		}
 	}
 
+	public static String getVersionString() {
+		return Minecraft.func_110431_a(Minecraft.getMinecraft());
+	}
 }

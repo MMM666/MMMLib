@@ -24,6 +24,9 @@ public class MMM_FileManager {
 	public static File minecraftJar;
 	public static Map<String, List<File>> fileList = new TreeMap<String, List<File>>();
 	public static File minecraftDir;
+	public static File versionDir;
+	public static File modDir;
+
 	
 	public static void init() {
 		// 初期化
@@ -32,7 +35,6 @@ public class MMM_FileManager {
 		} else {
 			minecraftDir = MinecraftServer.getServer().getFile("");
 		}
-		
 		
 		// mincraft.jarを取得
 		// 開発中用のJar内に含まれていることの対策
@@ -70,6 +72,19 @@ public class MMM_FileManager {
 			minecraftJar = new File(ls);
 			mod_MMM_MMMLib.Debug("getMinecraftFile-file:%s", ls);
 		}
+		if (!MMM_Helper.isForge && MMM_Helper.isClient) {
+			File lversions = new File(minecraftDir, "versions");
+			versionDir = new File(lversions, MMM_Client.getVersionString());
+			if (lversions.exists() && lversions.isDirectory() && versionDir.exists() && versionDir.isDirectory()) {
+				modDir = new File(versionDir, "/mods/");
+			} else {
+				modDir = new File(minecraftDir, "mods");
+			}
+		} else {
+			modDir = new File(minecraftDir, "mods");
+		}
+		mod_MMM_MMMLib.Debug("getMods-Directory:%s", modDir.getAbsolutePath());
+		
 		
 	}
 
@@ -89,20 +104,12 @@ public class MMM_FileManager {
 			fileList.put(pname, llist);
 		}
 		
-		// modsディレクトリの獲得
-		File lmod;
-		if (MMM_Helper.isClient) {
-			lmod = new File(minecraftDir, "/mods/");
-		} else {
-			lmod = new File(minecraftDir, "mods/");
-		}
-		
-		mod_MMM_MMMLib.Debug("getModFile:[%s]:%s", pname, lmod.getAbsolutePath());
+		mod_MMM_MMMLib.Debug("getModFile:[%s]:%s", pname, modDir.getAbsolutePath());
 		// ファイル・ディレクトリを検索
 		try {
-			if (lmod.isDirectory()) {
-				mod_MMM_MMMLib.Debug("getModFile-get:%d.", lmod.list().length);
-				for (File t : lmod.listFiles()) {
+			if (modDir.isDirectory()) {
+				mod_MMM_MMMLib.Debug("getModFile-get:%d.", modDir.list().length);
+				for (File t : modDir.listFiles()) {
 					if (t.getName().indexOf(pprefix) != -1) {
 						if (t.getName().endsWith(".zip")) {
 							llist.add(t);

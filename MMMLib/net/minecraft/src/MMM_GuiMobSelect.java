@@ -51,7 +51,7 @@ public abstract class MMM_GuiMobSelect extends GuiScreen {
 			try {
 				// 表示用のEntityを作る
 				do {
-					lentity = (EntityLiving)EntityList.createEntityByName(le.getValue(), world);
+					lentity = (EntityLivingBase)EntityList.createEntityByName(le.getValue(), world);
 				} while (lentity != null && checkEntity(le.getValue(), lentity, li++));
 			} catch (Exception e) {
 				mod_MMM_MMMLib.Debug("Entity [" + le.getValue() + "] can't created.");
@@ -96,7 +96,7 @@ public abstract class MMM_GuiMobSelect extends GuiScreen {
 	/**
 	 *  スロットがクリックされた
 	 */
-	public abstract void clickSlot(int pIndex, boolean pDoubleClick, String pName, EntityLiving pEntity);
+	public abstract void clickSlot(int pIndex, boolean pDoubleClick, String pName, EntityLivingBase pEntity);
 
 	/**
 	 *  スロットの描画

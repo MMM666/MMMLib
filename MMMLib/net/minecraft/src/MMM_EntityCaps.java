@@ -85,11 +85,7 @@ public class MMM_EntityCaps implements MMM_IModelCaps {
 		case caps_currentEquippedItem:
 			return owner.getHeldItem();
 		case caps_currentArmor:
-			if (owner instanceof EntityLiving) {
-				return ((EntityLiving)owner).getCurrentArmor((Integer)pArg[0]);
-			} else {
-				return null;
-			}
+			return owner.getCurrentItemOrArmor((Integer)pArg[0] + 1);
 		case caps_posX:
 			return owner.posX;
 		case caps_posY:
