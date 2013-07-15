@@ -187,7 +187,7 @@ public class MMM_Helper {
 	public static boolean setPathToTile(EntityLiving pEntity, TileEntity pTarget, boolean flag) {
 		// Tile‚Ü‚Å‚ÌƒpƒX‚ğì‚é
 		PathNavigate lpn = pEntity.getNavigator();
-		float lspeed = 0.3F;
+		float lspeed = 1.0F;
 		// Œü‚«‚É‡‚í‚¹‚Ä‹——£‚ğ’²®
 		int i = (pTarget.yCoord == MathHelper.floor_double(pEntity.posY) && flag) ? 2 : 1;
 		switch (pEntity.worldObj.getBlockMetadata(pTarget.xCoord, pTarget.yCoord, pTarget.zCoord)) {

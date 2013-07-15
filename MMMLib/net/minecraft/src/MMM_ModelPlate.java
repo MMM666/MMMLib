@@ -3,11 +3,17 @@ package net.minecraft.src;
 public class MMM_ModelPlate extends MMM_ModelBoxBase {
 
 	// 互換用パラメーター
+	@Deprecated
 	public static final int planeXY		= 0;
+	@Deprecated
 	public static final int planeZY		= 1;
+	@Deprecated
 	public static final int planeXZ		= 2;
+	@Deprecated
 	public static final int planeXYInv	= 4;
+	@Deprecated
 	public static final int planeZYInv	= 5;
+	@Deprecated
 	public static final int planeXZInv	= 6;
 
 	/*
@@ -60,11 +66,11 @@ public class MMM_ModelPlate extends MMM_ModelBoxBase {
 			lx += pZoom;
 			ly += pZoom;
 			if (lotherplane) {
-				pZ -= pZoom;
-				lz -= pZoom;
-			} else {
 				pZ += pZoom;
 				lz += pZoom;
+			} else {
+				pZ -= pZoom;
+				lz -= pZoom;
 			}
 			break;
 		case planeZY:
@@ -101,11 +107,11 @@ public class MMM_ModelPlate extends MMM_ModelBoxBase {
 			lx += pZoom;
 			lz += pZoom;
 			if (lotherplane) {
-				pY -= pZoom;
-				ly -= pZoom;
-			} else {
 				pY += pZoom;
 				ly += pZoom;
+			} else {
+				pY -= pZoom;
+				ly -= pZoom;
 			}
 			break;
 		}

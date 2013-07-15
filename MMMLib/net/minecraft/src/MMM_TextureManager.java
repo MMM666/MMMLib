@@ -303,8 +303,10 @@ public class MMM_TextureManager {
 		lbox.addTexture(0x0c, "/assets/minecraft/textures/entity/steve.png");
 		if (armorFilenamePrefix != null && armorFilenamePrefix.length > 0) {
 			for (String ls : armorFilenamePrefix) {
-				lbox.addTexture(tx_armor1, (new StringBuilder()).append("/assets/minecraft/textures/models/armor/").append(ls).append("_2.png").toString());
-				lbox.addTexture(tx_armor2, (new StringBuilder()).append("/assets/minecraft/textures/models/armor/").append(ls).append("_1.png").toString());
+				Map<Integer, ResourceLocation> lmap = new HashMap<Integer, ResourceLocation>();
+				lmap.put(tx_armor1, new ResourceLocation((new StringBuilder()).append("textures/models/armor/").append(ls).append("_layer_2.png").toString()));
+				lmap.put(tx_armor2, new ResourceLocation((new StringBuilder()).append("textures/models/armor/").append(ls).append("_layer_1.png").toString()));
+				lbox.armors.put(ls, lmap);
 			}
 		}
 		

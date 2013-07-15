@@ -199,6 +199,18 @@ public class MMM_ModelLittleMaid_RX0 extends MMM_ModelLittleMaidBase {
 		bipedHead.addChild(HeadTop);
 		bipedHead.addChild(HeadMount);
 		
+		/*
+		MMM_ModelRenderer ltest = new MMM_ModelRenderer(this);
+		ltest.setTextureOffset( 8, 8).addPlate(-4F, -4F, -4F, 8, 8, MMM_ModelPlate.planeXYFront, 0.3F);
+		ltest.setTextureOffset(24, 8).addPlate(-4F, -4F,  4F, 8, 8, MMM_ModelPlate.planeXYBack, 0.3F);
+		ltest.setTextureOffset( 0, 8).addPlate(-4F, -4F, -4F, 8, 8, MMM_ModelPlate.planeZYRight, 0.3F);
+		ltest.setTextureOffset(16, 8).addPlate( 4F, -4F, -4F, 8, 8, MMM_ModelPlate.planeZYLeft, 0.3F);
+		ltest.setTextureOffset( 8, 0).addPlate(-4F, -4F, -4F, 8, 8, MMM_ModelPlate.planeXZTop, 0.3F);
+		ltest.setTextureOffset(16, 0).addPlate(-4F,  4F, -4F, 8, 8, MMM_ModelPlate.planeXZBottom, 0.3F);
+		ltest.setRotationPoint(0F, -20F, 0F);
+		bipedHead.addChild(ltest);
+		*/
+		
 		
 	}
 
@@ -236,7 +248,7 @@ public class MMM_ModelLittleMaid_RX0 extends MMM_ModelLittleMaidBase {
 			float lf = bipedHead.rotateAngleX > 0 ? -bipedHead.rotateAngleX / 2F : 0F;
 			bipedForelock.setRotateAngleX(lf);
 			bipedRibbon.setRotationPoint(0F, -0.2F, 4F);
-			bipedRibbon.setRotateAngleDegX(20F - bipedHead.getRotateAngleDegX());
+			bipedRibbon.setRotateAngleDegX(20F - bipedHead.getRotateAngleDegX() + (isSneak ? 20F : 0F));
 			bipedRibbon1.setRotationPoint(-1.5F, 0F, 1F);
 			bipedRibbon2.setRotationPoint(1.5F, 0F, 1F);
 			bipedRibbon1.setRotateAngleDegY(0F);
@@ -244,12 +256,12 @@ public class MMM_ModelLittleMaid_RX0 extends MMM_ModelLittleMaidBase {
 			bipedTail.setRotationPoint(0F, 3.0F, 0F);
 			bipedTail.setRotateAngle(0F, 0F, 0F);
 			
-			bipedRibbonR.setRotationPoint(-3.5F, 0F, 4F).setRotateAngleDeg(15F - bipedHead.getRotateAngleDegX(), 0F, 10F);
+			bipedRibbonR.setRotationPoint(-3.5F, 0F, 4F).setRotateAngleDeg(15F - bipedHead.getRotateAngleDegX() + (isSneak ? 10F : 0F), 0F, 10F);
 			bipedRibbonRSensorU.setRotationPoint(0F, 1F, -0.2F).setRotateAngleDeg(10F, 0F, 0F);
 			bipedRibbonRSensorB.setRotationPoint(0F, 2F, -0.9F).setRotateAngleDeg(0F, 0F, 0F);
 			bipedSideTailR.setRotationPoint(0F, 2F, 0F).setRotateAngleDeg(0F, 0F, 0F);
 			
-			bipedRibbonL.setRotationPoint(3.5F, 0F, 4F).setRotateAngleDeg(15F - bipedHead.getRotateAngleDegX(), 0F, -10F);
+			bipedRibbonL.setRotationPoint(3.5F, 0F, 4F).setRotateAngleDeg(15F - bipedHead.getRotateAngleDegX() + (isSneak ? 10F : 0F), 0F, -10F);
 			bipedRibbonLSensorU.setRotationPoint(0F, 1F, -0.2F).setRotateAngleDeg(10F, 0F, 0F);
 			bipedRibbonLSensorB.setRotationPoint(0F, 2F, -0.9F).setRotateAngleDeg(0F, 0F, 0F);
 			bipedSideTailL.setRotationPoint(0F, 2F, 0F).setRotateAngleDeg(0F, 0F, 0F);
