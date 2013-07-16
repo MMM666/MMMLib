@@ -201,7 +201,7 @@ public class MMM_TextureBox extends MMM_TextureBoxBase {
 		if (pLocation.startsWith(ls)) {
 			pLocation = pLocation.substring(ls.length());
 		} else {
-			pLocation = "../../" + pLocation;
+			pLocation = "../.." + pLocation;
 		}
 		boolean lflag = false;
 		switch ((pIndex & 0xfff0)) {

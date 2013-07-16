@@ -495,23 +495,6 @@ public class MMM_TextureManager {
 						mod_MMM_MMMLib.Debug("getTextureName-append-texturePack-%s", pn);
 					}
 					lts.addTexture(lindex, fname);
-					/*
-					if (lindex >= 0x40 && lindex <= 0x5f) {
-						// ダメージドアーマー
-						Map<String, Map<Integer, String>> s = lts.armors;
-						if (an == null) an = fn.substring(1, fn.lastIndexOf('_'));
-						Map<Integer, String> ss = s.get(an);
-						if (ss == null) {
-							ss = new HashMap<Integer, String>();
-							s.put(an, ss);
-						}
-						ss.put(lindex, fn);
-					} else {
-						// 通常のテクスチャ
-						Map<Integer, String> s = lts.textures;
-						s.put(lindex, fn);
-					}
-					*/
 				}
 			}
 		}

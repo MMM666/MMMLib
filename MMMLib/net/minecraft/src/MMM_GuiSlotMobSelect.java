@@ -52,7 +52,7 @@ public class MMM_GuiSlotMobSelect extends GuiSlot {
 		// Entity‚ÌŠm•Û
 		String s = ownerGui.entityMap.keySet().toArray()[var1].toString();
 		boolean lf = ownerGui.exclusionList.contains(s);
-		EntityLiving entityliving = lf ? null : (EntityLiving) ownerGui.entityMap.get(s);
+		EntityLivingBase entityliving = lf ? null : (EntityLivingBase) ownerGui.entityMap.get(s);
 		
 		// “ÆŽ©•`‰æ
 		ownerGui.drawSlot(var1, var2, var3, var4, var5, s, entityliving);

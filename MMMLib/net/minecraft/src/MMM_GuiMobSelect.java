@@ -51,7 +51,8 @@ public abstract class MMM_GuiMobSelect extends GuiScreen {
 			try {
 				// ï\é¶ópÇÃEntityÇçÏÇÈ
 				do {
-					lentity = (EntityLivingBase)EntityList.createEntityByName(le.getValue(), world);
+					lentity = (EntityLivingBase)le.getKey().getConstructor(World.class).newInstance(world);
+//					lentity = (EntityLivingBase)EntityList.createEntityByName(le.getValue(), world);
 				} while (lentity != null && checkEntity(le.getValue(), lentity, li++));
 			} catch (Exception e) {
 				mod_MMM_MMMLib.Debug("Entity [" + le.getValue() + "] can't created.");
