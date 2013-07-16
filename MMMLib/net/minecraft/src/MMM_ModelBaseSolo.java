@@ -65,7 +65,7 @@ public class MMM_ModelBaseSolo extends MMM_ModelBaseNihil implements MMM_IModelB
 			GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
 //			GL11.glDisable(GL11.GL_LIGHTING);
 			
-			if (par1Entity.isInvisible()) {
+			if (!isRendering) {
 				GL11.glDepthMask(false);
 			} else {
 				GL11.glDepthMask(true);
@@ -75,7 +75,7 @@ public class MMM_ModelBaseSolo extends MMM_ModelBaseNihil implements MMM_IModelB
 			MMM_Client.setLightmapTextureCoords(0x00f0);//61680
 //			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, var4);
-			model.render(entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
+			model.render(entityCaps, par2, par3, par4, par5, par6, par7, true);
 			
 			MMM_Client.setLightmapTextureCoords(par1Entity.getBrightnessForRender(par2));
 			

@@ -142,6 +142,14 @@ public abstract class MMM_ModelMultiBase extends MMM_ModelBase implements MMM_IM
 	}
 
 	/**
+	 * ロープの取り付け位置調整用
+	 * @return
+	 */
+	public float getLeashOffset(MMM_IModelCaps pEntityCaps) {
+		return 0.4F;
+	}
+
+	/**
 	 * アイテムを持っているときに手を前に出すかどうか。
 	 */
 	@Deprecated

@@ -132,6 +132,7 @@ public abstract class MMM_ManagerBase {
 		}
 		catch (Error error) {
 			mod_MMM_MMMLib.Debug("get%sClass-Error: %s", getPreFix(), pname);
+			error.printStackTrace();
 		}
 		
 	}

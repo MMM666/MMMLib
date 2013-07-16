@@ -6,6 +6,7 @@ public class MMM_RenderModelMulti extends RenderLiving {
 
 	public MMM_ModelBaseSolo modelMain;
 	public MMM_ModelBaseDuo modelFATT;
+	public MMM_IModelCaps fcaps;
 
 
 
@@ -34,7 +35,7 @@ public class MMM_RenderModelMulti extends RenderLiving {
 	}
 	@Override
 	protected int shouldRenderPass(EntityLivingBase par1EntityLiving, int par2, float par3) {
-		return showArmorParts((EntityLiving)par1EntityLiving, par2, par3);
+		return showArmorParts((EntityLivingBase)par1EntityLiving, par2, par3);
 	}
 
 	@Override
@@ -45,7 +46,7 @@ public class MMM_RenderModelMulti extends RenderLiving {
 		}
 	}
 
-	public void setModelValues(EntityLiving par1EntityLiving, double par2,
+	public void setModelValues(EntityLivingBase par1EntityLiving, double par2,
 			double par4, double par6, float par8, float par9, MMM_IModelCaps pEntityCaps) {
 		if (par1EntityLiving instanceof MMM_ITextureEntity) {
 			MMM_ITextureEntity ltentity = (MMM_ITextureEntity)par1EntityLiving;
@@ -74,16 +75,32 @@ public class MMM_RenderModelMulti extends RenderLiving {
 		modelMain.setCapsValue(MMM_IModelCaps.caps_ticksExisted, par1EntityLiving.ticksExisted);
 	}
 
+//	public void renderModelMulti(EntityLivingBase par1EntityLiving, double par2,
 	public void renderModelMulti(EntityLiving par1EntityLiving, double par2,
 			double par4, double par6, float par8, float par9, MMM_IModelCaps pEntityCaps) {
 		setModelValues(par1EntityLiving, par2, par4, par6, par8, par9, pEntityCaps);
+		// TODO:なぜか変なとこに飛んでループする
+//		super.func_130000_a(par1EntityLiving, par2, par4, par6, par8, par9);
 		super.doRenderLiving(par1EntityLiving, par2, par4, par6, par8, par9);
 	}
 
 	@Override
 	public void doRenderLiving(EntityLiving par1EntityLiving, double par2,
 			double par4, double par6, float par8, float par9) {
-		renderModelMulti(par1EntityLiving, par2, par4, par6, par8, par9, (MMM_IModelCaps)par1EntityLiving);
+		fcaps = (MMM_IModelCaps)par1EntityLiving;
+		renderModelMulti(par1EntityLiving, par2, par4, par6, par8, par9, fcaps);
+	}
+
+	@Override
+	protected void func_110827_b(EntityLiving par1EntityLiving, double par2,
+			double par4, double par6, float par8, float par9) {
+		// 縄の位置のオフセット
+		// TODO：MCP-804対策
+		float lf = 0F;
+		if (modelMain.model != null && fcaps != null) {
+			lf = modelMain.model.getLeashOffset(fcaps);
+		}
+		super.func_110827_b(par1EntityLiving, par2, par4 - lf, par6, par8, par9);
 	}
 
 	@Override

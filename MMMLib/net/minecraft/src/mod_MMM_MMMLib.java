@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class mod_MMM_MMMLib extends BaseMod {
 
-	public static final String Revision = "1";
+	public static final String Revision = "2";
 	
 	@MLProp()
 	public static boolean isDebugView = false;
