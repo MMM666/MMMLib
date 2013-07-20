@@ -240,7 +240,7 @@ public class MMM_Helper {
 	 * @param updateFrequency
 	 * @param sendVelocityUpdate
 	 */
-	public static void registerEntity(
+	public static int registerEntity(
 			Class<? extends Entity> entityclass, String entityName, int defaultId,
 			BaseMod mod, int trackingRange, int updateFrequency, boolean sendVelocityUpdate,
 			int pEggColor1, int pEggColor2) {
@@ -263,12 +263,6 @@ public class MMM_Helper {
 					lmethod.invoke(null, entityclass, entityName, defaultId, pEggColor1, pEggColor2);
 				}
 				// EntityListÇ÷ÇÃìoò^ÇÕìKìñÇ»êîéöÇ≈ÇÊÇ¢ÅB
-//				defaultId = getNextEntityID(false);
-//				if (pEggColor1 == 0 && pEggColor2 == 0) {
-//					ModLoader.registerEntityID(entityclass, entityName, defaultId);
-//				} else {
-//					ModLoader.registerEntityID(entityclass, entityName, defaultId, pEggColor1, pEggColor2);
-//				}
 				registerModEntity.invoke(
 						null, entityclass, entityName, lid,
 						mod, trackingRange, updateFrequency, sendVelocityUpdate);
@@ -278,7 +272,7 @@ public class MMM_Helper {
 		} else {
 			// EntityListÇ÷ÇÃìoò^ÇÕ
 			if (defaultId == 0) {
-				defaultId = getNextEntityID(entityclass.isAssignableFrom(EntityLiving.class));
+				defaultId = getNextEntityID(entityclass.isAssignableFrom(EntityLivingBase.class));
 			}
 			if (pEggColor1 == 0 && pEggColor2 == 0) {
 				ModLoader.registerEntityID(entityclass, entityName, defaultId);
@@ -288,11 +282,12 @@ public class MMM_Helper {
 			ModLoader.addEntityTracker(mod, entityclass, defaultId, trackingRange, updateFrequency, sendVelocityUpdate);
 		}
 		Debug("RegisterEntity ID:%d / %s-%d : %s", defaultId, mod.getName(), lid, entityName);
+		return defaultId;
 	}
-	public static void registerEntity(
+	public static int registerEntity(
 			Class<? extends Entity> entityclass, String entityName, int defaultId,
 			BaseMod mod, int trackingRange, int updateFrequency, boolean sendVelocityUpdate) {
-		registerEntity(entityclass, entityName, defaultId, mod, trackingRange, updateFrequency, sendVelocityUpdate, 0, 0);
+		return registerEntity(entityclass, entityName, defaultId, mod, trackingRange, updateFrequency, sendVelocityUpdate, 0, 0);
 	}
 
 	private static int getModEntityID(String uniqueModeName) {
@@ -322,7 +317,7 @@ public class MMM_Helper {
 		try {
 			// éÀéËÇÃèÓïÒÇEntityLittleMaidAvatarÇ©ÇÁEntityLittleMaidÇ÷íuÇ´ä∑Ç¶ÇÈ
 			Field field = pEntity.getClass().getField("avatar");
-			pEntity = (EntityLiving)field.get(pEntity);
+			pEntity = (EntityLivingBase)field.get(pEntity);
 		} catch (NoSuchFieldException e) {
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -47,6 +47,10 @@ public interface MMM_IModelCaps {
 	public static final int caps_isInWater				= 0x0037;
 	public static final int caps_isInvisible			= 0x0038;
 	public static final int caps_isSprinting			= 0x0039;
+	/** “ê‚ÉŒq‚ª‚ê‚Ä‚Ü‚·; return boolean; **/
+	public static final int caps_isLeeding				= 0x003a;
+	/** æ‚Á‚©‚Ä‚¢‚éEntity‚Ì–¼‘O‚ğ•Ô‚·; return String; **/
+	public static final int caps_getRidingName			= 0x003b;
 	
 	public static final int caps_posX					= 0x0060;
 	public static final int caps_posY					= 0x0061;

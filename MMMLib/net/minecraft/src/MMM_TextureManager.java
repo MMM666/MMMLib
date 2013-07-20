@@ -290,7 +290,7 @@ public class MMM_TextureManager {
 		}
 		
 		
-		setDefaultTexture(EntityLiving.class, getTextureBox("default_" + defaultModelName));
+		setDefaultTexture(EntityLivingBase.class, getTextureBox("default_" + defaultModelName));
 		
 		return false;
 	}

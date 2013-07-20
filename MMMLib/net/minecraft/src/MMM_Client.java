@@ -2,6 +2,8 @@ package net.minecraft.src;
 
 import static net.minecraft.src.mod_MMM_MMMLib.Debug;
 
+import java.lang.reflect.Field;
+import java.util.List;
 import java.util.Random;
 
 import org.lwjgl.opengl.GL11;
@@ -10,6 +12,18 @@ public class MMM_Client {
 
 	public static MMM_ItemRenderer itemRenderer;
 
+	/**
+	 * 初期化時実行コード
+	 */
+	public static void init() {
+		try {
+			// TODO: バージョンアップ時には確認すること
+			List lresourcePacks = (List)ModLoader.getPrivateValue(Minecraft.class, Minecraft.getMinecraft(), 63);
+			lresourcePacks.add(new MMM_ModOldResourcePack(mod_MMM_MMMLib.class));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	public static void setItemRenderer() {
 		if (itemRenderer == null) {

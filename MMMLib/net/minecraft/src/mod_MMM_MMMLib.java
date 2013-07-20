@@ -1,11 +1,13 @@
 package net.minecraft.src;
 
+import java.lang.reflect.Field;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 public class mod_MMM_MMMLib extends BaseMod {
 
-	public static final String Revision = "2";
+	public static final String Revision = "3";
 	
 	@MLProp()
 	public static boolean isDebugView = false;
@@ -50,6 +52,9 @@ public class mod_MMM_MMMLib extends BaseMod {
 		MMM_FileManager.init();
 		MMM_TextureManager.instance.init();
 		MMM_StabilizerManager.init();
+		if (MMM_Helper.isClient) {
+			MMM_Client.init();
+		}
 		ModLoader.setInGameHook(this, true, true);
 		if (isDebugView) {
 			MMM_EntityDummy.isEnable = true;
@@ -57,6 +62,7 @@ public class mod_MMM_MMMLib extends BaseMod {
 		
 		// 独自パケット用チャンネル
 		ModLoader.registerPacketChannel(this, "MMM|Upd");
+		
 	}
 
 	@Override

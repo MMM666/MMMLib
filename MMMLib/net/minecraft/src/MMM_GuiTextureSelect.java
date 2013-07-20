@@ -109,19 +109,7 @@ public class MMM_GuiTextureSelect extends GuiScreen {
 				target.getTextureBox()[1] = selectPanel.getSelectedBox(true);
 			}
 			if (toServer) {
-/*
-				if (selectColor != selectPanel.color) {
-					// 色情報の設定
-//					theMaid.maidColor = selectPanel.color | 0x010000 | (selectColor << 8);
-					// サーバーへ染料の使用を通知
-					byte ldata[] = new byte[2];
-					ldata[0] = LMM_Statics.LMN_Server_DecDyePowder;
-					ldata[1] = (byte)selectColor;
-					LMM_Net.sendToServer(ldata);
-				}
-				*/
 				MMM_TextureManager.instance.postSetTexturePack(target, selectColor, target.getTextureBox());
-//				theMaid.sendTextureToServer();
 			} else {
 				MMM_TextureBox lboxs[] = new MMM_TextureBox[2];
 				lboxs[0] = (MMM_TextureBox)target.getTextureBox()[0];

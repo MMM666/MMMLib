@@ -79,16 +79,15 @@ public class MMM_GuiTextureSlot extends GuiSlot {
 			texsel[1] = var1;
 		} else {
 			MMM_TextureBox lbox = getSelectedBox(var1);
-			if (lbox.hasColor(selectColor) && (owner.canSelectColor & (1 << selectColor)) > 0) {
+			if (lbox.hasColor(selectColor, isContract) && (owner.canSelectColor & (1 << selectColor)) > 0) {
 				selected = var1;
 				texsel[0] = var1;
 				owner.selectColor = selectColor;
-			} else if (lbox.hasColor(color)) {
+			} else if (lbox.hasColor(color, isContract)) {
 				selected = var1;
 				texsel[0] = var1;
 				owner.selectColor = color;
 			}
-			
 		}
 	}
 

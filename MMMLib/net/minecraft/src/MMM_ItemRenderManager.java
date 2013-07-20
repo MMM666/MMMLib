@@ -55,7 +55,7 @@ public class MMM_ItemRenderManager {
 			Class lc = pItem.getClass();
 			
 			try {
-				lrenderItem = lc.getMethod("renderItem", EntityLiving.class, ItemStack.class, int.class);
+				lrenderItem = lc.getMethod("renderItem", EntityLivingBase.class, ItemStack.class, int.class);
 			} catch (Exception e) {
 			}
 			try {

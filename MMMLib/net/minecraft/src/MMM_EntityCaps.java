@@ -196,6 +196,12 @@ public class MMM_EntityCaps implements MMM_IModelCaps {
 					return owner.boundingBox.minZ;
 				}
 			}
+		case caps_isLeeding:
+			return (owner instanceof EntityLiving) && ((EntityLiving)owner).func_110167_bD();
+		case caps_getRidingName:
+			return owner.ridingEntity == null ? "" : EntityList.getEntityString(owner.ridingEntity);
+		
+		// World
 		case caps_WorldTotalTime:
 			return owner.worldObj.worldInfo.getWorldTotalTime();
 		case caps_WorldTime:

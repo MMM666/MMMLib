@@ -26,7 +26,7 @@ public class MMM_GuiSlotMobSelect extends GuiSlot {
 	@Override
 	protected void elementClicked(int var1, boolean var2) {
 		String s = ownerGui.entityMap.keySet().toArray()[var1].toString();
-		EntityLiving lel = (EntityLiving) ownerGui.entityMap.get(s);
+		EntityLivingBase lel = (EntityLivingBase) ownerGui.entityMap.get(s);
 		ownerGui.clickSlot(var1, var2, s, lel);
 		selected = var1;
 	}
