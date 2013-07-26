@@ -9,22 +9,27 @@ public class mod_MMM_MMMLib extends BaseMod {
 
 	public static final String Revision = "3";
 	
-	@MLProp()
-	public static boolean isDebugView = false;
-	@MLProp()
-	public static boolean isDebugMessage = true;
-	@MLProp(info = "Override RenderItem.")
-	public static boolean renderHacking = true;
-	@MLProp(info = "starting auto assigned ID.")
-	public static int startVehicleEntityID = 2176;
-	@MLProp(info="true: AlphaBlend(request power), false: AlphaTest(more fast)")
-	public static boolean isModelAlphaBlend = true;
+	public static String[] cfg_comment = {
+		"cfg_renderHacking = Override RenderItem.",
+		"cfg_startVehicleEntityID = starting auto assigned ID.",
+		"cfg_isModelAlphaBlend = true: AlphaBlend(request power), false: AlphaTest(more fast)"
+	};
+//	@MLProp()
+	public static boolean cfg_isDebugView = false;
+//	@MLProp()
+	public static boolean cfg_isDebugMessage = true;
+//	@MLProp(info = "Override RenderItem.")
+	public static boolean cfg_renderHacking = true;
+//	@MLProp(info = "starting auto assigned ID.")
+	public static int cfg_startVehicleEntityID = 2176;
+//	@MLProp(info="true: AlphaBlend(request power), false: AlphaTest(more fast)")
+	public static boolean cfg_isModelAlphaBlend = true;
 
 
 
 	public static void Debug(String pText, Object... pVals) {
 		// デバッグメッセージ
-		if (isDebugMessage) {
+		if (cfg_isDebugMessage) {
 			System.out.println(String.format("MMMLib-" + pText, pVals));
 		}
 	}
@@ -50,19 +55,23 @@ public class mod_MMM_MMMLib extends BaseMod {
 		Debug(MMM_Helper.isClient ? "Client" : "Server");
 		Debug(MMM_Helper.isForge ? "Forge" : "Modloader");
 		MMM_FileManager.init();
+		MMM_Config.init();
+		MMM_Config.checkConfig(mod_MMM_MMMLib.class);
 		MMM_TextureManager.instance.init();
 		MMM_StabilizerManager.init();
 		if (MMM_Helper.isClient) {
 			MMM_Client.init();
 		}
 		ModLoader.setInGameHook(this, true, true);
-		if (isDebugView) {
+		if (cfg_isDebugView) {
 			MMM_EntityDummy.isEnable = true;
 		}
 		
 		// 独自パケット用チャンネル
 		ModLoader.registerPacketChannel(this, "MMM|Upd");
 		
+		// Forge使用時は無効
+		cfg_renderHacking &= !MMM_Helper.isForge;
 	}
 
 	@Override
@@ -88,11 +97,11 @@ public class mod_MMM_MMMLib extends BaseMod {
 
 	@Override
 	public void addRenderer(Map var1) {
-		if (isDebugView) {
+		if (cfg_isDebugView) {
 			var1.put(net.minecraft.src.MMM_EntityDummy.class, new MMM_RenderDummy());
 		}
 		// RenderItem
-		if (renderHacking && MMM_Helper.isClient) {
+		if (cfg_renderHacking && MMM_Helper.isClient) {
 			var1.put(EntityItem.class, new MMM_RenderItem());
 		}
 		// RenderSelect
@@ -101,7 +110,7 @@ public class mod_MMM_MMMLib extends BaseMod {
 
 	@Override
 	public boolean onTickInGame(float var1, Minecraft var2) {
-		if (isDebugView && MMM_Helper.isClient) {
+		if (cfg_isDebugView && MMM_Helper.isClient) {
 			// ダミーマーカーの表示用処理
 			if (var2.theWorld != null && var2.thePlayer != null) {
 				try {
@@ -116,7 +125,7 @@ public class mod_MMM_MMMLib extends BaseMod {
 		}
 		
 		// アイテムレンダーをオーバーライド
-		if (renderHacking && MMM_Helper.isClient) {
+		if (cfg_renderHacking && MMM_Helper.isClient) {
 			MMM_Client.setItemRenderer();
 		}
 		

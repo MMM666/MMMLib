@@ -26,6 +26,7 @@ public class MMM_FileManager {
 	public static File minecraftDir;
 	public static File versionDir;
 	public static File modDir;
+	public static File assetsDir;
 
 	
 	public static void init() {
@@ -85,6 +86,17 @@ public class MMM_FileManager {
 		}
 		mod_MMM_MMMLib.Debug("getMods-Directory:%s", modDir.getAbsolutePath());
 		
+		if (MMM_Helper.isClient) {
+			try {
+				assetsDir = (File)ModLoader.getPrivateValue(Minecraft.class, MMM_Helper.mc, 42);
+			} catch (Exception e) {
+				e.printStackTrace();
+				assetsDir = new File(minecraftDir, "assets");
+			}
+			mod_MMM_MMMLib.Debug("getAssets-Directory:%s", assetsDir.getAbsolutePath());
+		} else {
+			// サーバー側では使われないはず。
+		}
 		
 	}
 

@@ -116,7 +116,7 @@ public class MMM_ItemRenderer extends ItemRenderer {
 		if (itemToRender != null) {
 			Item litem = itemToRender.getItem();
 			if (MMM_ItemRenderManager.isEXRender(litem)) {
-				if (MMM_ItemRenderManager.getEXRender(litem).renderItemInFirstPerson(f, this)) {
+				if (MMM_ItemRenderManager.getEXRender(litem).renderItemInFirstPerson(MMM_Helper.mc.thePlayer, itemToRender, f)) {
 					return;
 				}
 			}

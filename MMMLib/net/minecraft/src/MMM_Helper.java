@@ -218,7 +218,7 @@ public class MMM_Helper {
 			}
 		} else {
 			// •¨—p
-			for (int li = mod_MMM_MMMLib.startVehicleEntityID; li < mod_MMM_MMMLib.startVehicleEntityID + 2048; li++) {
+			for (int li = mod_MMM_MMMLib.cfg_startVehicleEntityID; li < mod_MMM_MMMLib.cfg_startVehicleEntityID + 2048; li++) {
 				if (EntityList.getClassFromID(li) == null) {
 					return li;
 				}

@@ -5,33 +5,60 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
+
+import net.minecraftforge.client.IItemRenderer;
+
+import org.lwjgl.opengl.EXTRescaleNormal;
+import org.lwjgl.opengl.GL11;
 
 public class MMM_ItemRenderManager {
 
 	protected static Map<Object, MMM_ItemRenderManager> classList = new HashMap<Object, MMM_ItemRenderManager>();
 	protected static List<Object> checkList = new ArrayList<Object>();
+	protected Random random;
 	
-	private Object fobject;
-	private Method frenderItem;
-	private Method frenderItemInFirstPerson;
-	private Method fgetRenderTexture;
-	private Method frenderItemWorld;
-	private MMM_IItemRenderManager exRender;
+	protected Object fobject;
+	protected Method frenderItem;
+	protected Method frenderItemInFirstPerson;
+	protected Method fgetRenderTexture;
+	protected Method frenderItemWorld;
+	protected MMM_IItemRenderManager exRender;
+
 
 
 	private MMM_ItemRenderManager(Object pObject, Method prenderItem, Method prenderItemInFirstPerson,
 			Method pgetRenderTexture, Method prenderItemWorld) {
 		fobject = pObject;
+		exRender = null;
 		frenderItem = prenderItem;
 		frenderItemInFirstPerson = prenderItemInFirstPerson;
 		fgetRenderTexture = pgetRenderTexture;
 		frenderItemWorld = prenderItemWorld;
-		exRender = null;
+		random = new Random();
 	}
-	
+
 	private MMM_ItemRenderManager(Object pObject, MMM_IItemRenderManager pEXRender) {
 		fobject = pObject;
 		exRender = pEXRender;
+//		frenderItem = pEXRender.getClass().getDeclaredMethod("renderItem", EntityLivingBase.class, ItemStack.class, int.class);
+//		frenderItemInFirstPerson = prenderItemInFirstPerson;
+//		fgetRenderTexture = pgetRenderTexture;
+//		frenderItemWorld = prenderItemWorld;
+		random = new Random();
+		if (MMM_Helper.isForge) {
+			registerForge((Item)pObject, pEXRender);
+		}
+	}
+
+	public static void registerForge(Item pItem, MMM_IItemRenderManager pEXRender) {
+		try {
+			Class lc = Class.forName("net.minecraftforge.client.MinecraftForgeClient");
+			Method lm = lc.getDeclaredMethod("registerItemRenderer", int.class, IItemRenderer.class);
+			lm.invoke(null, pItem.itemID, pEXRender);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static boolean setEXRender(Item pItem, MMM_IItemRenderManager pEXRender) {
@@ -86,7 +113,7 @@ public class MMM_ItemRenderManager {
 
 
 
-	public boolean renderItem(EntityLivingBase pEntity, ItemStack pItemstack, int pIndex) {
+	public boolean renderItem(Entity pEntity, ItemStack pItemstack, int pIndex) {
 		if (exRender != null) {
 			return exRender.renderItem(pEntity, pItemstack, pIndex);
 		} else if (frenderItem != null) {
@@ -98,17 +125,63 @@ public class MMM_ItemRenderManager {
 		return false;
 	}
 
-	public boolean renderItemInFirstPerson(float pDelta, MMM_ItemRenderer pItemRenderer) {
+	public boolean renderItemInFirstPerson(Entity pEntity, ItemStack pItemStack, float pDeltaTimepRenderPhatialTick) {
+//	public boolean renderItemInFirstPerson(float pDelta, MMM_ItemRenderer pItemRenderer) {
 		if (exRender != null) {
-			return exRender.renderItemInFirstPerson(pDelta, pItemRenderer);
+			return exRender.renderItemInFirstPerson(MMM_Helper.mc.thePlayer, pItemStack, pDeltaTimepRenderPhatialTick);
+//			return exRender.renderItemInFirstPerson(pDelta, pItemRenderer);
 		} else if (frenderItemInFirstPerson != null) {
 			try {
-				return (Boolean)frenderItemInFirstPerson.invoke(fobject, pDelta);
+				return (Boolean)frenderItemInFirstPerson.invoke(fobject, MMM_Helper.mc.thePlayer, pItemStack, pDeltaTimepRenderPhatialTick);
 			} catch (Exception e) {
 			}
 		}
 		return false;
 	}
+
+	public boolean renderItemWorld(EntityItem entityitem, double d, double d1, double d2, float f, float f1) {
+		ItemStack lis = entityitem.getEntityItem();
+		MMM_ItemRenderManager lirm = MMM_ItemRenderManager.getEXRender(lis.getItem());
+		if (!lirm.isRenderItemWorld()) return false;
+		
+		// テクスチャ
+		MMM_Client.setTexture(lirm.getRenderTexture());
+		// 描画
+		random.setSeed(187L);
+		GL11.glPushMatrix();
+		float f2 = MathHelper.sin(((float)entityitem.age + f1) / 10F + entityitem.hoverStart) * 0.1F + 0.1F;
+		float f3 = (((float)entityitem.age + f1) / 20F + entityitem.hoverStart) * 57.29578F;
+		byte byte0 = 1;
+		if (lis.stackSize > 1) {
+			byte0 = 2;
+		}
+		if (lis.stackSize > 5) {
+			byte0 = 3;
+		}
+		if (lis.stackSize > 20) {
+			byte0 = 4;
+		}
+		GL11.glTranslatef((float)d, (float)d1 + f2, (float)d2);
+		GL11.glEnable(EXTRescaleNormal.GL_RESCALE_NORMAL_EXT);
+		GL11.glRotatef(f3, 0.0F, 1.0F, 0.0F);
+		float f4 = 1.0F; //0.25F;
+		for (int j = 0; j < byte0; j++) {
+			GL11.glPushMatrix();
+			if (j > 0) {
+				float f5 = ((random.nextFloat() * 2.0F - 1.0F) * 0.2F) / f4;
+				float f7 = ((random.nextFloat() * 2.0F - 1.0F) * 0.2F) / f4;
+				float f9 = ((random.nextFloat() * 2.0F - 1.0F) * 0.2F) / f4;
+				GL11.glTranslatef(f5, f7, f9);
+			}
+			lirm.renderItem(null, lis, 0);
+			GL11.glPopMatrix();
+		}
+		
+		GL11.glPopMatrix();
+		return true;
+	}
+
+
 
 	public ResourceLocation getRenderTexture() {
 		if (exRender != null) {
@@ -134,4 +207,11 @@ public class MMM_ItemRenderManager {
 		return false;
 	}
 
+	public boolean isRenderItemInFirstPerson() {
+		return false;
+	}
+
+	public boolean isRenderItem() {
+		return false;
+	}
 }

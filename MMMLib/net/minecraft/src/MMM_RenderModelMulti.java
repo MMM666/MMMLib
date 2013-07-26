@@ -13,10 +13,10 @@ public class MMM_RenderModelMulti extends RenderLiving {
 	public MMM_RenderModelMulti(float pShadowSize) {
 		super(null, pShadowSize);
 		modelFATT = new MMM_ModelBaseDuo(this);
-		modelFATT.isModelAlphablend = mod_MMM_MMMLib.isModelAlphaBlend;
+		modelFATT.isModelAlphablend = mod_MMM_MMMLib.cfg_isModelAlphaBlend;
 		modelFATT.isRendering = true;
 		modelMain = new MMM_ModelBaseSolo(this);
-		modelMain.isModelAlphablend = mod_MMM_MMMLib.isModelAlphaBlend;
+		modelMain.isModelAlphablend = mod_MMM_MMMLib.cfg_isModelAlphaBlend;
 		modelMain.capsLink = modelFATT;
 		mainModel = modelMain;
 		setRenderPassModel(modelFATT);
