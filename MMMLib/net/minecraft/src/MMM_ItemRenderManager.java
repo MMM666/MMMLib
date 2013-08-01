@@ -16,6 +16,7 @@ public class MMM_ItemRenderManager {
 
 	protected static Map<Object, MMM_ItemRenderManager> classList = new HashMap<Object, MMM_ItemRenderManager>();
 	protected static List<Object> checkList = new ArrayList<Object>();
+	protected static MMM_ItemRendererForge forgeRender;
 	protected Random random;
 	
 	protected Object fobject;
@@ -52,11 +53,15 @@ public class MMM_ItemRenderManager {
 	}
 
 	public static void registerForge(Item pItem, MMM_IItemRenderManager pEXRender) {
+		if (forgeRender == null) {
+			forgeRender = new MMM_ItemRendererForge();
+		}
 		try {
 			Class lc = Class.forName("net.minecraftforge.client.MinecraftForgeClient");
 			Method lm = lc.getDeclaredMethod("registerItemRenderer", int.class, IItemRenderer.class);
-			lm.invoke(null, pItem.itemID, pEXRender);
+			lm.invoke(null, pItem.itemID, forgeRender);
 		} catch (Exception e) {
+//			MinecraftForgeClient.registerItemRenderer(pItem.itemID, forgeRender);
 			e.printStackTrace();
 		}
 	}
@@ -112,6 +117,58 @@ public class MMM_ItemRenderManager {
 	}
 
 
+	public void renderItemLocal(EntityLivingBase entityliving, ItemStack itemstack, int i) {
+		Item litem = itemstack.getItem();
+		// “ÁŽêƒŒƒ“ƒ_ƒ‰
+		MMM_Client.setTexture(getRenderTexture());
+		GL11.glPushMatrix();
+		boolean lflag = renderItem(entityliving, itemstack, i);
+		GL11.glPopMatrix();
+		if (lflag) {
+			if (itemstack != null && itemstack.hasEffect() && i == 0) {
+				GL11.glDepthFunc(GL11.GL_EQUAL);
+				GL11.glDisable(GL11.GL_LIGHTING);
+				MMM_Client.setTexture(MMM_ItemRenderer.texGlint);
+				GL11.glEnable(GL11.GL_BLEND);
+				GL11.glBlendFunc(GL11.GL_SRC_COLOR, GL11.GL_ONE);
+				float var14 = 0.76F;
+				GL11.glColor4f(0.5F * var14, 0.25F * var14, 0.8F * var14, 1.0F);
+				float var15 = 0.125F;
+				
+				GL11.glPushMatrix();
+				GL11.glMatrixMode(GL11.GL_TEXTURE);
+				GL11.glLoadIdentity();
+				GL11.glScalef(var15, var15, var15);
+				float var16 = (float)(Minecraft.getSystemTime() % 3000L) / 3000.0F * 8.0F;
+				GL11.glTranslatef(var16, 0.0F, 0.0F);
+				GL11.glRotatef(-50.0F, 0.0F, 0.0F, 1.0F);
+				GL11.glMatrixMode(GL11.GL_MODELVIEW);
+				renderItem(entityliving, itemstack, 0);
+//				renderItemIn2D(var6, 0.0F, 0.0F, 1.0F, 1.0F, 256, 256, 0.0625F);
+				GL11.glPopMatrix();
+				
+				GL11.glPushMatrix();
+				GL11.glMatrixMode(GL11.GL_TEXTURE);
+				GL11.glLoadIdentity();
+				GL11.glScalef(var15, var15, var15);
+				var16 = (float)(Minecraft.getSystemTime() % 4873L) / 4873.0F * 8.0F;
+				GL11.glTranslatef(-var16, 0.0F, 0.0F);
+				GL11.glRotatef(10.0F, 0.0F, 0.0F, 1.0F);
+				GL11.glMatrixMode(GL11.GL_MODELVIEW);
+				renderItem(entityliving, itemstack, 0);
+//				renderItemIn2D(var6, 0.0F, 0.0F, 1.0F, 1.0F, 256, 256, 0.0625F);
+				GL11.glPopMatrix();
+				
+				GL11.glMatrixMode(GL11.GL_TEXTURE);
+				GL11.glLoadIdentity();
+				GL11.glMatrixMode(GL11.GL_MODELVIEW);
+				GL11.glDisable(GL11.GL_BLEND);
+				GL11.glEnable(GL11.GL_LIGHTING);
+				GL11.glDepthFunc(GL11.GL_LEQUAL);
+			}
+			return;
+		}
+	}
 
 	public boolean renderItem(Entity pEntity, ItemStack pItemstack, int pIndex) {
 		if (exRender != null) {
@@ -208,10 +265,17 @@ public class MMM_ItemRenderManager {
 	}
 
 	public boolean isRenderItemInFirstPerson() {
+		if (exRender != null) {
+			return exRender.isRenderItemInFirstPerson();
+		}
 		return false;
 	}
 
 	public boolean isRenderItem() {
+		if (exRender != null) {
+			return exRender.isRenderItem();
+		}
 		return false;
 	}
+
 }

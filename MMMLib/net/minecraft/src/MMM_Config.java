@@ -92,6 +92,8 @@ public class MMM_Config {
 
 	public static void loadConfig(Class pClass) {
 		File lfile = getConfigFile(pClass);
+		if (!lfile.exists() || !lfile.isFile()) return;
+		
 		List<Field> llist = getConfigFields(pClass);
 		StringBuilder lsb = new StringBuilder();
 		Properties lprop = new Properties();
