@@ -441,8 +441,16 @@ public class MMM_ModelRenderer {
 			TileEntitySkullRenderer.skullRenderer.func_82393_a(-0.5F, -0.25F, -0.5F, 1, 180.0F,
 					itemstack.getItemDamage(), lsowner);
 		} else if (pRealBlock && itemstack.getItem() instanceof ItemBlock) {
+			MMM_Client.setTexture(TextureMap.field_110575_b);
 //			pRender.loadTexture("/terrain.png");
 //			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+
+//			int var4 = pEntityLiving.getBrightnessForRender(0.0F);
+//			int var5 = var4 % 65536;
+//			int var6 = var4 / 65536;
+//			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)var5 / 1.0F, (float)var6 / 1.0F);
+
+			
 			GL11.glEnable(GL11.GL_CULL_FACE);
 			pRender.renderBlocks.renderBlockAsItem(
 					Block.blocksList[itemstack.itemID],

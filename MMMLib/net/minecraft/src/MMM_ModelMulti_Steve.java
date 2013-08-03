@@ -312,6 +312,12 @@ public class MMM_ModelMulti_Steve extends MMM_ModelMultiBase {
 	}
 
 	@Override
+	public float getLeashOffset(MMM_IModelCaps pEntityCaps) {
+		// TODO Auto-generated method stub
+		return 0.2F;
+	}
+
+	@Override
 	public int showArmorParts(int parts, int index) {
 		if (index == 0) {
 			bipedHead.isRendering = parts == 3;

@@ -54,7 +54,7 @@ public class MMM_TextureData implements MMM_ITextureEntity {
 		};
 		color = 12;
 		contract = false;
-		textureBox = new MMM_TextureBox[2];
+		textureBox = new MMM_TextureBoxBase[2];
 		textureIndex = new int[2];
 	}
 
@@ -74,8 +74,8 @@ public class MMM_TextureData implements MMM_ITextureEntity {
 			}
 		}
 		if (textureBox[1] instanceof MMM_TextureBox && owner != null) {
-			for (int i = 1; i < 5; i++) {
-				ItemStack is = owner.getCurrentItemOrArmor(i);
+			for (int i = 0; i < 4; i++) {
+				ItemStack is = owner.getCurrentItemOrArmor(i + 1);
 				textures[1][i] = ((MMM_TextureBox)textureBox[1]).getArmorTextureName(MMM_TextureManager.tx_armor1, is);
 				textures[2][i] = ((MMM_TextureBox)textureBox[1]).getArmorTextureName(MMM_TextureManager.tx_armor2, is);
 				textures[3][i] = ((MMM_TextureBox)textureBox[1]).getArmorTextureName(MMM_TextureManager.tx_armor1light, is);
@@ -245,7 +245,7 @@ public class MMM_TextureData implements MMM_ITextureEntity {
 	 * @param pName
 	 */
 	public void setTextureInit(String pName) {
-		textureIndex[0] = textureIndex[1] = MMM_TextureManager.instance.getIndexTextureBoxServer(this, pName);
+		textureIndex[0] = textureIndex[1] = MMM_TextureManager.instance.getIndexTextureBoxServer((MMM_ITextureEntity)owner, pName);
 		textureBox[0] = textureBox[1] = MMM_TextureManager.instance.getTextureBoxServer(textureIndex[0]);
 		color = textureBox[0].getRandomWildColor(owner.rand);
 	}
