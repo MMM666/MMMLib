@@ -25,6 +25,16 @@ public class MMM_ModelBaseDuo extends MMM_ModelBaseNihil implements MMM_IModelBa
 	 */
 	public ResourceLocation[] textureInner;
 	/**
+	 * 部位毎のアーマーテクスチャの指定。
+	 * 外側・発光。
+	 */
+	public ResourceLocation[] textureOuterLight;
+	/**
+	 * 部位毎のアーマーテクスチャの指定。
+	 * 内側・発光。
+	 */
+	public ResourceLocation[] textureInnerLight;
+	/**
 	 * 描画されるアーマーの部位。
 	 * shouldRenderPassとかで指定する。
 	 */
@@ -57,25 +67,37 @@ public class MMM_ModelBaseDuo extends MMM_ModelBaseNihil implements MMM_IModelBa
 				GL11.glDisable(GL11.GL_BLEND);
 			}
 		}
-		while (modelInner != null) {
+		if (modelInner != null) {
 			if (textureInner != null) {
-				if (textureInner[renderParts] == null) {
-					break;
+				if (textureInner[renderParts] != null) {
+					MMM_Client.setTexture(textureInner[renderParts]);
+					modelInner.render(entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
 				}
-				MMM_Client.setTexture(textureInner[renderParts]);
+			} else {
+				modelInner.render(entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
 			}
-			modelInner.render(entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
-			break;
+			if (textureInnerLight != null) {
+				if (textureInnerLight[renderParts] != null) {
+					MMM_Client.setTexture(textureInner[renderParts]);
+					modelInner.render(entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
+				}
+			}
 		}
-		while (modelOuter != null) {
+		if (modelOuter != null) {
 			if (textureOuter != null) {
-				if (textureOuter[renderParts] == null) {
-					break;
+				if (textureOuter[renderParts] != null) {
+					MMM_Client.setTexture(textureOuter[renderParts]);
+					modelOuter.render(entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
 				}
-				MMM_Client.setTexture(textureOuter[renderParts]);
+			} else {
+				modelOuter.render(entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
 			}
-			modelOuter.render(entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
-			break;
+			if (textureOuterLight != null) {
+				if (textureOuterLight[renderParts] != null) {
+					MMM_Client.setTexture(textureOuterLight[renderParts]);
+					modelOuter.render(entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
+				}
+			}
 		}
 		isAlphablend = false;
 	}

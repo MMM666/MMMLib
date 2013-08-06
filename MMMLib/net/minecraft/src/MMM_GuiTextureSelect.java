@@ -66,15 +66,12 @@ public class MMM_GuiTextureSelect extends GuiScreen {
 		if (selectPanel.mode) {
 			selectPanel.entity.textureBox[0] = selectPanel.blankBox;
 			selectPanel.entity.textureBox[1] = lbox;
-			ltex = selectPanel.entity.getTextures(1);
-			ltex[0] = ltex[1] = ltex[2] = ltex[3] = lbox.getArmorTextureName(MMM_TextureManager.tx_armor1, "default", 0);
-			ltex = selectPanel.entity.getTextures(2);
-			ltex[0] = ltex[1] = ltex[2] = ltex[3] = lbox.getArmorTextureName(MMM_TextureManager.tx_armor2, "default", 0);
+			selectPanel.entity.setTextureNames("default");
 		} else {
 			selectPanel.entity.textureBox[0] = lbox;
 			selectPanel.entity.textureBox[1] = selectPanel.blankBox;
 			selectPanel.entity.setColor(selectColor);
-			selectPanel.entity.getTextures(0)[0] = lbox.getTextureName(selectColor + (selectPanel.isContract ? 0 : MMM_TextureManager.tx_wild));
+			selectPanel.entity.setTextureNames();
 		}
 		RenderManager.instance.renderEntityWithPosYaw(selectPanel.entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F);
 		for (int li = 0; li < 16; li++) {

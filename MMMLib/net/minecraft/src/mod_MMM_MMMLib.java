@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class mod_MMM_MMMLib extends BaseMod {
 
-	public static final String Revision = "3";
+	public static final String Revision = "4";
 	
 	public static String[] cfg_comment = {
 		"cfg_renderHacking = Override RenderItem.",

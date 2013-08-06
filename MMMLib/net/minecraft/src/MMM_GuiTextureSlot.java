@@ -158,13 +158,15 @@ public class MMM_GuiTextureSlot extends GuiSlot {
 			for (String ls : MMM_TextureManager.armorFilenamePrefix) {
 				GL11.glTranslatef(1F, 0, 0);
 				if (lbox.armors.containsKey(ls)) {
-					ltxname = entity.getTextures(1);
-					ltxname[0] = ltxname[1] = ltxname[2] = ltxname[3] =
-							lbox.getArmorTextureName(MMM_TextureManager.tx_armor1, ls, 0);
-					ltxname = entity.getTextures(2);
-					ltxname[0] = ltxname[1] = ltxname[2] = ltxname[3] =
-							lbox.getArmorTextureName(MMM_TextureManager.tx_armor2, ls, 0);
+//					ltxname = entity.getTextures(1);
+//					ltxname[0] = ltxname[1] = ltxname[2] = ltxname[3] =
+//							lbox.getArmorTextureName(MMM_TextureManager.tx_armor1, ls, 0);
+//					ltxname = entity.getTextures(2);
+//					ltxname[0] = ltxname[1] = ltxname[2] = ltxname[3] =
+//							lbox.getArmorTextureName(MMM_TextureManager.tx_armor2, ls, 0);
+					entity.setTextureNames(ls);
 					RenderManager.instance.renderEntityWithPosYaw(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F);
+					MMM_Client.setLightmapTextureCoords(0x00f0);//61680
 				}
 			}
 		} else {
@@ -174,8 +176,10 @@ public class MMM_GuiTextureSlot extends GuiSlot {
 				if (lbox.hasColor(li, isContract)) {
 					entity.setColor(li);
 					entity.setContract(isContract);
-					entity.getTextures(0)[0] = lbox.getTextureName(li + (isContract ? 0 : MMM_TextureManager.tx_wild));
+					entity.setTextureNames();
+//					entity.getTextures(0)[0] = lbox.getTextureName(li + (isContract ? 0 : MMM_TextureManager.tx_wild));
 					RenderManager.instance.renderEntityWithPosYaw(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F);
+					MMM_Client.setLightmapTextureCoords(0x00f0);//61680
 				}
 			}
 		}

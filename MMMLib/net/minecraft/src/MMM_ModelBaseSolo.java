@@ -73,7 +73,6 @@ public class MMM_ModelBaseSolo extends MMM_ModelBaseNihil implements MMM_IModelB
 //			GL11.glDepthMask(true);
 			
 			MMM_Client.setLightmapTextureCoords(0x00f0);//61680
-//			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, var4);
 			model.render(entityCaps, par2, par3, par4, par5, par6, par7, true);
 			
@@ -82,6 +81,7 @@ public class MMM_ModelBaseSolo extends MMM_ModelBaseNihil implements MMM_IModelB
 //			GL11.glEnable(GL11.GL_LIGHTING);
 			GL11.glDisable(GL11.GL_BLEND);
 			GL11.glEnable(GL11.GL_ALPHA_TEST);
+			GL11.glDepthMask(true);
 		}
 		textures = blanks;
 	}

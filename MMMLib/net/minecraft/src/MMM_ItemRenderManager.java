@@ -64,6 +64,7 @@ public class MMM_ItemRenderManager {
 //			MinecraftForgeClient.registerItemRenderer(pItem.itemID, forgeRender);
 			e.printStackTrace();
 		}
+		mod_MMM_MMMLib.Debug("registerForge:%s", pItem.getClass().getSimpleName());
 	}
 
 	public static boolean setEXRender(Item pItem, MMM_IItemRenderManager pEXRender) {

@@ -12,6 +12,8 @@ public class MMM_EntitySelect extends EntityLiving implements MMM_IModelCaps, MM
 	public ResourceLocation textures[][] = new ResourceLocation[][] {
 			{ null, null },
 			{ null, null , null , null },
+			{ null, null , null , null },
+			{ null, null , null , null },
 			{ null, null , null , null }
 	};
 	protected MMM_EntityCaps entityCaps;
@@ -103,6 +105,35 @@ public class MMM_EntitySelect extends EntityLiving implements MMM_IModelCaps, MM
 		textures[2][1] = ((MMM_TextureBox)textureBox[1]).getArmorTextureName(MMM_TextureManager.tx_armor2, getCurrentItemOrArmor(2));
 		textures[2][2] = ((MMM_TextureBox)textureBox[1]).getArmorTextureName(MMM_TextureManager.tx_armor2, getCurrentItemOrArmor(3));
 		textures[2][3] = ((MMM_TextureBox)textureBox[1]).getArmorTextureName(MMM_TextureManager.tx_armor2, getCurrentItemOrArmor(4));
+		textures[3][0] = ((MMM_TextureBox)textureBox[1]).getArmorTextureName(MMM_TextureManager.tx_armor1light, getCurrentItemOrArmor(1));
+		textures[3][1] = ((MMM_TextureBox)textureBox[1]).getArmorTextureName(MMM_TextureManager.tx_armor1light, getCurrentItemOrArmor(2));
+		textures[3][2] = ((MMM_TextureBox)textureBox[1]).getArmorTextureName(MMM_TextureManager.tx_armor1light, getCurrentItemOrArmor(3));
+		textures[3][3] = ((MMM_TextureBox)textureBox[1]).getArmorTextureName(MMM_TextureManager.tx_armor1light, getCurrentItemOrArmor(4));
+		textures[4][0] = ((MMM_TextureBox)textureBox[1]).getArmorTextureName(MMM_TextureManager.tx_armor2light, getCurrentItemOrArmor(1));
+		textures[4][1] = ((MMM_TextureBox)textureBox[1]).getArmorTextureName(MMM_TextureManager.tx_armor2light, getCurrentItemOrArmor(2));
+		textures[4][2] = ((MMM_TextureBox)textureBox[1]).getArmorTextureName(MMM_TextureManager.tx_armor2light, getCurrentItemOrArmor(3));
+		textures[4][3] = ((MMM_TextureBox)textureBox[1]).getArmorTextureName(MMM_TextureManager.tx_armor2light, getCurrentItemOrArmor(4));
+	}
+
+	protected void setTextureNames(String pArmorName) {
+		textures[0][0] = ((MMM_TextureBox)textureBox[0]).getTextureName(color + (contract ? 0 : MMM_TextureManager.tx_wild));
+		textures[0][1] = ((MMM_TextureBox)textureBox[0]).getTextureName(color + (contract ? MMM_TextureManager.tx_eyecontract : MMM_TextureManager.tx_eyewild));
+		textures[1][0] = ((MMM_TextureBox)textureBox[1]).getArmorTextureName(MMM_TextureManager.tx_armor1, pArmorName, 0);
+		textures[1][1] = ((MMM_TextureBox)textureBox[1]).getArmorTextureName(MMM_TextureManager.tx_armor1, pArmorName, 0);
+		textures[1][2] = ((MMM_TextureBox)textureBox[1]).getArmorTextureName(MMM_TextureManager.tx_armor1, pArmorName, 0);
+		textures[1][3] = ((MMM_TextureBox)textureBox[1]).getArmorTextureName(MMM_TextureManager.tx_armor1, pArmorName, 0);
+		textures[2][0] = ((MMM_TextureBox)textureBox[1]).getArmorTextureName(MMM_TextureManager.tx_armor2, pArmorName, 0);
+		textures[2][1] = ((MMM_TextureBox)textureBox[1]).getArmorTextureName(MMM_TextureManager.tx_armor2, pArmorName, 0);
+		textures[2][2] = ((MMM_TextureBox)textureBox[1]).getArmorTextureName(MMM_TextureManager.tx_armor2, pArmorName, 0);
+		textures[2][3] = ((MMM_TextureBox)textureBox[1]).getArmorTextureName(MMM_TextureManager.tx_armor2, pArmorName, 0);
+		textures[3][0] = ((MMM_TextureBox)textureBox[1]).getArmorTextureName(MMM_TextureManager.tx_armor1light, pArmorName, 0);
+		textures[3][1] = ((MMM_TextureBox)textureBox[1]).getArmorTextureName(MMM_TextureManager.tx_armor1light, pArmorName, 0);
+		textures[3][2] = ((MMM_TextureBox)textureBox[1]).getArmorTextureName(MMM_TextureManager.tx_armor1light, pArmorName, 0);
+		textures[3][3] = ((MMM_TextureBox)textureBox[1]).getArmorTextureName(MMM_TextureManager.tx_armor1light, pArmorName, 0);
+		textures[4][0] = ((MMM_TextureBox)textureBox[1]).getArmorTextureName(MMM_TextureManager.tx_armor2light, pArmorName, 0);
+		textures[4][1] = ((MMM_TextureBox)textureBox[1]).getArmorTextureName(MMM_TextureManager.tx_armor2light, pArmorName, 0);
+		textures[4][2] = ((MMM_TextureBox)textureBox[1]).getArmorTextureName(MMM_TextureManager.tx_armor2light, pArmorName, 0);
+		textures[4][3] = ((MMM_TextureBox)textureBox[1]).getArmorTextureName(MMM_TextureManager.tx_armor2light, pArmorName, 0);
 	}
 
 	@Override
@@ -142,7 +173,7 @@ public class MMM_EntitySelect extends EntityLiving implements MMM_IModelCaps, MM
 
 	@Override
 	public ResourceLocation[] getTextures(int pIndex) {
-		return textures[pIndex];
+		return pIndex < textures.length ? textures[pIndex] : null;
 	}
 
 	@Override

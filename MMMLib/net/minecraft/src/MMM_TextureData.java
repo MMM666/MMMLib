@@ -48,7 +48,7 @@ public class MMM_TextureData implements MMM_ITextureEntity {
 				 */
 				{ null, null, null, null },
 				/**
-				 * アーマー内発光：頭、胴、腰、足
+				 * アーマー外発光：頭、胴、腰、足
 				 */
 				{ null, null, null, null }
 		};

@@ -9,9 +9,11 @@ public class MMM_ItemRendererForge implements IItemRenderer {
 
 	@Override
 	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
-		if (item == null || MMM_ItemRenderManager.isEXRender(item.getItem())) return false;
+		if (item == null || !MMM_ItemRenderManager.isEXRender(item.getItem())) return false;
 		
 		MMM_ItemRenderManager lirm = MMM_ItemRenderManager.getEXRender(item.getItem());
+//		mod_MMM_MMMLib.Debug("MMM_ItemRendererForge:%s", item.getItem().getClass().getSimpleName());
+
 		switch (type) {
 		case ENTITY:
 			return lirm.isRenderItemWorld();

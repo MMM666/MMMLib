@@ -56,6 +56,8 @@ public class MMM_RenderModelMulti extends RenderLiving {
 			modelFATT.modelOuter = ((MMM_TextureBox)ltentity.getTextureBox()[1]).models[2];
 			modelFATT.textureInner = ltentity.getTextures(1);
 			modelFATT.textureOuter = ltentity.getTextures(2);
+			modelFATT.textureInnerLight = ltentity.getTextures(3);
+			modelFATT.textureOuterLight = ltentity.getTextures(4);
 		}
 		modelMain.setEntityCaps(pEntityCaps);
 		modelMain.setRender(this);
