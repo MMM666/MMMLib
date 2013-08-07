@@ -46,7 +46,7 @@ public class MMM_ItemRenderer extends ItemRenderer {
 		if (MMM_ItemRenderManager.isEXRender(litem)) {
 			// “ÁŽêƒŒƒ“ƒ_ƒ‰
 			MMM_ItemRenderManager lii = MMM_ItemRenderManager.getEXRender(litem);
-			MMM_Client.setTexture(lii.getRenderTexture());
+			MMM_Client.setTexture(lii.getRenderTexture(itemstack));
 			GL11.glPushMatrix();
 			boolean lflag = lii.renderItem(entityliving, itemstack, i);
 			GL11.glPopMatrix();

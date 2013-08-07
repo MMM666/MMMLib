@@ -21,10 +21,10 @@ public interface MMM_IItemRenderManager {
 	public boolean renderItem(Entity pEntity, ItemStack pItemStack, int pIndex);
 //	public boolean renderItemInFirstPerson(float pDeltaTimepRenderPhatialTick, MMM_ItemRenderer pItemRenderer);
 	public boolean renderItemInFirstPerson(Entity pEntity, ItemStack pItemStack, float pDeltaTimepRenderPhatialTick);
-	public boolean renderItemWorld();
-	public ResourceLocation getRenderTexture();
-	public boolean isRenderItem();
-	public boolean isRenderItemInFirstPerson();
-	public boolean isRenderItemWorld();
+	public boolean renderItemWorld(ItemStack pItemStack);
+	public ResourceLocation getRenderTexture(ItemStack pItemStack);
+	public boolean isRenderItem(ItemStack pItemStack);
+	public boolean isRenderItemInFirstPerson(ItemStack pItemStack);
+	public boolean isRenderItemWorld(ItemStack pItemStack);
 
 }

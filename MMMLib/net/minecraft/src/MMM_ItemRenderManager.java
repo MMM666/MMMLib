@@ -121,7 +121,7 @@ public class MMM_ItemRenderManager {
 	public void renderItemLocal(EntityLivingBase entityliving, ItemStack itemstack, int i) {
 		Item litem = itemstack.getItem();
 		// 特殊レンダラ
-		MMM_Client.setTexture(getRenderTexture());
+		MMM_Client.setTexture(getRenderTexture(itemstack));
 		GL11.glPushMatrix();
 		boolean lflag = renderItem(entityliving, itemstack, i);
 		GL11.glPopMatrix();
@@ -200,10 +200,10 @@ public class MMM_ItemRenderManager {
 	public boolean renderItemWorld(EntityItem entityitem, double d, double d1, double d2, float f, float f1) {
 		ItemStack lis = entityitem.getEntityItem();
 		MMM_ItemRenderManager lirm = MMM_ItemRenderManager.getEXRender(lis.getItem());
-		if (!lirm.isRenderItemWorld()) return false;
+		if (!lirm.isRenderItemWorld(lis)) return false;
 		
 		// テクスチャ
-		MMM_Client.setTexture(lirm.getRenderTexture());
+		MMM_Client.setTexture(lirm.getRenderTexture(lis));
 		// 描画
 		random.setSeed(187L);
 		GL11.glPushMatrix();
@@ -241,9 +241,9 @@ public class MMM_ItemRenderManager {
 
 
 
-	public ResourceLocation getRenderTexture() {
+	public ResourceLocation getRenderTexture(ItemStack pItemStack) {
 		if (exRender != null) {
-			return exRender.getRenderTexture();
+			return exRender.getRenderTexture(pItemStack);
 		} else if (fgetRenderTexture != null) {
 			try {
 				return (ResourceLocation)fgetRenderTexture.invoke(fobject);
@@ -253,9 +253,9 @@ public class MMM_ItemRenderManager {
 		return null;
 	}
 
-	public boolean isRenderItemWorld() {
+	public boolean isRenderItemWorld(ItemStack pItemStack) {
 		if (exRender != null) {
-			return exRender.isRenderItemWorld();
+			return exRender.isRenderItemWorld(pItemStack);
 		} else if (frenderItemWorld != null) {
 			try {
 				return (Boolean)frenderItemWorld.invoke(fobject);
@@ -265,16 +265,16 @@ public class MMM_ItemRenderManager {
 		return false;
 	}
 
-	public boolean isRenderItemInFirstPerson() {
+	public boolean isRenderItemInFirstPerson(ItemStack pItemStack) {
 		if (exRender != null) {
-			return exRender.isRenderItemInFirstPerson();
+			return exRender.isRenderItemInFirstPerson(pItemStack);
 		}
 		return false;
 	}
 
-	public boolean isRenderItem() {
+	public boolean isRenderItem(ItemStack pItemStack) {
 		if (exRender != null) {
-			return exRender.isRenderItem();
+			return exRender.isRenderItem(pItemStack);
 		}
 		return false;
 	}

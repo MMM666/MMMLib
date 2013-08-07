@@ -16,11 +16,11 @@ public class MMM_ItemRendererForge implements IItemRenderer {
 
 		switch (type) {
 		case ENTITY:
-			return lirm.isRenderItemWorld();
+			return lirm.isRenderItemWorld(item);
 		case EQUIPPED:
-			return lirm.isRenderItem();
+			return lirm.isRenderItem(item);
 		case EQUIPPED_FIRST_PERSON:
-			return lirm.isRenderItemInFirstPerson();
+			return lirm.isRenderItemInFirstPerson(item);
 		case INVENTORY:
 		case FIRST_PERSON_MAP:
 			break;
@@ -59,7 +59,7 @@ public class MMM_ItemRendererForge implements IItemRenderer {
 			renderItem(item, (EntityLivingBase)data[1], lirm);
 			break;
 		case EQUIPPED_FIRST_PERSON:
-			MMM_Client.setTexture(lirm.getRenderTexture());
+			MMM_Client.setTexture(lirm.getRenderTexture(item));
 			GL11.glTranslatef(1.5F, 0.1F, 0.3F);
 //			GL11.glRotatef(135.0F, 0.0F, 0.0F, 1.0F);
 //			GL11.glRotatef(20.0F, 1.0F, 0.0F, 0.0F);

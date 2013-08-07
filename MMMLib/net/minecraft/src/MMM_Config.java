@@ -31,10 +31,6 @@ public class MMM_Config {
 	 */
 	public static void init() {
 		configDir = new File(MMM_FileManager.minecraftDir, "config");
-		
-		
-		// jikken
-		checkConfig(MMM_Config.class);
 	}
 
 	/**
