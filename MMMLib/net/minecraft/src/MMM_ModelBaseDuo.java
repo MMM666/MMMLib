@@ -78,8 +78,12 @@ public class MMM_ModelBaseDuo extends MMM_ModelBaseNihil implements MMM_IModelBa
 			}
 			if (textureInnerLight != null) {
 				if (textureInnerLight[renderParts] != null) {
-					MMM_Client.setTexture(textureInner[renderParts]);
+//					GL11.glDisable(GL11.GL_LIGHTING);
+//					GL11.glColor4f(1F, 1F, 1F, 1F);
+					MMM_Client.setTexture(textureInnerLight[renderParts]);
 					modelInner.render(entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
+//					GL11.glEnable(GL11.GL_LIGHTING);
+//					GL11.glColor4f(1F, 1F, 1F, 1F);
 				}
 			}
 		}

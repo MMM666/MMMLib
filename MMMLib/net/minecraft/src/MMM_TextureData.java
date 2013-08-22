@@ -25,6 +25,12 @@ public class MMM_TextureData implements MMM_ITextureEntity {
 	
 	public MMM_TextureBoxBase textureBox[];
 	public int textureIndex[];
+	
+	/**
+	 * 表示制御に使うフラグ群<br>
+	 * int型32bitで保存。
+	 */
+	public int selectValue;
 
 
 	public MMM_TextureData(EntityLivingBase pEntity, MMM_IModelCaps pCaps) {
@@ -86,7 +92,7 @@ public class MMM_TextureData implements MMM_ITextureEntity {
 	}
 
 	protected boolean setTextureNamesServer() {
-		// Client
+		// Server
 		boolean lf = false;
 		if (textureBox[0] instanceof MMM_TextureBoxServer) {
 			int lc = (color & 0x00ff) + (contract ? 0 : MMM_TextureManager.tx_wild);
@@ -115,7 +121,7 @@ public class MMM_TextureData implements MMM_ITextureEntity {
 			textureBox[0] = MMM_TextureManager.instance.getNextPackege((MMM_TextureBox)textureBox[0], lc);
 			if (textureBox[0] == null) {
 				// 指定色が無い場合は標準モデルに
-				textureBox[0] = textureBox[1] = MMM_TextureManager.instance.getDefaultTexture(this);
+				textureBox[0] = textureBox[1] = MMM_TextureManager.instance.getDefaultTexture((MMM_ITextureEntity)owner);
 				setColor(12);
 			} else {
 				textureBox[1] = textureBox[0];
@@ -256,6 +262,71 @@ public class MMM_TextureData implements MMM_ITextureEntity {
 
 	public ResourceLocation getGUITexture() {
 		return ((MMM_TextureBox)textureBox[0]).getTextureName(MMM_TextureManager.tx_gui);
+	}
+
+	/**
+	 * 
+	 * @param pIndex 0-31
+	 * @return
+	 */
+	public boolean isValueFlag(int pIndex) {
+		return ((selectValue >>> pIndex) & 0x01) == 1;
+	}
+
+	/**
+	 * 
+	 * @param pIndex 0-31
+	 * @param pFlag
+	 */
+	public void setValueFlag(int pIndex, boolean pFlag) {
+		selectValue |= ((pFlag ? 1 : 0) << pIndex);
+	}
+
+	/**
+	 * 保有パラメーターの保存。<br>
+	 * サーバー用。
+	 * @param par1nbtTagCompound
+	 */
+	public void writeToNBT(NBTTagCompound par1nbtTagCompound) {
+		NBTTagCompound lnbt = new NBTTagCompound();
+		NBTTagList lnbtlist = new NBTTagList();
+		for (int li = 0; li < textureIndex.length; li++) {
+			lnbtlist.appendTag(new NBTTagInt(Integer.toString(li), textureIndex[li]));
+		}
+		lnbt.setTag("Textures", lnbtlist);
+		lnbt.setInteger("Color", color);
+		lnbt.setBoolean("Contract", contract);
+		lnbt.setInteger("SelectValue", selectValue);
+		
+		par1nbtTagCompound.setCompoundTag("TextureData", lnbt);
+	}
+
+	/**
+	 * 保有パラメーターの読出。<br>
+	 * サーバー用。
+	 * @param par1nbtTagCompound
+	 */
+	public void readToNBT(NBTTagCompound par1nbtTagCompound) {
+		if (par1nbtTagCompound.hasKey("TextureData")) {
+			NBTTagCompound lnbt = par1nbtTagCompound.getCompoundTag("TextureData");
+			color = lnbt.getInteger("Color");
+			contract = lnbt.getBoolean("Contract");
+			selectValue = lnbt.getInteger("SelectValue");
+			
+			MMM_TextureBox lbox = MMM_TextureManager.instance.getDefaultTexture((MMM_ITextureEntity)owner);
+			NBTTagList lnbtlist = lnbt.getTagList("Textures");
+			if (lnbtlist.tagCount() > 0) {
+				textureIndex = new int[lnbtlist.tagCount()];
+				for (int li = 0; li < lnbtlist.tagCount(); li++) {
+					textureIndex[li] = ((NBTTagInt)lnbtlist.tagAt(li)).data;
+				}
+				setTexturePackIndex(color, textureIndex);
+			} else {
+				// ローカルに在るデフォルトのテクスチャを設定
+				int li = MMM_TextureManager.instance.getIndexTextureBoxServerIndex(lbox);
+				setTexturePackIndex(color, new int[] {li, li});
+			}
+		}
 	}
 
 }

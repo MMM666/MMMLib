@@ -147,12 +147,13 @@ public class MMM_GuiTextureSlot extends GuiSlot {
 			GL11.glTranslatef(1F, 0, 0);
 			Map<Integer, ResourceLocation> lmap = lbox.armors.get("default");
 			if (lmap != null) {
-				ltxname = entity.getTextures(1);
-				ltxname[0] = ltxname[1] = ltxname[2] = ltxname[3] =
-						lbox.getArmorTextureName(MMM_TextureManager.tx_armor1, "default", 0);
-				ltxname = entity.getTextures(2);
-				ltxname[0] = ltxname[1] = ltxname[2] = ltxname[3] =
-						lbox.getArmorTextureName(MMM_TextureManager.tx_armor2, "default", 0);
+//				ltxname = entity.getTextures(1);
+//				ltxname[0] = ltxname[1] = ltxname[2] = ltxname[3] =
+//						lbox.getArmorTextureName(MMM_TextureManager.tx_armor1, "default", 0);
+//				ltxname = entity.getTextures(2);
+//				ltxname[0] = ltxname[1] = ltxname[2] = ltxname[3] =
+//						lbox.getArmorTextureName(MMM_TextureManager.tx_armor2, "default", 0);
+				entity.setTextureNames("default");
 				RenderManager.instance.renderEntityWithPosYaw(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F);
 			}
 			for (String ls : MMM_TextureManager.armorFilenamePrefix) {

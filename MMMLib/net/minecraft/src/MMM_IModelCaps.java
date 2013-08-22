@@ -142,10 +142,13 @@ public interface MMM_IModelCaps {
 	public static final int caps_PartsStrings	= 0x0204;
 
 	// MMM_test
+	/** モデルが変更された時に実行される関数へリンクします **/
 	public static final int caps_changeModel	= 0x0300;
 	public static final int caps_renderFace		= 0x0310;
 	public static final int caps_renderBody		= 0x0311;
 	public static final int caps_setFaceTexture	= 0x0312;
+	/** MMM_TextureDataのインスタンスを返します。 **/
+	public static final int caps_textureData	= 0x0313;
 
 
 	/**
