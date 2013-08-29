@@ -186,4 +186,10 @@ public class MMM_EntitySelect extends EntityLiving implements MMM_IModelCaps, MM
 		return textureIndex;
 	}
 
+	@Override
+	public int getBrightnessForRender(float par1) {
+		// ˆê’è‚Ì–¾‚é‚³‚ð•Ô‚·
+		return 0x00f000f0;
+	}
+
 }

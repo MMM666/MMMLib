@@ -67,6 +67,15 @@ public class MMM_ModelBaseDuo extends MMM_ModelBaseNihil implements MMM_IModelBa
 				GL11.glDisable(GL11.GL_BLEND);
 			}
 		}
+		GL11.glColor3f(1F, 1F, 1F);
+//		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glDisable(GL11.GL_BLEND);
+		GL11.glEnable(GL11.GL_ALPHA_TEST);
+//		GL11.glDisable(GL11.GL_ALPHA_TEST);
+		GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
+		GL11.glDepthFunc(GL11.GL_LEQUAL);
+		MMM_Client.setLightmapTextureCoords(lighting);
+
 		if (modelInner != null) {
 			if (textureInner != null) {
 				if (textureInner[renderParts] != null) {
@@ -78,12 +87,21 @@ public class MMM_ModelBaseDuo extends MMM_ModelBaseNihil implements MMM_IModelBa
 			}
 			if (textureInnerLight != null) {
 				if (textureInnerLight[renderParts] != null) {
-//					GL11.glDisable(GL11.GL_LIGHTING);
-//					GL11.glColor4f(1F, 1F, 1F, 1F);
 					MMM_Client.setTexture(textureInnerLight[renderParts]);
+					float var4 = 1.0F;
+					GL11.glEnable(GL11.GL_BLEND);
+					GL11.glEnable(GL11.GL_ALPHA_TEST);
+					GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
+					GL11.glDepthFunc(GL11.GL_LEQUAL);
+					
+					MMM_Client.setLightmapTextureCoords(0x00f000f0);//61680
+					GL11.glColor4f(1.0F, 1.0F, 1.0F, var4);
 					modelInner.render(entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
-//					GL11.glEnable(GL11.GL_LIGHTING);
-//					GL11.glColor4f(1F, 1F, 1F, 1F);
+					MMM_Client.setLightmapTextureCoords(lighting);
+					
+					GL11.glDisable(GL11.GL_BLEND);
+					GL11.glEnable(GL11.GL_ALPHA_TEST);
+					GL11.glDepthMask(true);
 				}
 			}
 		}
@@ -99,7 +117,20 @@ public class MMM_ModelBaseDuo extends MMM_ModelBaseNihil implements MMM_IModelBa
 			if (textureOuterLight != null) {
 				if (textureOuterLight[renderParts] != null) {
 					MMM_Client.setTexture(textureOuterLight[renderParts]);
+					float var4 = 1.0F;
+					GL11.glEnable(GL11.GL_BLEND);
+					GL11.glEnable(GL11.GL_ALPHA_TEST);
+					GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
+					GL11.glDepthFunc(GL11.GL_LEQUAL);
+					
+					MMM_Client.setLightmapTextureCoords(0x00f000f0);//61680
+					GL11.glColor4f(1.0F, 1.0F, 1.0F, var4);
 					modelOuter.render(entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
+					MMM_Client.setLightmapTextureCoords(lighting);
+					
+					GL11.glDisable(GL11.GL_BLEND);
+					GL11.glEnable(GL11.GL_ALPHA_TEST);
+					GL11.glDepthMask(true);
 				}
 			}
 		}

@@ -60,10 +60,14 @@ public class MMM_RenderModelMulti extends RenderLiving {
 			modelFATT.textureOuterLight = ltentity.getTextures(4);
 		}
 		modelMain.setEntityCaps(pEntityCaps);
+		modelFATT.setEntityCaps(pEntityCaps);
 		modelMain.setRender(this);
+		modelFATT.setRender(this);
 		modelMain.showAllParts();
+		modelFATT.showAllParts();
 		modelMain.isAlphablend = true;
 		modelFATT.isAlphablend = true;
+		modelMain.lighting = modelFATT.lighting = par1EntityLiving.getBrightnessForRender(par8);
 		
 		modelMain.setCapsValue(MMM_IModelCaps.caps_heldItemLeft, (Integer)0);
 		modelMain.setCapsValue(MMM_IModelCaps.caps_heldItemRight, (Integer)0);
@@ -81,7 +85,7 @@ public class MMM_RenderModelMulti extends RenderLiving {
 	public void renderModelMulti(EntityLiving par1EntityLiving, double par2,
 			double par4, double par6, float par8, float par9, MMM_IModelCaps pEntityCaps) {
 		setModelValues(par1EntityLiving, par2, par4, par6, par8, par9, pEntityCaps);
-		// TODO:なぜか変なとこに飛んでループする
+		// TODO:1.6.2-MCP805 なぜか変なとこに飛んでループする
 //		super.func_130000_a(par1EntityLiving, par2, par4, par6, par8, par9);
 		super.doRenderLiving(par1EntityLiving, par2, par4, par6, par8, par9);
 	}

@@ -7,6 +7,7 @@ public class MMM_ModelBaseNihil extends ModelBase {
 	public boolean isAlphablend;
 	public boolean isModelAlphablend;
 	public MMM_IModelBaseMMM capsLink;
+	public int lighting;
 	protected MMM_IModelCaps entityCaps;
 	protected boolean isRendering;
 

@@ -251,7 +251,16 @@ public class MMM_TextureData implements MMM_ITextureEntity {
 	 * @param pName
 	 */
 	public void setTextureInit(String pName) {
-		textureIndex[0] = textureIndex[1] = MMM_TextureManager.instance.getIndexTextureBoxServer((MMM_ITextureEntity)owner, pName);
+		setTextureInit(MMM_TextureManager.instance.getTextureBox(pName));
+	}
+	/**
+	 * テクスチャ名称からランダムで設定する。
+	 * @param pBox
+	 */
+	public void setTextureInit(MMM_TextureBox pBox) {
+		textureIndex[0] = textureIndex[1] = 
+				MMM_TextureManager.instance.getIndexTextureBoxServerIndex(pBox);
+//				MMM_TextureManager.instance.getIndexTextureBoxServer((MMM_ITextureEntity)owner, pName);
 		textureBox[0] = textureBox[1] = MMM_TextureManager.instance.getTextureBoxServer(textureIndex[0]);
 		color = textureBox[0].getRandomWildColor(owner.rand);
 	}
