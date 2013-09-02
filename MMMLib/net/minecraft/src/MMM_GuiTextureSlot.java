@@ -126,12 +126,12 @@ public class MMM_GuiTextureSlot extends GuiSlot {
 		MMM_TextureBox lbox;
 		if (mode) {
 			lbox = indexArmor.get(var1);
-			entity.textureBox[0] = blankBox;
-			entity.textureBox[1] = lbox;
+			entity.textureData.textureBox[0] = blankBox;
+			entity.textureData.textureBox[1] = lbox;
 		} else {
 			lbox = indexTexture.get(var1);
-			entity.textureBox[0] = lbox;
-			entity.textureBox[1] = blankBox;
+			entity.textureData.textureBox[0] = lbox;
+			entity.textureData.textureBox[1] = blankBox;
 		}
 		MMM_TextureManager.instance.checkTextureBoxServer(lbox);
 		GL11.glDisable(GL11.GL_BLEND);

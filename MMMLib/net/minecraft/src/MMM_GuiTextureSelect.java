@@ -64,12 +64,12 @@ public class MMM_GuiTextureSelect extends GuiScreen {
 		selectPanel.entity.rotationYawHead = -10F;
 		ResourceLocation ltex[];
 		if (selectPanel.mode) {
-			selectPanel.entity.textureBox[0] = selectPanel.blankBox;
-			selectPanel.entity.textureBox[1] = lbox;
+			selectPanel.entity.textureData.textureBox[0] = selectPanel.blankBox;
+			selectPanel.entity.textureData.textureBox[1] = lbox;
 			selectPanel.entity.setTextureNames("default");
 		} else {
-			selectPanel.entity.textureBox[0] = lbox;
-			selectPanel.entity.textureBox[1] = selectPanel.blankBox;
+			selectPanel.entity.textureData.textureBox[0] = lbox;
+			selectPanel.entity.textureData.textureBox[1] = selectPanel.blankBox;
 			selectPanel.entity.setColor(selectColor);
 			selectPanel.entity.setTextureNames();
 		}

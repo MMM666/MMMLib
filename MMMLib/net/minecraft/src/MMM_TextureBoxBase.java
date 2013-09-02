@@ -53,6 +53,10 @@ public abstract class MMM_TextureBoxBase {
 		return wildColor;
 	}
 
+//	public boolean hasColor(int pIndex, boolean pContract) {
+//		return (((pContract ? contractColor : wildColor) >>> pIndex) & 0x01) != 0;
+//	}
+
 	/**
 	 * 野生のメイドの色をランダムで返す
 	 */

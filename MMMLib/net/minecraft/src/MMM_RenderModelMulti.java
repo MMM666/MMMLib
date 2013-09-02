@@ -50,10 +50,13 @@ public class MMM_RenderModelMulti extends RenderLiving {
 			double par4, double par6, float par8, float par9, MMM_IModelCaps pEntityCaps) {
 		if (par1EntityLiving instanceof MMM_ITextureEntity) {
 			MMM_ITextureEntity ltentity = (MMM_ITextureEntity)par1EntityLiving;
-			modelMain.model = ((MMM_TextureBox)ltentity.getTextureBox()[0]).models[0];
+			modelMain.model = ltentity.getTextureData().textureModel[0];
+			modelFATT.modelInner = ltentity.getTextureData().textureModel[1];
+			modelFATT.modelOuter = ltentity.getTextureData().textureModel[2];
+//			modelMain.model = ((MMM_TextureBox)ltentity.getTextureBox()[0]).models[0];
 			modelMain.textures = ltentity.getTextures(0);
-			modelFATT.modelInner = ((MMM_TextureBox)ltentity.getTextureBox()[1]).models[1];
-			modelFATT.modelOuter = ((MMM_TextureBox)ltentity.getTextureBox()[1]).models[2];
+//			modelFATT.modelInner = ((MMM_TextureBox)ltentity.getTextureBox()[1]).models[1];
+//			modelFATT.modelOuter = ((MMM_TextureBox)ltentity.getTextureBox()[1]).models[2];
 			modelFATT.textureInner = ltentity.getTextures(1);
 			modelFATT.textureOuter = ltentity.getTextures(2);
 			modelFATT.textureInnerLight = ltentity.getTextures(3);

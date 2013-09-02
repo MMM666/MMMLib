@@ -44,6 +44,12 @@ public interface MMM_ITextureEntity {
 
 	public void setTextures(int pIndex, ResourceLocation[] pNames);
 	public ResourceLocation[] getTextures(int pIndex);
+	
+	/**
+	 * 仕様変更により、これ以外は必要無くなる予定。
+	 * @return
+	 */
+	public MMM_TextureData getTextureData();
 
 
 }
