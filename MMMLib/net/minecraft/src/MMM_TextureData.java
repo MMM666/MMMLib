@@ -63,7 +63,8 @@ public class MMM_TextureData  {
 		color = 12;
 		contract = false;
 		textureBox = new MMM_TextureBoxBase[2];
-		textureIndex = new int[2];
+		textureBox[0] = textureBox[1] = MMM_TextureManager.instance.getDefaultTexture(owner.getClass());
+		textureIndex = new int[] { 0, 0 };
 		textureModel = new MMM_ModelMultiBase[3];
 	}
 
@@ -100,6 +101,8 @@ public class MMM_TextureData  {
 				lf = true;
 				textureModel[0] = lbox.models[0];
 			}
+		} else {
+			textureBox[0] = MMM_TextureManager.instance.getTextureBoxServerIndex(textureIndex[0]);
 		}
 		if (textureBox[1] instanceof MMM_TextureBox && owner != null) {
 			lbox = (MMM_TextureBox)textureBox[1];
@@ -112,6 +115,8 @@ public class MMM_TextureData  {
 			}
 			textureModel[1] = lbox.models[1];
 			textureModel[2] = lbox.models[2];
+		} else {
+			textureBox[0] = MMM_TextureManager.instance.getTextureBoxServerIndex(textureIndex[0]);
 		}
 		return lf;
 	}
@@ -129,6 +134,7 @@ public class MMM_TextureData  {
 					lc = (color & 0x00ff) + (contract ? MMM_TextureManager.tx_eyecontract : MMM_TextureManager.tx_eyewild);
 					textures[0][1] = lbox.localBox.getTextureName(lc);
 					lf = true;
+					textureModel[0] = lbox.localBox.models[0];
 				}
 			}
 		}
@@ -142,6 +148,8 @@ public class MMM_TextureData  {
 					textures[3][i] = lbox.localBox.getArmorTextureName(MMM_TextureManager.tx_armor1light, is);
 					textures[4][i] = lbox.localBox.getArmorTextureName(MMM_TextureManager.tx_armor2light, is);
 				}
+				textureModel[1] = lbox.localBox.models[1];
+				textureModel[2] = lbox.localBox.models[2];
 			}
 		}
 		return lf;
@@ -204,10 +212,10 @@ public class MMM_TextureData  {
 //	@Override
 	public void setTexturePackIndex(int pColor, int[] pIndex) {
 		// Server
-		textureIndex[0] = pIndex[0];
-		textureIndex[1] = pIndex[1];
-		textureBox[0] = MMM_TextureManager.instance.getTextureBoxServer(textureIndex[0]);
-		textureBox[1] = MMM_TextureManager.instance.getTextureBoxServer(textureIndex[1]);
+		for (int li = 0; li < pIndex.length; li++) {
+			textureIndex[li] = pIndex[li];
+			textureBox[li] = MMM_TextureManager.instance.getTextureBoxServer(textureIndex[li]);
+		}
 		color = pColor;
 		setSize();
 	}
@@ -215,8 +223,9 @@ public class MMM_TextureData  {
 //	@Override
 	public void setTexturePackName(MMM_TextureBox[] pTextureBox) {
 		// Client
-		textureBox[0] = pTextureBox[0];
-		textureBox[1] = pTextureBox[1];
+		for (int li = 0; li < pTextureBox.length; li++) {
+			textureBox[li] = pTextureBox[li];
+		}
 		setSize();
 	}
 
@@ -285,6 +294,7 @@ public class MMM_TextureData  {
 	 * @param pName
 	 */
 	public void setTextureInit(String pName) {
+		mod_MMM_MMMLib.Debug("request Init Texture: %s", pName);
 		setTextureInit(MMM_TextureManager.instance.getTextureBox(pName));
 	}
 	/**
@@ -292,7 +302,11 @@ public class MMM_TextureData  {
 	 * @param pBox
 	 */
 	public void setTextureInit(MMM_TextureBox pBox) {
-		textureIndex[0] = textureIndex[1] = 
+		if (pBox == null) {
+			mod_MMM_MMMLib.Debug("request TextureBox is null");
+			return;
+		}
+		textureIndex[0] = textureIndex[1] =
 				MMM_TextureManager.instance.getIndexTextureBoxServerIndex(pBox);
 //				MMM_TextureManager.instance.getIndexTextureBoxServer((MMM_ITextureEntity)owner, pName);
 		textureBox[0] = textureBox[1] = MMM_TextureManager.instance.getTextureBoxServer(textureIndex[0]);

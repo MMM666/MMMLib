@@ -105,6 +105,7 @@ public class MMM_GuiTextureSelect extends GuiScreen {
 			if (selectPanel.texsel[1] > -1) {
 				target.getTextureBox()[1] = selectPanel.getSelectedBox(true);
 			}
+			target.getTextureData().setTextureNames();
 			if (toServer) {
 				MMM_TextureManager.instance.postSetTexturePack(target, selectColor, target.getTextureBox());
 			} else {

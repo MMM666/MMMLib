@@ -355,7 +355,7 @@ public class MMM_TextureManager {
 				e.printStackTrace();
 			}
 			
-			mod_MMM_MMMLib.Debug("Loadef ServerBoxList.(%d)", textureServer.size());
+			mod_MMM_MMMLib.Debug("Loaded ServerBoxList.(%d)", textureServer.size());
 			for (int li = 0; li < textureServer.size(); li++) {
 				MMM_TextureBoxServer lbox = textureServer.get(li);
 				mod_MMM_MMMLib.Debug("%04d=%s:%04x:%04x", li, lbox.textureName, lbox.contractColor, lbox.wildColor);
