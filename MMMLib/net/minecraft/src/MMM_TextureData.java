@@ -293,23 +293,19 @@ public class MMM_TextureData  {
 	 * テクスチャ名称からランダムで設定する。
 	 * @param pName
 	 */
-	public void setTextureInit(String pName) {
+	public void setTextureInitServer(String pName) {
 		mod_MMM_MMMLib.Debug("request Init Texture: %s", pName);
-		setTextureInit(MMM_TextureManager.instance.getTextureBox(pName));
-	}
-	/**
-	 * テクスチャ名称からランダムで設定する。
-	 * @param pBox
-	 */
-	public void setTextureInit(MMM_TextureBox pBox) {
-		if (pBox == null) {
-			mod_MMM_MMMLib.Debug("request TextureBox is null");
-			return;
-		}
 		textureIndex[0] = textureIndex[1] =
-				MMM_TextureManager.instance.getIndexTextureBoxServerIndex(pBox);
-//				MMM_TextureManager.instance.getIndexTextureBoxServer((MMM_ITextureEntity)owner, pName);
+				MMM_TextureManager.instance.getIndexTextureBoxServer((MMM_ITextureEntity)owner, pName);
 		textureBox[0] = textureBox[1] = MMM_TextureManager.instance.getTextureBoxServer(textureIndex[0]);
+		color = textureBox[0].getRandomWildColor(owner.rand);
+	}
+	public void setTextureInitClient() {
+		MMM_TextureBox lbox = MMM_TextureManager.instance.getDefaultTexture(owner.getClass());
+		for (int li = 0; li < textureBox.length; li++) {
+			textureBox[li] = lbox;
+			textureIndex[li] = MMM_TextureManager.instance.getIndexTextureBoxServerIndex(lbox);
+		}
 		color = textureBox[0].getRandomWildColor(owner.rand);
 	}
 
