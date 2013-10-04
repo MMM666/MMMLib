@@ -403,8 +403,7 @@ public class MMM_ModelRenderer {
 				} else if (Item.itemsList[itemstack.itemID].isFull3D()) {
 					var6 = 0.625F;
 					
-					if (Item.itemsList[itemstack.itemID]
-							.shouldRotateAroundWhenRendering()) {
+					if (Item.itemsList[itemstack.itemID].shouldRotateAroundWhenRendering()) {
 						GL11.glRotatef(180.0F, 0.0F, 0.0F, 1.0F);
 						GL11.glTranslatef(0.0F, -0.125F, 0.0F);
 					}

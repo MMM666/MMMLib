@@ -1,6 +1,5 @@
 package net.minecraft.src;
 
-import static net.minecraft.src.LMM_Statics.dataWatch_Texture;
 
 /**
  * テクスチャ管理用の変数群をまとめたもの。

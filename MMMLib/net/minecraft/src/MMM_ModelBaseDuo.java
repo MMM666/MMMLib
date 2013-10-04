@@ -59,6 +59,7 @@ public class MMM_ModelBaseDuo extends MMM_ModelBaseNihil implements MMM_IModelBa
 
 	@Override
 	public void render(Entity par1Entity, float par2, float par3, float par4, float par5, float par6, float par7) {
+/*
 		if (isAlphablend) {
 			if (isModelAlphablend) {
 				GL11.glEnable(GL11.GL_BLEND);
@@ -67,17 +68,21 @@ public class MMM_ModelBaseDuo extends MMM_ModelBaseNihil implements MMM_IModelBa
 				GL11.glDisable(GL11.GL_BLEND);
 			}
 		}
-		GL11.glColor3f(1F, 1F, 1F);
-//		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glDisable(GL11.GL_BLEND);
-		GL11.glEnable(GL11.GL_ALPHA_TEST);
-//		GL11.glDisable(GL11.GL_ALPHA_TEST);
-		GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
-		GL11.glDepthFunc(GL11.GL_LEQUAL);
-		MMM_Client.setLightmapTextureCoords(lighting);
-
+	*/
+		if (renderCount == 0) {
+//			GL11.glColor3f(1F, 1F, 1F);
+//			GL11.glEnable(GL11.GL_BLEND);
+//			GL11.glDisable(GL11.GL_BLEND);
+			GL11.glEnable(GL11.GL_ALPHA_TEST);
+//			GL11.glDisable(GL11.GL_ALPHA_TEST);
+//			GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
+			GL11.glDepthFunc(GL11.GL_LEQUAL);
+			MMM_Client.setLightmapTextureCoords(lighting);
+			
+		}
+		boolean lri = (renderCount & 0x0f) == 0;
 		if (modelInner != null) {
-			if (textureInner != null) {
+			if (textureInner != null && lri) {
 				if (textureInner[renderParts] != null) {
 					MMM_Client.setTexture(textureInner[renderParts]);
 					modelInner.render(entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
@@ -85,7 +90,7 @@ public class MMM_ModelBaseDuo extends MMM_ModelBaseNihil implements MMM_IModelBa
 			} else {
 				modelInner.render(entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
 			}
-			if (textureInnerLight != null) {
+			if (textureInnerLight != null && renderCount == 0) {
 				if (textureInnerLight[renderParts] != null) {
 					MMM_Client.setTexture(textureInnerLight[renderParts]);
 					float var4 = 1.0F;
@@ -101,12 +106,12 @@ public class MMM_ModelBaseDuo extends MMM_ModelBaseNihil implements MMM_IModelBa
 					
 					GL11.glDisable(GL11.GL_BLEND);
 					GL11.glEnable(GL11.GL_ALPHA_TEST);
-					GL11.glDepthMask(true);
+//					GL11.glDepthMask(true);
 				}
 			}
 		}
 		if (modelOuter != null) {
-			if (textureOuter != null) {
+			if (textureOuter != null && lri) {
 				if (textureOuter[renderParts] != null) {
 					MMM_Client.setTexture(textureOuter[renderParts]);
 					modelOuter.render(entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
@@ -114,7 +119,7 @@ public class MMM_ModelBaseDuo extends MMM_ModelBaseNihil implements MMM_IModelBa
 			} else {
 				modelOuter.render(entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
 			}
-			if (textureOuterLight != null) {
+			if (textureOuterLight != null && renderCount == 0) {
 				if (textureOuterLight[renderParts] != null) {
 					MMM_Client.setTexture(textureOuterLight[renderParts]);
 					float var4 = 1.0F;
@@ -130,11 +135,12 @@ public class MMM_ModelBaseDuo extends MMM_ModelBaseNihil implements MMM_IModelBa
 					
 					GL11.glDisable(GL11.GL_BLEND);
 					GL11.glEnable(GL11.GL_ALPHA_TEST);
-					GL11.glDepthMask(true);
+//					GL11.glDepthMask(true);
 				}
 			}
 		}
-		isAlphablend = false;
+//		isAlphablend = false;
+		renderCount++;
 	}
 
 	@Override

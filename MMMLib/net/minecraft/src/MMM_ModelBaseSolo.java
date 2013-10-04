@@ -55,7 +55,7 @@ public class MMM_ModelBaseSolo extends MMM_ModelBaseNihil implements MMM_IModelB
 			model.render(entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
 		}
 		isAlphablend = false;
-		if (textures.length > 1 && textures[1] != null) {
+		if (textures.length > 1 && textures[1] != null && renderCount == 0) {
 			// î≠åıÉpÅ[Éc
 			MMM_Client.setTexture(textures[1]);
 			float var4 = 1.0F;
@@ -75,7 +75,8 @@ public class MMM_ModelBaseSolo extends MMM_ModelBaseNihil implements MMM_IModelB
 			GL11.glEnable(GL11.GL_ALPHA_TEST);
 			GL11.glDepthMask(true);
 		}
-		textures = blanks;
+//		textures = blanks;
+		renderCount++;
 	}
 
 	@Override
