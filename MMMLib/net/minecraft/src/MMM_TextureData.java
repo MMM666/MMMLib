@@ -1,6 +1,7 @@
 package net.minecraft.src;
 
 
+
 /**
  * テクスチャ管理用の変数群をまとめたもの。
  */
@@ -32,6 +33,11 @@ public class MMM_TextureData  {
 	 * int型32bitで保存。
 	 */
 	public int selectValue;
+
+
+	public int data_Color	= 19;
+	public int data_Texture	= 20;
+	public int data_Value	= 21;
 
 
 	public MMM_TextureData(EntityLivingBase pEntity, MMM_IModelCaps pCaps) {
@@ -403,4 +409,38 @@ public class MMM_TextureData  {
 		return lf;
 	}
 
+	// パッケージ化用
+	/**
+	 * 監視用のdataWatcherを設定する。
+	 * @param pDataWatcher
+	 */
+	public void entityInit(DataWatcher pDataWatcher) {
+		// Color
+		pDataWatcher.addObject(data_Color, Byte.valueOf((byte)0));
+		// 選択テクスチャインデックス
+		pDataWatcher.addObject(data_Texture, Integer.valueOf(0));
+		// モデルパーツの表示フラグ
+		pDataWatcher.addObject(data_Value, Integer.valueOf(0));
+	}
+
+	public void onUpdateTex() {
+		// TODO:onUpdateと統合すること
+		if (owner.worldObj.isRemote) {
+			// Client
+			
+		} else {
+			
+		}
+		
+		
+	}
+
+	protected void setWatchedColor(int pColor) {
+		owner.dataWatcher.updateObject(data_Color, (byte)pColor);
+	}
+
+	protected int getWatchedColor() {
+		return owner.dataWatcher.getWatchableObjectByte(data_Color);
+	}
+	
 }
