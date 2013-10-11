@@ -139,6 +139,8 @@ public abstract class MMM_ModelMultiMMMBase extends MMM_ModelMultiBase {
 		switch (pIndex) {
 		case caps_setFaceTexture:
 			return setFaceTexture((Integer)pArg[0]);
+		case caps_textureLightColor:
+			return getTextureLightColor((MMM_IModelCaps)pArg[0]);
 		}
 		return super.getCapsValue(pIndex, pArg);
 	}
@@ -160,6 +162,10 @@ public abstract class MMM_ModelMultiMMMBase extends MMM_ModelMultiBase {
 		// v = (int)(pIndex / 2) * 32 / 32
 		GL11.glTranslatef(((pIndex & 0x01) * 32) / textureWidth, (((pIndex >>> 1) & 0x01) * 16) / textureHeight , 0F);
 		return pIndex / 4;
+	}
+
+	public float[] getTextureLightColor(MMM_IModelCaps pEntityCaps) {
+		return null;
 	}
 
 }

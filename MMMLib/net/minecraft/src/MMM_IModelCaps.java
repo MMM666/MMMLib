@@ -36,6 +36,7 @@ public interface MMM_IModelCaps {
 	public static final int caps_currentEquippedItem	= 0x0023;
 	public static final int caps_currentArmor			= 0x0024;
 	public static final int caps_healthFloat			= 0x0025;
+	public static final int caps_TextureEntity			= 0x0026;
 	
 	public static final int caps_isWet					= 0x0030;
 	public static final int caps_isDead					= 0x0031;
@@ -143,12 +144,14 @@ public interface MMM_IModelCaps {
 
 	// MMM_test
 	/** モデルが変更された時に実行される関数へリンクします **/
-	public static final int caps_changeModel	= 0x0300;
-	public static final int caps_renderFace		= 0x0310;
-	public static final int caps_renderBody		= 0x0311;
-	public static final int caps_setFaceTexture	= 0x0312;
+	public static final int caps_changeModel		= 0x0300;
+	public static final int caps_renderFace			= 0x0310;
+	public static final int caps_renderBody			= 0x0311;
+	public static final int caps_setFaceTexture		= 0x0312;
 	/** MMM_TextureDataのインスタンスを返します。 **/
-	public static final int caps_textureData	= 0x0313;
+	public static final int caps_textureData		= 0x0313;
+	/** 発光テクスチャの色補正 */
+	public static final int caps_textureLightColor	= 0x0314;
 
 
 	/**

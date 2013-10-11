@@ -7,7 +7,7 @@ public class MMM_GuiVisibleSelect extends GuiScreen {
 
 	public GuiScreen ownerScreen;
 	public MMM_GuiToggleButton select[] = new MMM_GuiToggleButton[32];
-	public EPS_EntityCaps target;
+	public MMM_EntityCaps target;
 	public Entity owner;
 	protected float fyaw;
 	protected float fpitch;
@@ -15,7 +15,7 @@ public class MMM_GuiVisibleSelect extends GuiScreen {
 	protected int flasty;
 
 
-	public MMM_GuiVisibleSelect(GuiScreen pOwnerScreen, EPS_EntityCaps pTarget) {
+	public MMM_GuiVisibleSelect(GuiScreen pOwnerScreen, MMM_EntityCaps pTarget) {
 		ownerScreen = pOwnerScreen;
 		target = pTarget;
 		owner = (Entity)target.getCapsValue(MMM_IModelCaps.caps_Entity);
@@ -90,7 +90,9 @@ public class MMM_GuiVisibleSelect extends GuiScreen {
 			target.setCapsValue(MMM_IModelCaps.caps_PartsVisible, lval);
 		}
 		if (par1GuiButton.id == 100) {
-			mc.displayGuiScreen(new MMM_GuiTextureSelect(this, target, 0xffff, false));
+			mc.displayGuiScreen(new MMM_GuiTextureSelect(this,
+					(MMM_ITextureEntity)target.getCapsValue(MMM_IModelCaps.caps_TextureEntity),
+					0xffff, false));
 		}
 	}
 

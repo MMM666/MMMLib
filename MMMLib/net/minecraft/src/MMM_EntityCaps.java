@@ -54,6 +54,8 @@ public class MMM_EntityCaps implements MMM_IModelCaps {
 		caps.put("prevRotationYaw", caps_prevRotationYaw);
 		caps.put("prevRotationPitch", caps_prevRotationPitch);
 		caps.put("renderYawOffset", caps_renderYawOffset);
+		caps.put("TextureEntity", caps_TextureEntity);
+
 
 	}
 
@@ -208,6 +210,8 @@ public class MMM_EntityCaps implements MMM_IModelCaps {
 			return owner.worldObj.worldInfo.getWorldTime();
 		case caps_MoonPhase:
 			return owner.worldObj.getMoonPhase();
+		case caps_TextureEntity:
+			return owner;
 		}
 		
 		return null;

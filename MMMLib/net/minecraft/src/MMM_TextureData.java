@@ -135,9 +135,11 @@ public class MMM_TextureData  {
 			if (lbox.localBox != null) {
 				int lc = (color & 0x00ff) + (contract ? 0 : MMM_TextureManager.tx_wild);
 				if (lbox.localBox.hasColor(lc)) {
-					textures[0][0] = lbox.localBox.getTextureName(lc);
-					lc = (color & 0x00ff) + (contract ? MMM_TextureManager.tx_eyecontract : MMM_TextureManager.tx_eyewild);
-					textures[0][1] = lbox.localBox.getTextureName(lc);
+					if (MMM_Helper.isClient) {
+						textures[0][0] = lbox.localBox.getTextureName(lc);
+						lc = (color & 0x00ff) + (contract ? MMM_TextureManager.tx_eyecontract : MMM_TextureManager.tx_eyewild);
+						textures[0][1] = lbox.localBox.getTextureName(lc);
+					}
 					lf = true;
 					textureModel[0] = lbox.localBox.models[0];
 				}
@@ -146,12 +148,14 @@ public class MMM_TextureData  {
 		if (textureBox[1] instanceof MMM_TextureBoxServer && owner != null) {
 			lbox = (MMM_TextureBoxServer)textureBox[1];
 			if (lbox.localBox != null) {
-				for (int i = 0; i < 4; i++) {
-					ItemStack is = owner.getCurrentItemOrArmor(i + 1);
-					textures[1][i] = lbox.localBox.getArmorTextureName(MMM_TextureManager.tx_armor1, is);
-					textures[2][i] = lbox.localBox.getArmorTextureName(MMM_TextureManager.tx_armor2, is);
-					textures[3][i] = lbox.localBox.getArmorTextureName(MMM_TextureManager.tx_armor1light, is);
-					textures[4][i] = lbox.localBox.getArmorTextureName(MMM_TextureManager.tx_armor2light, is);
+				if (MMM_Helper.isClient) {
+					for (int i = 0; i < 4; i++) {
+						ItemStack is = owner.getCurrentItemOrArmor(i + 1);
+						textures[1][i] = lbox.localBox.getArmorTextureName(MMM_TextureManager.tx_armor1, is);
+						textures[2][i] = lbox.localBox.getArmorTextureName(MMM_TextureManager.tx_armor2, is);
+						textures[3][i] = lbox.localBox.getArmorTextureName(MMM_TextureManager.tx_armor1light, is);
+						textures[4][i] = lbox.localBox.getArmorTextureName(MMM_TextureManager.tx_armor2light, is);
+					}
 				}
 				textureModel[1] = lbox.localBox.models[1];
 				textureModel[2] = lbox.localBox.models[2];
