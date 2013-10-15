@@ -1,0 +1,50 @@
+
+
+mainFrame
+	bipedTorso
+		bipedNeck
+			bipedHead
+				bipedForelock
+					bipedForelockRight
+					bipedForelockLeft
+				bipedRibbon
+					bipedRibbon1
+					bipedRibbon2
+					bipedTail
+				bipedRibbonR
+					bipedRibbonRSensoreU
+					bipedRibbonRSensoreB
+					bipedSideTailR
+				bipedRibbonL
+					bipedRibbonLSensoreU
+					bipedRibbonLSensoreB
+					bipedSideTailL
+			bipedRightArm
+				bipedForearmRight
+			bipedLeftArm
+				bipedForearmLeft
+		bipedBody
+			bipedBust
+Breast
+		bipedTrunc
+			bipedWaist
+				bipedHipRight
+				bipedHipLeft
+			bipedPrevic
+				bipedRightLeg
+					bipedShineRight
+						bipedTiptoeRight
+						bipedHeelRight
+				bipedLeftLeg
+					bipedShineLeft
+						bipedTiptoeLeft
+							bipedHeelLeft
+				Skirt
+					SkirtRU
+						SkirtRB
+					SkirtLU
+						SkirtLB
+
+
+
+

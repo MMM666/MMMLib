@@ -83,6 +83,7 @@ public class MMM_ModelLittleMaid_Aug extends MMM_ModelLittleMaid_SR2 {
 		bipedHead.setRotationPoint(0F, 0F, 0F);
 		
 		bipedHead.addChild(HeadMount);
+		bipedHead.addChild(HeadTop);
 		bipedHead.addChild(SideTailR);
 		bipedHead.addChild(SideTailL);
 		bipedHead.addChild(shaggyB);

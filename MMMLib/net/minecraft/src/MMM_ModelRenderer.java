@@ -442,7 +442,7 @@ public class MMM_ModelRenderer {
 		} else if (pRealBlock && itemstack.getItem() instanceof ItemBlock) {
 			MMM_Client.setTexture(TextureMap.field_110575_b);
 //			pRender.loadTexture("/terrain.png");
-//			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 //			int var4 = pEntityLiving.getBrightnessForRender(0.0F);
 //			int var5 = var4 % 65536;

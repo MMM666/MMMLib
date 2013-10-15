@@ -105,6 +105,7 @@ public class MMM_Client {
 			
 			for (int var6 = 0; var6 < lacount; ++var6) {
 				GL11.glPushMatrix();
+				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 				MMM_ModelRenderer var7 = pModel.getRandomModelBox(lrand);
 				MMM_ModelBoxBase var8 = var7.cubeList.get(lrand.nextInt(var7.cubeList.size()));
 				var7.postRender(0.0625F);
