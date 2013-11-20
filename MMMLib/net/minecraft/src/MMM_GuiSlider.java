@@ -10,6 +10,8 @@ public class MMM_GuiSlider extends GuiButton {
 	public String strFormat = "%s : %.2f";
 	public float sliderMultiply = 1.0F;
 	public float sliderOffset = 0.0F;
+	public float sliderStep = 0;
+
 
 	public MMM_GuiSlider(int i, int j, int k, String s, float f) {
 		super(i, j, k, 100, 20, "");
@@ -35,6 +37,9 @@ public class MMM_GuiSlider extends GuiButton {
 		}
 		if (dragging) {
 			sliderValue = (float) (i - (xPosition + 4)) / (float) (width - 8);
+			if (sliderStep > 0F) {
+				sliderValue = (float)((int)(sliderValue / sliderStep)) * sliderStep;
+			}
 			if (sliderValue < 0.0F) {
 				sliderValue = 0.0F;
 			}
@@ -52,14 +57,14 @@ public class MMM_GuiSlider extends GuiButton {
 
 	public boolean mousePressed(Minecraft minecraft, int i, int j) {
 		if (super.mousePressed(minecraft, i, j)) {
-			sliderValue = (float) (i - (xPosition + 4)) / (float) (width - 8);
-			if (sliderValue < 0.0F) {
-				sliderValue = 0.0F;
-			}
-			if (sliderValue > 1.0F) {
-				sliderValue = 1.0F;
-			}
-			setDisplayString();
+//			sliderValue = (float) (i - (xPosition + 4)) / (float) (width - 8);
+//			if (sliderValue < 0.0F) {
+//				sliderValue = 0.0F;
+//			}
+//			if (sliderValue > 1.0F) {
+//				sliderValue = 1.0F;
+//			}
+//			setDisplayString();
 			dragging = true;
 			return true;
 		} else {
