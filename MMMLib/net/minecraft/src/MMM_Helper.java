@@ -41,6 +41,7 @@ public class MMM_Helper {
 		mc = lm;
 		isClient = mc != null;
 		if (isForge) {
+			Debug("Get Forge Class.");
 			try {
 				methGetSmeltingResultForge = FurnaceRecipes.class.getMethod("getExperience", ItemStack.class);
 			} catch (Exception e) {
@@ -247,6 +248,7 @@ public class MMM_Helper {
 		int lid = 0;
 		lid = getModEntityID(mod.getName());
 		if (isForge) {
+			Debug("RegisterEntity Forge.");
 			try {
 				Method lmethod;
 				// EntityID‚ÌŠl“¾
@@ -270,6 +272,7 @@ public class MMM_Helper {
 				e.printStackTrace();
 			}
 		} else {
+			Debug("RegisterEntity Modloader.");
 			// EntityList‚Ö‚Ì“o˜^‚Í
 			if (defaultId == 0) {
 				defaultId = getNextEntityID(entityclass.isAssignableFrom(EntityLivingBase.class));
