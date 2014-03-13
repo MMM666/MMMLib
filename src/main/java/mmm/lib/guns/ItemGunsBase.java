@@ -3,14 +3,37 @@ package mmm.lib.guns;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.EnumAction;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-public abstract class ItemGunsBase extends ItemBow {
+/**
+ * 銃火器用の基本クラス
+ *
+ */
+public class ItemGunsBase extends ItemBow {
+
+	public static final String Tag_State		= "State";
+	public static final String Tag_MaxLoad		= "MaxLoad";
+	public static final String Tag_Magazin		= "Magazin";
+	public static final String Tag_Burst		= "Burst";
+	public static final String Tag_Cycle		= "Cycle";
+	public static final String Tag_ReloadTime	= "ReloadTime";
+	public static final String Tag_BurstCount	= "BurstCount";
+	public static final String Tag_CycleCount	= "CycleCount";
+	public static final String Tag_Efficiency	= "Efficiency";
+	public static final String Tag_Stability	= "Stability";
+	public static final String Tag_StabilityY	= "StabilityY";
+	public static final String Tag_StabilityYO	= "StabilityYO";
+	public static final String Tag_StabilityP	= "StabilityP";
+	public static final String Tag_StabilityPO	= "StabilityPO";
+	public static final String Tag_Accuracy		= "Accuracy";
 
 	protected static byte State_Ready		= 0x00;
 	protected static byte State_Empty		= 0x10;
@@ -20,74 +43,191 @@ public abstract class ItemGunsBase extends ItemBow {
 	protected static byte State_ReleseMag	= 0x50;
 	protected static byte State_ReloadEnd	= 0x60;
 	
-	/**
-	 * ダミーの弾、いらんか？
-	 */
-//	public static Item bulletBase = new ItemBulletBase().setUnlocalizedName("dammyBullet");
+	/** 空打ちした時の音 */
+	public String soundEmpty;
+	/** マガジンを外した時（リロード開始時）の音 */
+	public String soundRelease;
+	/** マガジンを入れた時（リロード完了時）の音 */
+	public String soundReload;
+	/** ボリューム */
+	public float volume;
+	
+	/** リロードに掛る時間 */
+	public int reloadTime;
+	/** 最大点射数 */
+	public int burstCount;
+	/** 発射インターバル */
+	public short cycleCount;
+	
+	/** 弾速のエネルギー効率 */
+	public float efficiency;
+	/** 銃身の安定性 */
+	public float stability;
+	/** 発射時の腕の動き左右、乱数 */
+	public float stabilityYaw;
+	/** 発射時の腕の動き左右、固定値 */
+	public float stabilityYawOffset;
+	/** 発射時の腕の動き上下、乱数 */
+	public float stabilityPitch;
+	/** 発射時の腕の動き上下、固定値 */
+	public float stabilityPitchOffset;
+	/** 集弾性 */
+	public float accuracy;
+	/** 使用可能弾薬名 */
+	public String[] bullets;
+	/** アイコン名称 */
+	public String[] iconNames;
+	
 	protected IIcon[] iconArray;
+	protected Item[] ammos;
 
 
 	public ItemGunsBase() {
 		maxStackSize = 1;
 		setFull3D();
+		
+		volume = 0.5F;
+		reloadTime = 40;
+		burstCount = 0;
+		cycleCount = 2;
+		efficiency = 1.0F;
+		stability = 1.0F;
+		stabilityPitch = 5.0F;
+		stabilityPitchOffset = 5.0F;
+		stabilityYaw = 3.0F;
+		stabilityYawOffset = 0F;
+		accuracy = 1.0F;
+		
+		bullets = new String[] {"FN5728Guns:SS190"};
+		
 	}
 
-	/**
-	 * 空打ちした時の音
-	 * @param pWorld
-	 * @param pPlayer
-	 * @param pGun
-	 */
-	public abstract void soundEmpty(World pWorld, EntityPlayer pPlayer, ItemStack pGun);
-
-	/**
-	 * マガジンを外した時（リロード開始時）の音
-	 * @param pWorld
-	 * @param pPlayer
-	 * @param pGun
-	 */
-	public abstract void soundRelease(World pWorld, EntityPlayer pPlayer, ItemStack pGun);
-
-	/**
-	 * マガジンを入れた時（リロード完了時）の音
-	 * @param pWorld
-	 * @param pPlayer
-	 * @param pGun
-	 */
-	public abstract void soundReload(World pWorld, EntityPlayer pPlayer, ItemStack pGun);
-
-	/**
-	 * リロードに掛る時間
-	 * @return
-	 */
-	public abstract int getReloadTime(ItemStack pGun);
-
-	/**
-	 * 残心の時間
-	 * 未実装
-	 * @param pGun
-	 * @return
-	 */
-	public int getHoldTime(ItemStack pGun) {
-		return 10;
+	public void init() {
+		ammos = new Item[bullets.length];
+		for (int li = 0; li < bullets.length; li++) {
+			ammos[li] = (Item)Item.itemRegistry.getObject(bullets[li]);
+		}
 	}
 
-	/**
-	 * 弾速のエネルギー効率
-	 * @param pGun
-	 * @return
-	 */
+	public void playSoundEmpty(World pWorld, EntityPlayer pPlayer, ItemStack pGun) {
+		pWorld.playSoundAtEntity(pPlayer, soundEmpty,
+				volume, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
+	}
+
+	public void playSoundRelease(World pWorld, EntityPlayer pPlayer, ItemStack pGun) {
+		pWorld.playSoundAtEntity(pPlayer, soundRelease,
+				volume, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
+	}
+
+	public void playSoundReload(World pWorld, EntityPlayer pPlayer, ItemStack pGun) {
+		pWorld.playSoundAtEntity(pPlayer, soundReload,
+				volume, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
+	}
+
+	public int getReloadTime(ItemStack pGun) {
+		if (pGun.hasTagCompound() && pGun.getTagCompound().hasKey(Tag_ReloadTime)) {
+			return pGun.getTagCompound().getInteger(Tag_ReloadTime);
+		}
+		return reloadTime;
+	}
+
+	public int getBurstCount(ItemStack pGun) {
+		if (pGun.hasTagCompound() && pGun.getTagCompound().hasKey(Tag_BurstCount)) {
+			return pGun.getTagCompound().getInteger(Tag_BurstCount);
+		}
+		return burstCount;
+		
+	}
+
+	public short getCycleCount(ItemStack pGun) {
+		if (pGun.hasTagCompound() && pGun.getTagCompound().hasKey(Tag_CycleCount)) {
+			return pGun.getTagCompound().getShort(Tag_CycleCount);
+		}
+		return cycleCount;
+	}
+
 	public float getEfficiency(ItemStack pGun, EntityPlayer pPlayer, int pUseCount) {
-		return 1.0F;
+		if (pGun.hasTagCompound() && pGun.getTagCompound().hasKey(Tag_Efficiency)) {
+			return pGun.getTagCompound().getFloat(Tag_Efficiency);
+		}
+		return efficiency;
+	}
+
+	public float getStability(ItemStack pGun, EntityPlayer pPlayer, int pUseCount) {
+		if (pGun.hasTagCompound() && pGun.getTagCompound().hasKey(Tag_Stability)) {
+			return pGun.getTagCompound().getFloat(Tag_Stability);
+		}
+		return stability;
+	}
+
+	public float getStabilityY(ItemStack pGun, EntityPlayer pPlayer, int pUseCount) {
+		if (pGun.hasTagCompound() && pGun.getTagCompound().hasKey(Tag_StabilityY)) {
+			return pGun.getTagCompound().getFloat(Tag_StabilityY);
+		}
+		return stabilityYaw;
+	}
+
+	public float getStabilityYO(ItemStack pGun, EntityPlayer pPlayer, int pUseCount) {
+		if (pGun.hasTagCompound() && pGun.getTagCompound().hasKey(Tag_StabilityYO)) {
+			return pGun.getTagCompound().getFloat(Tag_StabilityYO);
+		}
+		return stabilityYawOffset;
+	}
+
+	public float getStabilityP(ItemStack pGun, EntityPlayer pPlayer, int pUseCount) {
+		if (pGun.hasTagCompound() && pGun.getTagCompound().hasKey(Tag_StabilityP)) {
+			return pGun.getTagCompound().getFloat(Tag_StabilityP);
+		}
+		return stabilityPitch;
+	}
+
+	public float getStabilityPO(ItemStack pGun, EntityPlayer pPlayer, int pUseCount) {
+		if (pGun.hasTagCompound() && pGun.getTagCompound().hasKey(Tag_StabilityPO)) {
+			return pGun.getTagCompound().getFloat(Tag_StabilityPO);
+		}
+		return stabilityPitchOffset;
+	}
+
+	public float getAccuracy(ItemStack pGun, EntityPlayer pPlayer, int pUseCount) {
+		if (pGun.hasTagCompound() && pGun.getTagCompound().hasKey(Tag_Accuracy)) {
+			return pGun.getTagCompound().getFloat(Tag_Accuracy);
+		}
+		return accuracy;
+	}
+
+	@Override
+	public int getMaxDamage(ItemStack stack) {
+		// TODO 取り敢えず付けた
+		NBTTagCompound ltag = getTagCompound(stack);
+		if (ltag.hasKey(Tag_MaxLoad)) {
+			return ltag.getInteger(Tag_MaxLoad);
+		}
+		return super.getMaxDamage();
+	}
+
+	protected NBTTagCompound getTagCompound(ItemStack pGun) {
+		if (!pGun.hasTagCompound()) {
+			pGun.setTagCompound(new NBTTagCompound());
+		}
+		return pGun.getTagCompound();
+	}
+
+
+	/**
+	 * マガジンのからスロットをスキップするかどうか
+	 * @return
+	 */
+	public boolean isSkipBlank() {
+		return true;
 	}
 
 	/**
-	 * 銃身の安定性
+	 * 連射するかどうか、falseの時は通常の弓と同じ。
 	 * @param pGun
 	 * @return
 	 */
-	public float getStability(ItemStack pGun, EntityPlayer pPlayer, int pUseCount) {
-		return 1.0F;
+	public boolean isBurst(ItemStack pGun) {
+		return getBurstCount(pGun) > 0;
 	}
 
 	@Override
@@ -95,9 +235,12 @@ public abstract class ItemGunsBase extends ItemBow {
 		// ItemBowで再定義されているので標準に戻す。
 		// 必要なら上書きすること。
 		iconArray = new IIcon[3];
-		iconArray[0] = par1IconRegister.registerIcon(getIconString());
-		iconArray[1] = par1IconRegister.registerIcon(getIconString() + "_Empty");
-		iconArray[2] = par1IconRegister.registerIcon(getIconString() + "_Release");
+//		iconArray[0] = par1IconRegister.registerIcon(getIconString());
+//		iconArray[1] = par1IconRegister.registerIcon(getIconString() + "_Empty");
+//		iconArray[2] = par1IconRegister.registerIcon(getIconString() + "_Release");
+		iconArray[0] = par1IconRegister.registerIcon(iconNames[0]);
+		iconArray[1] = par1IconRegister.registerIcon(iconNames[1]);
+		iconArray[2] = par1IconRegister.registerIcon(iconNames[2]);
 		itemIcon = iconArray[0];
 	}
 
@@ -125,26 +268,46 @@ public abstract class ItemGunsBase extends ItemBow {
 	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World,
 			EntityPlayer par3EntityPlayer) {
 		// TODO Forgeのイベントハンドラどうする？
-		GunsBase.Debug("trigger");
+		GunsBase.Debug("%s - trigger", par3EntityPlayer instanceof EntityPlayerMP ? "MP" : "SP");
 		int li = getState(par1ItemStack);
 		if (par3EntityPlayer.isSwingInProgress) {
 			setState(par1ItemStack, State_ReloadTac);
 			GunsBase.Debug("Tactical Reload.");
 		} else {
-			if (isAmmoEmpty(par1ItemStack) && li < State_Reload) {
-				if (hasAmmo(par1ItemStack, par2World, par3EntityPlayer)) {
-					setState(par1ItemStack, State_Reload);
-					GunsBase.Debug("Reload.");
+			if (isBurst(par1ItemStack)) {
+				// 連射
+				if (li >= State_Empty && li < State_Reload) {
+					if (hasAmmo(par1ItemStack, par2World, par3EntityPlayer)) {
+						// リロード
+						setState(par1ItemStack, State_Reload);
+						GunsBase.Debug("Reload.");
+					} else {
+						// 空打ち
+						playSoundEmpty(par2World, par3EntityPlayer, par1ItemStack);
+						GunsBase.Debug("Empty.");
+					}
+				} else if (li < State_Empty) {
+					// 発射可能
+					resetBolt(par1ItemStack);
+					resetBurst(par1ItemStack);
+				}
+			} else {
+				// 単発
+				if (isAmmoEmpty(par1ItemStack) && li < State_Reload) {
+					if (hasAmmo(par1ItemStack, par2World, par3EntityPlayer)) {
+						setState(par1ItemStack, State_Reload);
+						GunsBase.Debug("Reload.");
+					}
 				}
 			}
 		}
-		GunsBase.setUncheckedItemStack(par1ItemStack, par3EntityPlayer);
-//		if (par3EntityPlayer.capabilities.isCreativeMode
-//				|| hasAmmo(par1ItemStack, par2World, par3EntityPlayer)) {
-//		}
 		// 撃つ
+		GunsBase.Debug("%s - ItemStack: %s",
+				par3EntityPlayer instanceof EntityPlayerMP ? "MP" : "SP",
+				par1ItemStack.toString()
+				);
+		GunsBase.setUncheckedItemStack(par1ItemStack, par3EntityPlayer);
 		par3EntityPlayer.setItemInUse(par1ItemStack, this.getMaxItemUseDuration(par1ItemStack));
-		
 		return par1ItemStack;
 	}
 
@@ -173,6 +336,17 @@ public abstract class ItemGunsBase extends ItemBow {
 	 * @param pState
 	 */
 	public void onFireTick(ItemStack pGun, World pWorld, EntityPlayer pPlayer, int count, int pState) {
+		if (isBurst(pGun)) {
+			if (pState == State_Ready && !isAmmoEmpty(pGun)) {
+				if (checkBolt(pGun) && decBurst(pGun) > 0) {
+					// 発射
+					if (fireBullet(pGun, pWorld, pPlayer, count) <= 0) {
+						setState(pGun, State_Empty);
+					}
+				}
+				GunsBase.setUncheckedItemStack(pGun, pPlayer);
+			}
+		}
 	}
 
 	@Override
@@ -197,17 +371,19 @@ public abstract class ItemGunsBase extends ItemBow {
 			} else {
 				setState(par1ItemStack, State_Ready);
 			}
-		} else if (!isAmmoEmpty(par1ItemStack)) {
-			// 弾があるので発射
-			if (fireBullet(par1ItemStack, par2World, par3EntityPlayer, par4) <= 0) {
-				// 撃ち尽くした
-				setState(par1ItemStack, State_Empty);
+		} else if (!isBurst(par1ItemStack)) {
+			if (!isAmmoEmpty(par1ItemStack)) {
+				// 弾があるので発射
+				if (fireBullet(par1ItemStack, par2World, par3EntityPlayer, par4) <= 0) {
+					// 撃ち尽くした
+					setState(par1ItemStack, State_Empty);
+				}
+			} else if (li < State_Reload) {
+				// 弾がないので空打ち
+				playSoundEmpty(par2World, par3EntityPlayer, par1ItemStack);
+			} else {
+//				setState(par1ItemStack, State_Empty);
 			}
-		} else if (li < State_Reload) {
-			// 弾がないので空打ち
-			soundEmpty(par2World, par3EntityPlayer, par1ItemStack);
-		} else {
-//			setState(par1ItemStack, State_Empty);
 		}
 	}
 
@@ -250,23 +426,28 @@ public abstract class ItemGunsBase extends ItemBow {
 	 * @return 射撃後の残弾数
 	 */
 	public int fireBullet(ItemStack pGun, World pWorld, EntityPlayer pPlayer, int pUseCount) {
-		// 残弾数を減らす
 		int ldamage = getDamage(pGun);
-		setDamage(pGun, ldamage + 1);
-		ItemStack lbullet = getBullet(pGun, ldamage);
-//		GunsBase.setUncheckedItemStack(pGun, pPlayer);
+		int lmdamage = getMaxDamage(pGun);
+		ItemStack lbullet;
+		do {
+			// 弾薬を取り出す
+			lbullet = getBullet(pGun, ldamage);
+			ldamage++;
+			// 残弾数を減らす
+			setDamage(pGun, ldamage);
+			if (lbullet != null) break;
+		} while(!isSkipBlank() && ldamage < lmdamage);
 		// 戻り値として再設定、残弾数を返す。
-		ldamage = getMaxDamage(pGun) - ldamage - 1;
-		
-		// 弾薬を取り出す
+		ldamage = lmdamage - ldamage;
 		if (lbullet == null) return ldamage;
+		
 		ItemBulletBase libullet = null;
 		if (lbullet.getItem() instanceof ItemBulletBase) {
 			libullet = (ItemBulletBase)lbullet.getItem();
 		}
 		// 発射音、弾薬ごとに音声を設定
 		if (libullet != null) {
-			libullet.soundFire(pWorld, pPlayer, pGun, lbullet);
+			libullet.playSoundFire(pWorld, pPlayer, pGun, lbullet);
 		}
 		
 		// 弾体を発生させる
@@ -278,8 +459,11 @@ public abstract class ItemGunsBase extends ItemBow {
 			if (libullet != null) {
 				lentity = libullet.getBulletEntity(pGun, lbullet, pWorld, pPlayer, 72000 - pUseCount);
 				pWorld.spawnEntityInWorld(lentity);
-				onRecoile(pGun, pWorld, pPlayer, 72000 - pUseCount);
+//				onRecoile(pGun, pWorld, pPlayer, 72000 - pUseCount);
 			}
+		}
+		if (libullet != null) {
+			onRecoile(pGun, lbullet, pWorld, pPlayer, 72000 - pUseCount);
 		}
 		return ldamage;
 	}
@@ -291,7 +475,19 @@ public abstract class ItemGunsBase extends ItemBow {
 	 * @param pPlayer
 	 * @param pUseCount
 	 */
-	public void onRecoile(ItemStack pGun, World pWorld, EntityPlayer pPlayer, int pUseCount) {
+	public void onRecoile(ItemStack pGun, ItemStack pBullet, World pWorld, EntityPlayer pPlayer, int pUseCount) {
+		// しゃがみの時は少し早く照準が安定する
+		float lsn = pPlayer.isSneaking() ? 0.5F : 1.0F;
+		lsn *= ((ItemBulletBase)pBullet.getItem()).getReaction(pBullet);
+		// 腕の動き
+		pPlayer.rotationPitch -= (pPlayer.getRNG().nextFloat() * getStabilityP(pGun, pPlayer, pUseCount)
+				+ getStabilityPO(pGun, pPlayer, pUseCount)) * lsn;
+		pPlayer.rotationYaw += (pPlayer.getRNG().nextFloat() * getStabilityY(pGun, pPlayer, pUseCount)
+				+ getStabilityYO(pGun, pPlayer, pUseCount)) * lsn;
+		// 後ろに吹っ飛ぶ
+		lsn *= getStability(pGun, pPlayer, pUseCount);
+		pPlayer.motionX += MathHelper.sin(pPlayer.rotationYawHead * 0.01745329252F) * lsn;
+		pPlayer.motionZ -= MathHelper.cos(pPlayer.rotationYawHead * 0.01745329252F) * lsn;
 	}
 
 	/**
@@ -303,7 +499,7 @@ public abstract class ItemGunsBase extends ItemBow {
 	public ItemStack getBullet(ItemStack pGun, int pIndex) {
 		if (pGun.hasTagCompound()) {
 			NBTTagCompound ltag = pGun.getTagCompound();
-			NBTTagCompound lbullet = ltag.getCompoundTag("Magazin");
+			NBTTagCompound lbullet = ltag.getCompoundTag(Tag_Magazin);
 			String ls = String.format("%04d", pIndex);
 			if (lbullet.hasKey(ls)) {
 				return ItemStack.loadItemStackFromNBT(lbullet.getCompoundTag(ls));
@@ -314,8 +510,8 @@ public abstract class ItemGunsBase extends ItemBow {
 
 	public void setBullet(ItemStack pGun, int pIndex, ItemStack pBullet) {
 		NBTTagCompound ltag = getTagCompound(pGun);
-		NBTTagCompound lmagazin = ltag.getCompoundTag("Magazin");
-		ltag.setTag("Magazin", lmagazin);
+		NBTTagCompound lmagazin = ltag.getCompoundTag(Tag_Magazin);
+		ltag.setTag(Tag_Magazin, lmagazin);
 		String ls = String.format("%04d", pIndex);
 		if (pBullet == null) {
 			lmagazin.removeTag(ls);
@@ -355,34 +551,17 @@ public abstract class ItemGunsBase extends ItemBow {
 	}
 
 	/**
-	 * マガジンを取り外す。
-	 * @param pGun
-	 * @param pWorld
-	 * @param pPlayer
-	 */
-	public void releaseMagazin(ItemStack pGun, World pWorld, EntityPlayer pPlayer) {
-		soundRelease(pWorld, pPlayer, pGun);
-		if (!pPlayer.capabilities.isCreativeMode) {
-			// マガジンから使用済みのカートを取り出す（Creativeの時はマガジンの内容が変わらない）
-			for (int li = 0; li < getDamage(pGun); li++) {
-				setBullet(pGun, li, null);
-			}
-		}
-		GunsBase.Debug(pGun.toString());
-		for (int li = 0; li < getMaxDamage(pGun); li++) {
-			ItemStack lis = getBullet(pGun, li);
-			GunsBase.Debug("%04d: %s", li, lis == null ? "null" : lis.toString());
-		}
-		
-		setDamage(pGun, getMaxDamage(pGun));
-	}
-
-	/**
 	 * 使用可能な弾薬を判定する
 	 * @param pItemStack
 	 * @return
 	 */
-	public abstract  boolean checkAmmo(ItemStack pItemStack);
+	public boolean checkAmmo(ItemStack pItemStack) {
+		Item litem = pItemStack.getItem();
+		for (Item li : ammos) {
+			if (litem == li) return true;
+		}
+		return false;
+	}
 
 	/**
 	 * インベントリから弾薬を検索する
@@ -397,6 +576,29 @@ public abstract class ItemGunsBase extends ItemBow {
 			}
 		}
 		return -1;
+	}
+
+	/**
+	 * マガジンを取り外す。
+	 * @param pGun
+	 * @param pWorld
+	 * @param pPlayer
+	 */
+	public void releaseMagazin(ItemStack pGun, World pWorld, EntityPlayer pPlayer) {
+		playSoundRelease(pWorld, pPlayer, pGun);
+		if (!pPlayer.capabilities.isCreativeMode) {
+			// マガジンから使用済みのカートを取り出す（Creativeの時はマガジンの内容が変わらない）
+			for (int li = 0; li < getDamage(pGun); li++) {
+				setBullet(pGun, li, null);
+			}
+		}
+		GunsBase.Debug(pGun.toString());
+		for (int li = 0; li < getMaxDamage(pGun); li++) {
+			ItemStack lis = getBullet(pGun, li);
+			GunsBase.Debug("%04d: %s", li, lis == null ? "null" : lis.toString());
+		}
+		
+		setDamage(pGun, getMaxDamage(pGun));
 	}
 
 	/**
@@ -416,34 +618,54 @@ public abstract class ItemGunsBase extends ItemBow {
 				pPlayer.inventory.setInventorySlotContents(li, null);
 			}
 		}
-		soundReload(pWorld, pPlayer, pGun);
+		playSoundReload(pWorld, pPlayer, pGun);
 	}
+
+	// 状態ステータス
 
 	public void setState(ItemStack pGun, byte pState) {
 		NBTTagCompound ltag = getTagCompound(pGun);
-		ltag.setByte("State", pState);
+		ltag.setByte(Tag_State, pState);
 	}
 
 	public byte getState(ItemStack pGun) {
 		NBTTagCompound ltag = getTagCompound(pGun);
-		return ltag.getByte("State");
+		return ltag.getByte(Tag_State);
 	}
 
-	protected NBTTagCompound getTagCompound(ItemStack pGun) {
-		if (!pGun.hasTagCompound()) {
-			pGun.setTagCompound(new NBTTagCompound());
+	// 発射間隔の算出
+
+	public boolean checkBolt(ItemStack pGun) {
+		NBTTagCompound ltag = getTagCompound(pGun);
+		short lval = ltag.getShort(Tag_Cycle);
+		if (--lval <= 0) {
+			ltag.setShort(Tag_Cycle, getCycleCount(pGun));
+			return true;
 		}
-		return pGun.getTagCompound();
+		ltag.setShort(Tag_Cycle, lval);
+		return false;
 	}
 
-	@Override
-	public int getMaxDamage(ItemStack stack) {
-		// TODO 取り敢えず付けた
-		NBTTagCompound ltag = getTagCompound(stack);
-		if (ltag.hasKey("maxLoad")) {
-			return ltag.getInteger("maxLoad");
-		}
-		return super.getMaxDamage();
+	public void resetBolt(ItemStack pGun) {
+		NBTTagCompound ltag = getTagCompound(pGun);
+		ltag.setShort(Tag_Cycle, getCycleCount(pGun));
 	}
+
+	// 連射カウント
+
+	public int decBurst(ItemStack pGun) {
+		NBTTagCompound ltag = getTagCompound(pGun);
+		int lburst = ltag.getInteger(Tag_Burst);
+		if (lburst > 0) {
+			ltag.setInteger(Tag_Burst, lburst - 1);
+		}
+		return lburst;
+	}
+
+	public void resetBurst(ItemStack pGun) {
+		NBTTagCompound ltag = getTagCompound(pGun);
+		ltag.setInteger(Tag_Burst, getBurstCount(pGun));
+	}
+
 
 }

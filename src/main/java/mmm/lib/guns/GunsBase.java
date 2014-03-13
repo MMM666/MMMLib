@@ -8,10 +8,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.ReflectionHelper;
-import cpw.mods.fml.relauncher.Side;
 
 /**
  * 初期化処理とかを書く
@@ -40,7 +37,7 @@ public class GunsBase {
 	public static void setholdSight(EntityPlayer pPlayer) {
 		playerList.add(pPlayer);
 	}
-
+/*
 	@SubscribeEvent
 	public boolean onTick(TickEvent.ClientTickEvent pEvent) {
 		// 登録されたプレーヤに対し残心を指示
@@ -57,7 +54,7 @@ public class GunsBase {
 		}
 		return true;
 	}
-
+*/
 	/**
 	 * アイテムスタックの変動によるアイテムの再使用を抑制する
 	 */

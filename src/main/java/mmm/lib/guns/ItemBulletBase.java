@@ -13,29 +13,46 @@ import net.minecraft.world.World;
 
 public class ItemBulletBase extends Item {
 
+	protected final static String Tag_Speed		= "speed";
+	protected final static String Tag_Reaction	= "reaction";
+	protected final static String Tag_Power		= "power";
+	
+	/** 基準発射速度 **/
+	float speed;
+	/** 発射時の反動 **/
+	float reaction;
+	/** ダメージ係数 **/
+	float power;
+
+
 	public ItemBulletBase() {
 		setCreativeTab(CreativeTabs.tabCombat);
-	}
-
-	/**
-	 * 基準発射速度
-	 * @param pBullet
-	 * @return
-	 */
-	public float getSpeed(ItemStack pBullet) {
 		// 500m/s
-		return 25F;
+		speed = 25F;
+		reaction = 1.0F;
+		power = 0.2F;
 	}
 
-	/**
-	 * 集弾性
-	 * @param pBullet
-	 * @return
-	 */
+	public float getSpeed(ItemStack pBullet) {
+		if (pBullet.hasTagCompound() && pBullet.getTagCompound().hasKey(Tag_Speed)) {
+			return pBullet.getTagCompound().getFloat(Tag_Speed);
+		}
+		return speed;
+	}
+
 	public float getReaction(ItemStack pBullet) {
-		return 1.0F;
+		if (pBullet.hasTagCompound() && pBullet.getTagCompound().hasKey(Tag_Reaction)) {
+			return pBullet.getTagCompound().getFloat(Tag_Reaction);
+		}
+		return reaction;
 	}
 
+	public float getPower(ItemStack pBullet) {
+		if (pBullet.hasTagCompound() && pBullet.getTagCompound().hasKey(Tag_Power)) {
+			return pBullet.getTagCompound().getFloat(Tag_Power);
+		}
+		return power;
+	}
 
 	/**
 	 * 弾薬に関連付けられたEntityを返す。
@@ -50,7 +67,7 @@ public class ItemBulletBase extends Item {
 		ItemGunsBase lgun = ((ItemGunsBase)pGun.getItem());
 		return new EntityBulletBase(pWorld, pPlayer, pGun, pBullet,
 				getSpeed(pBullet) * lgun.getEfficiency(pGun, pPlayer, pUseCount),
-				getReaction(pBullet) * lgun.getStability(pGun, pPlayer, pUseCount));
+				lgun.getAccuracy(pGun, pPlayer, pUseCount));
 	}
 
 	/**
@@ -59,7 +76,7 @@ public class ItemBulletBase extends Item {
 	 * @param pPlayer
 	 * @param pBullet
 	 */
-	public void soundFire(World pWorld, EntityPlayer pPlayer, ItemStack pGun, ItemStack pBullet) {
+	public void playSoundFire(World pWorld, EntityPlayer pPlayer, ItemStack pGun, ItemStack pBullet) {
 	}
 
 	/**
@@ -71,8 +88,8 @@ public class ItemBulletBase extends Item {
 		return 0x804000;
 	}
 
-	public float getHitDamage(EntityBulletBase pBullrtEntity,  Entity pTargetEntity) {
-		float ldam = pBullrtEntity.speed * 0.2F;//Math.ceil((double)lfd * damage * 0.1D * (isInfinity ? 0.5D : 1D));
+	public float getHitDamage(EntityBulletBase pBullrtEntity,  Entity pTargetEntity, ItemStack pBullet) {
+		float ldam = pBullrtEntity.speed * getPower(pBullet);//Math.ceil((double)lfd * damage * 0.1D * (isInfinity ? 0.5D : 1D));
 		GunsBase.Debug("damage: %f", ldam);
 		return ldam;
 	}
@@ -80,7 +97,7 @@ public class ItemBulletBase extends Item {
 	public boolean onHitEntity(MovingObjectPosition var1, EntityBulletBase pBullrtEntity,  Entity pTargetEntity) {
 		pTargetEntity.hurtResistantTime = 0;
 		pTargetEntity.attackEntityFrom(
-				DamageSource.causeThrownDamage(pBullrtEntity, pBullrtEntity.getThrower()), getHitDamage(pBullrtEntity, pTargetEntity));
+				DamageSource.causeThrownDamage(pBullrtEntity, pBullrtEntity.getThrower()), getHitDamage(pBullrtEntity, pTargetEntity, pBullrtEntity.bullet));
 		if (!pBullrtEntity.worldObj.isRemote) {
 			pBullrtEntity.setDead();
 		}
