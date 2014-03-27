@@ -10,10 +10,9 @@ import mmm.lib.debugs.MoveWindow;
 import mmm.lib.debugs.fileTest;
 import mmm.lib.destroyAll.DestroyAllManager;
 import mmm.lib.guns.GunsBase;
-import mmm.lib.model.ModelBase;
-import mmm.lib.model.ModelLittleMaid_Archetype;
-import mmm.lib.model.ModelMultiBase;
-import net.minecraft.launchwrapper.LaunchClassLoader;
+import mmm.lib.multiModel.model.mc162.ModelLittleMaid_Archetype;
+import mmm.lib.multiModel.model.mc162.ModelMultiBase;
+import mmm.lib.multiModel.oldLoader.MMMTransformer;
 import net.minecraftforge.common.config.Configuration;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
@@ -30,6 +29,7 @@ import cpw.mods.fml.relauncher.Side;
 public class MMMLib {
 
 	public static boolean isDebugMessage = true;
+	public static boolean isModelAlphaBlend = true;
 
 
 
@@ -46,7 +46,8 @@ public class MMMLib {
 		File configFile = pEvent.getSuggestedConfigurationFile();
 		Configuration lconf = new Configuration(configFile);
 		lconf.load();
-		isDebugMessage	= lconf.get("MMMLib", "isDebugMessage", false).getBoolean(false);
+		isDebugMessage		= lconf.get("MMMLib", "isDebugMessage", false).getBoolean(false);
+		isModelAlphaBlend	= lconf.get("MMMLib", "isModelAlphaBlend", true).getBoolean(true);
 		
 		String ls;
 		ls = "DestroyAll";
@@ -83,6 +84,8 @@ public class MMMLib {
 			Debug("%s", lo.toString());
 		}
 		EzRecipes.init();
+		// 旧モデル用変換開始
+		MMMTransformer.isEnable = true;
 		
 		// TODO test
 		(new fileTest()).execute();
@@ -114,7 +117,8 @@ public class MMMLib {
 //				((LaunchClassLoader)lcl).addURL(new URL("file:/E:/GAME/SIM/MineCraft/MMMMOD/MyGit/ModsGradle/master/eclipse/mods/littleMaidMob-ModelTest.zip"));
 //			}
 			
-			lcl = Loader.instance().getModClassLoader();
+//			lcl = Loader.instance().getModClassLoader();
+			lcl = getClass().getClassLoader();
 //			if (lcl instanceof LaunchClassLoader) {
 //				((LaunchClassLoader)lcl).addTransformerExclusion("ModelLittleMaid");
 //				((LaunchClassLoader)lcl).addClassLoaderExclusion("ModelLittleMaid");
@@ -126,7 +130,7 @@ public class MMMLib {
 //			lc = lcl.loadClass("MMM_ModelBase");
 //			Debug("Class: %s", lc.toString());
 //			ModelBase lmb = (ModelBase) lc.getConstructor().newInstance();
-			lc = lcl.loadClass("MMM_ModelLittleMaid_Archetype");
+			lc = lcl.loadClass("ModelLittleMaid_long");
 			Debug("Class: %s - %s", lc.toString(), lc.getPackage());
 			Constructor<ModelMultiBase> lcc = lc.getConstructor();
 			Debug("Constructor: %s", lcc.toString());
@@ -137,7 +141,7 @@ public class MMMLib {
 		}
 		
 	}
-	
+
 	private void viewClasses(ClassLoader pClassLoader) {
 		Debug("\r\nClassLoader: %s", pClassLoader.toString());
 		if (pClassLoader instanceof URLClassLoader ) {

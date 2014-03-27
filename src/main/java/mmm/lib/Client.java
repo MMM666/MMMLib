@@ -2,9 +2,9 @@ package mmm.lib;
 
 import java.util.Random;
 
-import mmm.lib.model.ModelBase;
-import mmm.lib.model.ModelBoxBase;
-import mmm.lib.model.ModelRenderer;
+import mmm.lib.multiModel.model.mc162.ModelBase;
+import mmm.lib.multiModel.model.mc162.ModelBoxBase;
+import mmm.lib.multiModel.model.mc162.ModelRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
