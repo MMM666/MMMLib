@@ -1,20 +1,17 @@
 package mmm.lib;
 
 import java.io.File;
-import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.net.URLClassLoader;
 
 import mmm.lib.debugs.EzRecipes;
 import mmm.lib.debugs.MoveWindow;
-import mmm.lib.debugs.fileTest;
 import mmm.lib.destroyAll.DestroyAllManager;
 import mmm.lib.guns.GunsBase;
-import mmm.lib.multiModel.model.mc162.ModelLittleMaid_Archetype;
+import mmm.lib.multiModel.MMMLoader.MMMTransformer;
 import mmm.lib.multiModel.model.mc162.ModelMultiBase;
-import mmm.lib.multiModel.oldLoader.MMMTransformer;
+import mmm.lib.multiModel.texture.MultiModelManager;
 import net.minecraftforge.common.config.Configuration;
-import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -80,15 +77,27 @@ public class MMMLib {
 
 	@Mod.EventHandler
 	public void loaded(FMLPostInitializationEvent pEvent) {
-		for (Object lo : Loader.instance().getModList()) {
-			Debug("%s", lo.toString());
-		}
+//		for (Object lo : Loader.instance().getModList()) {
+//			Debug("%s", lo.toString());
+//		}
 		EzRecipes.init();
 		// 旧モデル用変換開始
 		MMMTransformer.isEnable = true;
+		MultiModelManager.instance.execute();
 		
 		// TODO test
-		(new fileTest()).execute();
+/*
+		//		(new fileTest()).execute();
+		viewClasses(getClass().getClassLoader());
+		for (File lf : FileManager.getAllmodsFiles(getClass().getClassLoader())) {
+			Debug("fileList: %s", lf.getAbsolutePath());
+		}
+*/		
+		
+		ModelMultiBase lmodel;
+		
+/*		
+		
 		ModelMultiBase lmodel = new ModelLittleMaid_Archetype();
 		Debug(lmodel.toString());
 //		MMM_ModelBase lmb = new MMM_ModelBase();
@@ -107,7 +116,8 @@ public class MMMLib {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+*/
+/*
 		try {
 			ClassLoader lcl;
 			lcl = Loader.instance().getModClassLoader();
@@ -139,7 +149,7 @@ public class MMMLib {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+*/
 	}
 
 	private void viewClasses(ClassLoader pClassLoader) {

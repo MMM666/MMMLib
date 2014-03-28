@@ -1,11 +1,10 @@
 package mmm.lib.multiModel.texture;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.client.model.ModelBase;
+import mmm.lib.multiModel.model.AbstractModelBase;
 import net.minecraft.util.ResourceLocation;
 
 /**
@@ -22,17 +21,19 @@ public class MultiModelContainer {
 	/**
 	 * バインドされているモデルクラス
 	 */
-	protected ModelBase defaultModel;
-	protected Map<Integer, ModelBase> models;
+	protected AbstractModelBase[] defaultModel;
+	protected Map<Integer, AbstractModelBase[]> models;
 	/**
 	 * バインドされているテクスチャ
 	 */
 	protected Map<Integer, ResourceLocation> textures;
+	protected boolean isDecodeJSON;
 
 
 	public MultiModelContainer() {
-		models = new HashMap<Integer, ModelBase>();
+		models = new HashMap<Integer, AbstractModelBase[]>();
 		textures = new HashMap<Integer, ResourceLocation>();
+		isDecodeJSON = false;
 	}
 
 	/**
@@ -41,11 +42,12 @@ public class MultiModelContainer {
 	 * @return
 	 */
 	public boolean loadJSON(FileInputStream pStream) {
+		isDecodeJSON = true;
 		return false;
 	}
 
-	public void addTexture(int pIndex) {
-		ResourceLocation lres = new ResourceLocation("");
+	public void addTexture(int pIndex, ResourceLocation pResource) {
+		textures.put(pIndex, pResource);
 	}
 
 	/**
@@ -57,15 +59,22 @@ public class MultiModelContainer {
 		return textures.get(pIndex);
 	}
 
-	public ModelBase getModelClass(int pIndex) {
+	public AbstractModelBase[] getModelClass(int pIndex) {
 		if (models.containsKey(pIndex)) {
 			return models.get(pIndex);
 		}
 		return defaultModel;
 	}
+	public AbstractModelBase[] getModelClass() {
+		return defaultModel;
+	}
 
 	public MultiModelEntry getMultiModel() {
 		return new MultiModelEntry();
+	}
+
+	public int getTextureCount() {
+		return textures.size();
 	}
 
 }

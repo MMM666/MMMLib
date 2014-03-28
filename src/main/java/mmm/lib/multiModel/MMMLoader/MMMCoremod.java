@@ -1,21 +1,21 @@
-package mmm.lib.multiModel.oldLoader;
+package mmm.lib.multiModel.MMMLoader;
 
 import java.util.Map;
 
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions;
 
-@TransformerExclusions({"mmm.lib.multiModel.oldLoader"})
+@TransformerExclusions({"mmm.lib.multiModel.MMMLoader"})
 public class MMMCoremod implements IFMLLoadingPlugin{
 
 	@Override
 	public String[] getASMTransformerClass() {
-		return new String[] {"mmm.lib.multiModel.oldLoader.MMMTransformer"};
+		return new String[] {"mmm.lib.multiModel.MMMLoader.MMMTransformer"};
 	}
 
 	@Override
 	public String getModContainerClass() {
-		return "mmm.lib.multiModel.oldLoader.MMMModContainer";
+		return "mmm.lib.multiModel.MMMLoader.MMMModContainer";
 //		return null;
 	}
 

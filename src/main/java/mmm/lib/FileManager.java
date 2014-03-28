@@ -1,6 +1,8 @@
 package mmm.lib;
 
 import java.io.File;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +37,22 @@ public class FileManager {
 		if (dirModsVersion.exists()) {
 			for (File lf : dirModsVersion.listFiles()) {
 				llist.add(lf);
+			}
+		}
+		return llist;
+	}
+	public static List<File> getAllmodsFiles(ClassLoader pClassLoader) {
+		List<File> llist = new ArrayList<File>();
+		if (pClassLoader instanceof URLClassLoader ) {
+			for (URL lurl : ((URLClassLoader)pClassLoader).getURLs()) {
+				try {
+					String ls = lurl.toString();
+					if (ls.endsWith("/bin/") || ls.indexOf("/mods/") > -1) {
+						llist.add(new File(lurl.toURI()));
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		return llist;

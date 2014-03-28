@@ -1,5 +1,6 @@
 package mmm.lib.multiModel.texture;
 
+import mmm.lib.multiModel.model.AbstractModelBase;
 import net.minecraft.util.ResourceLocation;
 
 /**
@@ -8,13 +9,14 @@ import net.minecraft.util.ResourceLocation;
  */
 public class MultiModelEntry {
 
+	protected String name;
 	protected int color;
-	protected Class modelClass;
+	protected AbstractModelBase model;
 	protected ResourceLocation texture;
 
 
-	public Class getModelClass() {
-		return null;
+	public AbstractModelBase getModel() {
+		return model;
 	}
 
 	public int getColor() {

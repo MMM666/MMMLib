@@ -1,4 +1,4 @@
-package mmm.lib.multiModel.oldLoader;
+package mmm.lib.multiModel.MMMLoader;
 
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;

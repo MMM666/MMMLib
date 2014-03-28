@@ -3,10 +3,8 @@ package mmm.lib.multiModel.model.mc162;
 import java.util.HashMap;
 import java.util.Map;
 
-import mmm.lib.MMMLib;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * マルチモデル用の基本クラス、これを継承していればマルチモデルとして使用できる。
@@ -33,6 +31,7 @@ public abstract class ModelMultiBase extends ModelBase implements IModelCaps {
 	/**
 	 * モデルが持っている機能群
 	 */
+	@SuppressWarnings("serial")
 	private final Map<String, Integer> fcapsmap = new HashMap<String, Integer>() {{
 		put("onGround",			caps_onGround);
 		put("isRiding",			caps_isRiding);
@@ -64,7 +63,7 @@ public abstract class ModelMultiBase extends ModelBase implements IModelCaps {
 		textureHeight = pTextureHeight;
 		
 		if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
-			MMMLib.Debug("ModelMulti.InitClient");
+//			MMMLib.Debug("ModelMulti.InitClient");
 			// ハードポイント
 			Arms = new ModelRenderer[2];
 			HeadMount = new ModelRenderer(this, "HeadMount");
@@ -80,12 +79,6 @@ public abstract class ModelMultiBase extends ModelBase implements IModelCaps {
 	 * モデルの初期化コード
 	 */
 	public abstract void initModel(float psize, float pyoffset);
-
-	/**
-	 * アーマーモデルのサイズを返す。
-	 * サイズは内側のものから。
-	 */
-	public abstract float[] getArmorModelsSize();
 
 	/**
 	 * モデル指定詞に依らずに使用するテクスチャパック名。

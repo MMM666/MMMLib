@@ -4,6 +4,9 @@ import mmm.lib.MMMLib;
 import mmm.lib.multiModel.model.mc162.IModelCaps;
 import mmm.lib.multiModel.model.mc162.ModelBaseDuo;
 import mmm.lib.multiModel.model.mc162.ModelBaseSolo;
+import mmm.lib.multiModel.model.mc162.ModelMultiBase;
+import mmm.lib.multiModel.texture.MultiModelContainer;
+import mmm.lib.multiModel.texture.MultiModelManager;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -14,9 +17,8 @@ public class RenderLittleMaidMob extends RenderLiving {
 	public ModelBaseSolo modelMain;
 	public ModelBaseDuo modelFATT;
 	public IModelCaps fcaps;
-
-//	private static final ResourceLocation textures = new ResourceLocation("textures/entity/pig/pig.png");
-	private static final ResourceLocation textures = new ResourceLocation("/mob/littleMaid/CF_Kagami/kagami_c.png");
+	
+	public MultiModelContainer modelContainer;
 
 
 	public RenderLittleMaidMob(float pShadowSize) {
@@ -30,7 +32,8 @@ public class RenderLittleMaidMob extends RenderLiving {
 		mainModel = modelMain;
 		setRenderPassModel(modelFATT);
 		
-		modelMain.textures = new ResourceLocation[] { textures };
+		modelMain.textures = new ResourceLocation[0];
+//		modelMain.textures = new ResourceLocation[] { textures };
 /*
 		modelMain.model = new ModelLittleMaid_Aug();
 		try {
@@ -52,7 +55,10 @@ public class RenderLittleMaidMob extends RenderLiving {
 
 	public void doRender(EntityLittleMaidMob pEntity, double pX, double pY, double pZ, float par8, float par9) {
 		modelMain.isRendering = true;
-		modelMain.model = pEntity.getModel();
+//		modelMain.model = pEntity.getModel();
+		modelContainer = MultiModelManager.instance.getMultiModel("ERYI_Aokise");
+		modelMain.model = (ModelMultiBase)modelContainer.getModelClass()[0];
+		
 		super.doRender(pEntity, pX, pY, pZ, par8, par9);
 	}
 
@@ -60,7 +66,8 @@ public class RenderLittleMaidMob extends RenderLiving {
 	protected ResourceLocation getEntityTexture(Entity var1) {
 		// TODO Auto-generated method stub
 //		return ((EntityLittleMaidMob)var1).getTexture();
-		return textures;
+//		return textures;
+		return modelContainer.getTexture(0x08);
 	}
 
 }

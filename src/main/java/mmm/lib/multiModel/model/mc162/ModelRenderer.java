@@ -275,9 +275,9 @@ public class ModelRenderer {
 		return this;
 	}
 
-	protected ModelBoxBase getModelBoxBase(Class<ModelBoxBase> pModelBoxBase, Object ... pArg) {
+	protected ModelBoxBase getModelBoxBase(Class<? extends ModelBoxBase> pModelBoxBase, Object ... pArg) {
 		try {
-			Constructor<ModelBoxBase> lconstructor =
+			Constructor<? extends ModelBoxBase> lconstructor =
 					pModelBoxBase.getConstructor(ModelRenderer.class, Object[].class);
 			return lconstructor.newInstance(this, pArg);
 		} catch(Exception e) {
@@ -296,7 +296,7 @@ public class ModelRenderer {
 		return lobject;
 	}
 
-	public ModelRenderer addParts(Class pModelBoxBase, String pName, Object ... pArg) {
+	public ModelRenderer addParts(Class<? extends ModelBoxBase> pModelBoxBase, String pName, Object ... pArg) {
 		pName = (new StringBuilder()).append(boxName).append(".").append(pName).toString();
 		TextureOffset ltextureoffset = baseModel.getTextureOffset(pName);
 		setTextureOffset(ltextureoffset.textureOffsetX, ltextureoffset.textureOffsetY);
@@ -304,7 +304,7 @@ public class ModelRenderer {
 		return this;
 	}
 
-	public ModelRenderer addParts(Class pModelBoxBase, Object ... pArg) {
+	public ModelRenderer addParts(Class<? extends ModelBoxBase> pModelBoxBase, Object ... pArg) {
 		addCubeList(getModelBoxBase(pModelBoxBase, getArg(pArg)));
 		return this;
 	}
@@ -313,7 +313,7 @@ public class ModelRenderer {
 	 * 自分でテクスチャの座標を指定する時に使います。
 	 * コンストラクタへそのまま値を渡します。
 	 */
-	public ModelRenderer addPartsTexture(Class pModelBoxBase, String pName, Object ... pArg) {
+	public ModelRenderer addPartsTexture(Class<? extends ModelBoxBase> pModelBoxBase, String pName, Object ... pArg) {
 		pName = (new StringBuilder()).append(boxName).append(".").append(pName).toString();
 		addCubeList(getModelBoxBase(pModelBoxBase, pArg).setBoxName(pName));
 		return this;
@@ -323,7 +323,7 @@ public class ModelRenderer {
 	 * 自分でテクスチャの座標を指定する時に使います。
 	 * コンストラクタへそのまま値を渡します。
 	 */
-	public ModelRenderer addPartsTexture(Class pModelBoxBase, Object ... pArg) {
+	public ModelRenderer addPartsTexture(Class<? extends ModelBoxBase> pModelBoxBase, Object ... pArg) {
 		addCubeList(getModelBoxBase(pModelBoxBase, pArg));
 		return this;
 	}

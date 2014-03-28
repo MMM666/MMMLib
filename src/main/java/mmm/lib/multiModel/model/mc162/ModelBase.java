@@ -6,11 +6,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import mmm.lib.multiModel.model.AbstractModelBase;
 import net.minecraft.client.model.TextureOffset;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.util.MathHelper;
 
-public abstract class ModelBase {
+public abstract class ModelBase extends AbstractModelBase {
 	
 	public static final float PI = (float)Math.PI;
 
