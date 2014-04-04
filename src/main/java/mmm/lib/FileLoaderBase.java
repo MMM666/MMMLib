@@ -2,8 +2,10 @@ package mmm.lib;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.List;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
 /**
@@ -18,7 +20,7 @@ public abstract class FileLoaderBase {
 	 */
 	public void execute() {
 //		List<File> llist = FileManager.getAllmodsFiles();
-		List<File> llist = FileManager.getAllmodsFiles(getClass().getClassLoader());
+		List<File> llist = FileManager.getAllmodsFiles(getClass().getClassLoader(), true);
 		for (File lf : llist) {
 			String ls = lf.getName();
 			if (isZipLoad() && ls.matches("(.+).(zip|jar)$")) {
@@ -26,7 +28,11 @@ public abstract class FileLoaderBase {
 			} if (lf.isDirectory()) {
 				decodeDir(lf, lf);
 			} else {
-				preLoad(lf, ls);
+				try {
+					preLoad(lf, ls, new FileInputStream(lf));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
@@ -37,16 +43,19 @@ public abstract class FileLoaderBase {
 	 */
 	public void decodeZip(File pFile) {
 		try {
+			ZipFile lzf = new ZipFile(pFile);
 			FileInputStream lfis = new FileInputStream(pFile);
 			ZipInputStream lzis = new ZipInputStream(lfis);
+			
 			for (ZipEntry lze = lzis.getNextEntry(); lze != null; lze = lzis.getNextEntry()) {
 				if (!lze.isDirectory()) {
-					preLoad(pFile, lze.getName());
+					preLoad(pFile, lze.getName(), lzf.getInputStream(lze));
 				}
 			}
 			
 			lzis.close();
 			lfis.close();
+			lzf.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -61,7 +70,11 @@ public abstract class FileLoaderBase {
 			if (lf.isDirectory()) {
 				decodeDir(pBaseDir, lf);
 			} else {
-				preLoad(lf, lf.getAbsolutePath().substring(pBaseDir.getAbsolutePath().length()));
+				try {
+					preLoad(lf, lf.getAbsolutePath().substring(pBaseDir.getAbsolutePath().length()), new FileInputStream(lf));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
@@ -70,7 +83,9 @@ public abstract class FileLoaderBase {
 	 * zipファイルを解析するか？
 	 * @return
 	 */
-	public abstract boolean isZipLoad();
+	public boolean isZipLoad() {
+		return true;
+	}
 
 	/**
 	 * 解析動作の実装
@@ -78,15 +93,17 @@ public abstract class FileLoaderBase {
 	 * @param pFileName
 	 * @return
 	 */
-	public abstract boolean load(File pFile, String pFileName);
+	public boolean load(File pFile, String pFileName, InputStream pInputStream) {
+		return false;
+	}
 
-	public boolean preLoad(File pFile, String pFileName) {
+	protected boolean preLoad(File pFile, String pFileName, InputStream pInputStream) {
 //		if (!pFileName.startsWith("/")) {
 //			pFileName = (new StringBuilder()).append("/").append(pFileName).toString();
 //		} else {
 //		}
 		pFileName = pFileName.replace("\\", "/");
-		return load(pFile, pFileName);
+		return load(pFile, pFileName, pInputStream);
 	}
 
 }

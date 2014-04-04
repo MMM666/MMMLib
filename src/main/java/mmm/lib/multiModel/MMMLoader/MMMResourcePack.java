@@ -29,6 +29,7 @@ public class MMMResourcePack implements IResourcePack {
 		ownerContainer = pContainer;
 	}
 
+	@Override
 	public InputStream getInputStream(ResourceLocation par1ResourceLocation) throws IOException {
 		InputStream inputstream = getResourceStream(par1ResourceLocation);
 		
@@ -45,25 +46,36 @@ public class MMMResourcePack implements IResourcePack {
 		return lis;
 	}
 
+	@Override
 	public boolean resourceExists(ResourceLocation par1ResourceLocation) {
 		return getResourceStream(par1ResourceLocation) != null;
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public Set getResourceDomains() {
 		return DefaultResourcePack.defaultResourceDomains;
 	}
 
+	@Override
 	public IMetadataSection getPackMetadata(IMetadataSerializer par1MetadataSerializer, String par2Str)
-			throws IOException {
+	{ //throws IOException {
 		return null;
 	}
 
-	public BufferedImage getPackImage() throws IOException {
-		return ImageIO.read(DefaultResourcePack.class.getResourceAsStream("/"
-				+ (new ResourceLocation("pack.png")).getResourcePath()));
+	@Override
+	public BufferedImage getPackImage() {// throws IOException {
+		try {
+			return ImageIO.read(DefaultResourcePack.class.getResourceAsStream("/"
+					+ (new ResourceLocation("pack.png")).getResourcePath()));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 
+	@Override
 	public String getPackName() {
 		return "Default";
 	}

@@ -3,8 +3,10 @@ package mmm.lib;
 import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.List;
 
 import mmm.lib.debugs.EzRecipes;
+import mmm.lib.debugs.MMMDecorder;
 import mmm.lib.debugs.MoveWindow;
 import mmm.lib.destroyAll.DestroyAllManager;
 import mmm.lib.guns.GunsBase;
@@ -80,12 +82,19 @@ public class MMMLib {
 //		for (Object lo : Loader.instance().getModList()) {
 //			Debug("%s", lo.toString());
 //		}
+		// 独自スクリプトデコーダー
+		(new MMMDecorder()).execute();
 		EzRecipes.init();
+		
 		// 旧モデル用変換開始
 		MMMTransformer.isEnable = true;
 		MultiModelManager.instance.execute();
 		
 		// TODO test
+		List<File> llist = FileManager.getAllmodsFiles(getClass().getClassLoader(), true);
+		for (File lf : llist) {
+			Debug("targetFiles: %s", lf.getAbsolutePath());
+		}
 /*
 		//		(new fileTest()).execute();
 		viewClasses(getClass().getClassLoader());

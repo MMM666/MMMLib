@@ -1,6 +1,7 @@
 package mmm.lib.multiModel.texture;
 
 import java.io.File;
+import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -47,6 +48,7 @@ public class MultiModelManager extends FileLoaderBase {
 		preFixs = new ArrayList<String>();
 		preFixs.add("/mob/littleMaid/");
 		preFixs.add("/textures/entity/littleMaid/");
+		preFixs.add("/multiModel/");
 		textures  = new HashMap<String, MultiModelContainer>();
 	}
 
@@ -70,7 +72,7 @@ public class MultiModelManager extends FileLoaderBase {
 	}
 
 	@Override
-	public boolean load(File pFile, String pFileName) {
+	public boolean load(File pFile, String pFileName, InputStream pInputStream) {
 //		MMMLib.Debug("loadTexture:%s, %s", pFile.toString(), pFileName);
 		return addModelClass(pFileName) || addTexture(pFile, pFileName);
 	}

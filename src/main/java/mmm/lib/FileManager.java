@@ -13,6 +13,9 @@ public class FileManager {
 	public static File dirMinecraft;
 	public static File dirMods;
 	public static File dirModsVersion;
+	
+	public static List<File> files;
+
 
 	static {
 		Object[] lo = FMLInjectionData.data();
@@ -39,6 +42,7 @@ public class FileManager {
 				llist.add(lf);
 			}
 		}
+		files = llist;
 		return llist;
 	}
 	public static List<File> getAllmodsFiles(ClassLoader pClassLoader) {
@@ -55,7 +59,51 @@ public class FileManager {
 				}
 			}
 		}
+		files = llist;
 		return llist;
+	}
+	public static List<File> getAllmodsFiles(ClassLoader pClassLoader, boolean pFlag) {
+		List<File> llist = new ArrayList<File>();
+		if (pClassLoader instanceof URLClassLoader ) {
+			for (URL lurl : ((URLClassLoader)pClassLoader).getURLs()) {
+				try {
+					String ls = lurl.toString();
+					if (ls.endsWith("/bin/") || ls.indexOf("/mods/") > -1) {
+						llist.add(new File(lurl.toURI()));
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		if (pFlag) {
+			if (dirMods.exists()) {
+				for (File lf : dirMods.listFiles()) {
+					addList(llist, lf);
+				}
+			}
+			if (dirModsVersion.exists()) {
+				for (File lf : dirModsVersion.listFiles()) {
+					addList(llist, lf);
+				}
+			}
+		}
+		files = llist;
+		return llist;
+	}
+
+	protected static boolean addList(List<File> pList, File pFile) {
+		for (File lf : pList) {
+			try {
+				if (pFile.getCanonicalPath().compareTo(lf.getCanonicalPath()) == 0) {
+					return false;
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		pList.add(pFile);
+		return true;
 	}
 
 }

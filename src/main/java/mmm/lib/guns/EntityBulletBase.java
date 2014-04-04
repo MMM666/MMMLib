@@ -2,7 +2,6 @@ package mmm.lib.guns;
 
 import io.netty.buffer.ByteBuf;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -494,7 +493,7 @@ public class EntityBulletBase extends Entity implements IProjectile, IEntityAddi
 		}
 		try {
 			lpbuf.writeItemStackToBuffer(bullet);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -521,7 +520,7 @@ public class EntityBulletBase extends Entity implements IProjectile, IEntityAddi
 		}
 		try {
 			bullet = lpbuf.readItemStackFromBuffer();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
