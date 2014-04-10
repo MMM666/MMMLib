@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ContainerWorkbench;
 import net.minecraft.inventory.IInventory;
@@ -19,6 +20,12 @@ public class ContainerMultiBench extends ContainerWorkbench {
 	protected int posX;
 	protected int posY;
 	protected int posZ;
+	
+	protected int index;
+	protected List<ItemStack> craftList;
+	
+	public EntityPlayerMP player;
+
 
 	public ContainerMultiBench(InventoryPlayer par1InventoryPlayer,
 			World par2World, int par3, int par4, int par5) {
@@ -27,11 +34,61 @@ public class ContainerMultiBench extends ContainerWorkbench {
 		posX = par3;
 		posY = par4;
 		posZ = par5;
+		
+		player = null;
+	}
+
+	@Override
+	public boolean canInteractWith(EntityPlayer par1EntityPlayer) {
+		return worldObj.getBlock(posX, posY, posZ) != MultiBench.blockMultiBench ? false : par1EntityPlayer.getDistanceSq((double)posX + 0.5D, (double)posY + 0.5D, (double)posZ + 0.5D) <= 64.0D;
+	}
+
+	public ItemStack addIndex(int pDelta) {
+		ItemStack lresult = null;
+		if (craftList != null && !craftList.isEmpty()) {
+			index += pDelta;
+			int lsize = craftList.size();
+			for (;index >= lsize; index -= lsize);
+			for (;index < 0; index += lsize);
+			lresult = craftList.get(index);
+			putStackInSlot(0, lresult);
+//			craftResult.setInventorySlotContents(0, lresult);
+			return lresult;
+		} else {
+			index = 0;
+		}
+		return lresult;
 	}
 
 	@Override
 	public void onCraftMatrixChanged(IInventory par1iInventory) {
-		craftResult.setInventorySlotContents(0, CraftingManager.getInstance().findMatchingRecipe(craftMatrix, worldObj));
+		craftList = getCraftList();
+		if (craftList.size() <= index) {
+			index = 0;
+		}
+		ItemStack lis = null;
+		if (!craftList.isEmpty()) {
+			lis = craftList.get(index);
+		}
+		putStackInSlot(0, lis);
+//		craftResult.setInventorySlotContents(0, lis);
+//		if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
+//			MultiBench.sendChangeIndex(0);
+//		}
+		if (player != null) {
+			// サーバー側なら更新情報を送信
+//			MultiBench.sendChangeItemStack(player, index, lis);
+			if (!MultiBench.updateList.contains(player)) {
+				MultiBench.updateList.add(player);
+			}
+		}
+	}
+
+	@Override
+	public ItemStack slotClick(int par1, int par2, int par3, EntityPlayer par4EntityPlayer) {
+		// TODO Auto-generated method stub
+//		MultiBench.Debug("%d", par1);
+		return super.slotClick(par1, par2, par3, par4EntityPlayer);
 	}
 
 	protected List<ItemStack> getCraftList() {
@@ -90,9 +147,4 @@ public class ContainerMultiBench extends ContainerWorkbench {
 		return lresult;
 	}
 
-	@Override
-	public boolean canInteractWith(EntityPlayer par1EntityPlayer) {
-		return worldObj.getBlock(posX, posY, posZ) != MultiBench.blockMultiBench ? false : par1EntityPlayer.getDistanceSq((double)posX + 0.5D, (double)posY + 0.5D, (double)posZ + 0.5D) <= 64.0D;
-	}
-	
 }

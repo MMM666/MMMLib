@@ -216,4 +216,8 @@ public class MultiModelManager extends FileLoaderBase {
 		return lcont;
 	}
 
+	public boolean isMultiModel(String pName) {
+		return textures.containsKey(pName);
+	}
+
 }

@@ -78,7 +78,7 @@ public class ItemGunsBase extends ItemBow {
 	/** アイコン名称 */
 	public String[] iconNames;
 	
-	protected IIcon[] iconArray;
+	protected IIcon[] icons;
 	protected Item[] ammos;
 
 
@@ -98,8 +98,10 @@ public class ItemGunsBase extends ItemBow {
 		stabilityYawOffset = 0F;
 		accuracy = 1.0F;
 		
-		bullets = new String[] {"FN5728Guns:SS190"};
+		iconNames = new String[] {"", "", ""};
+		bullets = new String[] {""};
 		
+		GunsBase.appendItem(this);
 	}
 
 	public void init() {
@@ -234,14 +236,14 @@ public class ItemGunsBase extends ItemBow {
 	public void registerIcons(IIconRegister par1IconRegister) {
 		// ItemBowで再定義されているので標準に戻す。
 		// 必要なら上書きすること。
-		iconArray = new IIcon[3];
+		icons = new IIcon[3];
 //		iconArray[0] = par1IconRegister.registerIcon(getIconString());
 //		iconArray[1] = par1IconRegister.registerIcon(getIconString() + "_Empty");
 //		iconArray[2] = par1IconRegister.registerIcon(getIconString() + "_Release");
-		iconArray[0] = par1IconRegister.registerIcon(iconNames[0]);
-		iconArray[1] = par1IconRegister.registerIcon(iconNames[1]);
-		iconArray[2] = par1IconRegister.registerIcon(iconNames[2]);
-		itemIcon = iconArray[0];
+		icons[0] = par1IconRegister.registerIcon(iconNames[0]);
+		icons[1] = par1IconRegister.registerIcon(iconNames[1]);
+		icons[2] = par1IconRegister.registerIcon(iconNames[2]);
+		itemIcon = icons[0];
 	}
 
 	@Override
@@ -255,12 +257,12 @@ public class ItemGunsBase extends ItemBow {
 	public IIcon getIcon(ItemStack stack, int pass) {
 		int li = getState(stack);
 		if (li >= State_ReleseMag && li < State_ReloadEnd) {
-			return iconArray[2];
+			return icons[2];
 		} else
 		if (li >= State_Empty && li < State_ReleseMag) {
-			return iconArray[1];
+			return icons[1];
 		} else {
-			return iconArray[0];
+			return icons[0];
 		}
 	}
 

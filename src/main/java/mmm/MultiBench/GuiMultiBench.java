@@ -1,40 +1,29 @@
 package mmm.MultiBench;
 
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiCrafting;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import cpw.mods.fml.client.FMLClientHandler;
 
-import org.lwjgl.opengl.GL11;
+public class GuiMultiBench extends GuiCrafting {
 
-public class GuiMultiBench extends GuiContainer {
-
-	protected static final ResourceLocation craftingTableGuiTextures =
-			new ResourceLocation("textures/gui/container/crafting_table.png");
+	public ContainerMultiBench multiContainer;
 
 
-	public GuiMultiBench(InventoryPlayer pInventoryPlayer, World pWorld, int pX, int pY, int pZ) {
-		super(new ContainerMultiBench(pInventoryPlayer, pWorld, pX, pY, pZ));
+	public GuiMultiBench(InventoryPlayer par1InventoryPlayer, World par2World,
+			int par3, int par4, int par5) {
+		super(par1InventoryPlayer, par2World, par3, par4, par5);
+		
+		multiContainer = new ContainerMultiBench(par1InventoryPlayer, par2World, par3, par4, par5);
+		inventorySlots = multiContainer;
+//		par1EntityPlayer.openContainer = this.inventorySlots;
+		
 	}
 
-	@Override
-	protected void drawGuiContainerForegroundLayer(int pX, int pY) {
-		fontRendererObj.drawString(I18n.format("container.crafting", new Object[0]), 28, 6, 0x404040);
-		fontRendererObj.drawString(I18n.format("container.inventory", new Object[0]), 8, ySize - 96 + 2, 0x404040);
-	}
-
-	@Override
-	protected void drawGuiContainerBackgroundLayer(float p_146976_1_, int p_146976_2_, int p_146976_3_) {
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		mc.getTextureManager().bindTexture(craftingTableGuiTextures);
-		int k = (width - xSize) / 2;
-		int l = (height - ySize) / 2;
-		this.drawTexturedModalRect(k, l, 0, 0, xSize, ySize);
-	}
-
+	@SuppressWarnings("unchecked")
 	@Override
 	public void initGui() {
 		super.initGui();
@@ -44,8 +33,26 @@ public class GuiMultiBench extends GuiContainer {
 
 	@Override
 	protected void actionPerformed(GuiButton p_146284_1_) {
-		// TODO Auto-generated method stub
-		super.actionPerformed(p_146284_1_);
+		if (p_146284_1_.id == 10) {
+//			multiContainer.addIndex(-1);
+			MultiBench.sendChangeIndex(-1);
+		} else if (p_146284_1_.id == 11) {
+//			multiContainer.addIndex(1);
+			MultiBench.sendChangeIndex(1);
+		} else {
+			super.actionPerformed(p_146284_1_);
+		}
+	}
+
+	public static void getPacket(int pIndex, ItemStack pItemStack) {
+		// アイテムスタックを受信
+		EntityPlayerSP lplayer = FMLClientHandler.instance().getClientPlayerEntity();
+		if (lplayer.openContainer instanceof ContainerMultiBench) {
+			ContainerMultiBench lcmb = (ContainerMultiBench)lplayer.openContainer;
+			lcmb.index = pIndex;
+//			lcmb.putStackInSlot(0, pItemStack);
+			lcmb.craftResult.setInventorySlotContents(0, pItemStack);
+		}
 	}
 
 }

@@ -17,6 +17,9 @@ public class ItemBulletBase extends Item {
 	protected final static String Tag_Reaction	= "reaction";
 	protected final static String Tag_Power		= "power";
 	
+	/** 発射時の音 */
+	public String soundFire;
+	
 	/** 基準発射速度 **/
 	float speed;
 	/** 発射時の反動 **/
@@ -77,6 +80,15 @@ public class ItemBulletBase extends Item {
 	 * @param pBullet
 	 */
 	public void playSoundFire(World pWorld, EntityPlayer pPlayer, ItemStack pGun, ItemStack pBullet) {
+		if (soundFire != null && !soundFire.isEmpty()) {
+			Item lgun = pGun.getItem();
+			float lvol = 0.5F;
+			if (lgun instanceof ItemGunsBase) {
+				lvol = ((ItemGunsBase)lgun).volume;
+			}
+			pWorld.playSoundAtEntity(pPlayer, soundFire,
+					lvol, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
+		}
 	}
 
 	/**

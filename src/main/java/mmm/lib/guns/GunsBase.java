@@ -1,8 +1,9 @@
 package mmm.lib.guns;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.List;
 
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
@@ -18,6 +19,8 @@ public class GunsBase {
 
 	public static ArrayList<EntityPlayer> playerList = new ArrayList<EntityPlayer>();
 	public static boolean isDebugMessage = true;
+
+	protected static List<ItemGunsBase> appendList = new ArrayList<ItemGunsBase>();
 
 
 	public static void Debug(String pText, Object... pData) {
@@ -60,18 +63,25 @@ public class GunsBase {
 	 */
 	@SuppressWarnings("unchecked")
 	public static void setUncheckedItemStack(ItemStack pGun, EntityPlayer pPlayer) {
-		ItemStack[] lequipments = ReflectionHelper.getPrivateValue(EntityLivingBase.class, pPlayer, "previousEquipment");
-		lequipments[0] = pGun.copy();
-		ReflectionHelper.setPrivateValue(EntityLivingBase.class, pPlayer, lequipments, "previousEquipment");
-		if (pPlayer instanceof EntityPlayer) {
-			Container lctr = pPlayer.openContainer;
-			for (int li = 0; li < lctr.inventorySlots.size(); li++) {
-				ItemStack lis = lctr.getSlot(li).getStack(); 
-				if (lis == pGun) {
-					lctr.inventoryItemStacks.set(li, pGun.copy());
-					break;
+		try {
+			Class<?> lclass = ReflectionHelper.getClass(pGun.getClass().getClassLoader(), "net.minecraft.entity.EntityLivingBase");
+			Field lfield = ReflectionHelper.findField(lclass, "previousEquipment", "field_82180_bT");
+			ItemStack[] lequipments = (ItemStack[])lfield.get(pPlayer);
+			lequipments[0] = pGun.copy();
+			lfield.set(pPlayer, lequipments);
+//			ReflectionHelper.setPrivateValue(lclass, pPlayer, lequipments, "previousEquipment");
+			if (pPlayer instanceof EntityPlayer) {
+				Container lctr = pPlayer.openContainer;
+				for (int li = 0; li < lctr.inventorySlots.size(); li++) {
+					ItemStack lis = lctr.getSlot(li).getStack(); 
+					if (lis == pGun) {
+						lctr.inventoryItemStacks.set(li, pGun.copy());
+						break;
+					}
 				}
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -114,4 +124,16 @@ public class GunsBase {
 		return true;
 	}
 */
+	
+	public static void appendItem(ItemGunsBase pItem) {
+		appendList.add(pItem);
+	}
+
+	public static void initAppend() {
+		for (ItemGunsBase li : appendList) {
+			li.init();
+		}
+		appendList.clear();
+	}
+
 }
