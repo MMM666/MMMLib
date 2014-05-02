@@ -3,9 +3,11 @@ package mmm.lib.multiModel.MMMLoader;
 import java.util.Map;
 
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
+import cpw.mods.fml.relauncher.IFMLLoadingPlugin.MCVersion;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions;
 
 @TransformerExclusions({"mmm.lib.multiModel.MMMLoader"})
+@MCVersion(value="1.7.2")
 public class MMMCoremod implements IFMLLoadingPlugin{
 
 	@Override

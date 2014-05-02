@@ -100,6 +100,9 @@ public abstract class ModelMultiBase extends ModelBase implements IModelCaps {
 	public float getHeight(IModelCaps pEntityCaps) {
 		return getHeight();
 	}
+	public float getHeight(mmm.lib.multiModel.model.IModelCaps pEntityCaps) {
+		return getHeight(pEntityCaps);
+	}
 	/**
 	 * 横幅
 	 */
@@ -110,6 +113,9 @@ public abstract class ModelMultiBase extends ModelBase implements IModelCaps {
 	 */
 	public float getWidth(IModelCaps pEntityCaps) {
 		return getWidth();
+	}
+	public float getWidth(mmm.lib.multiModel.model.IModelCaps pEntityCaps) {
+		return getWidth(pEntityCaps);
 	}
 	/**
 	 * モデルのYオフセット
@@ -122,6 +128,9 @@ public abstract class ModelMultiBase extends ModelBase implements IModelCaps {
 	public float getyOffset(IModelCaps pEntityCaps) {
 		return getyOffset();
 	}
+	public float getyOffset(mmm.lib.multiModel.model.IModelCaps pEntityCaps) {
+		return getyOffset(pEntityCaps);
+	}
 	/**
 	 * 上に乗せる時のオフセット高
 	 */
@@ -133,6 +142,9 @@ public abstract class ModelMultiBase extends ModelBase implements IModelCaps {
 	public float getMountedYOffset(IModelCaps pEntityCaps) {
 		return getMountedYOffset();
 	}
+	public float getMountedYOffset(mmm.lib.multiModel.model.IModelCaps pEntityCaps) {
+		return getMountedYOffset(pEntityCaps);
+	}
 
 	/**
 	 * ロープの取り付け位置調整用
@@ -140,6 +152,9 @@ public abstract class ModelMultiBase extends ModelBase implements IModelCaps {
 	 */
 	public float getLeashOffset(IModelCaps pEntityCaps) {
 		return 0.4F;
+	}
+	public float getLeashOffset(mmm.lib.multiModel.model.IModelCaps pEntityCaps) {
+		return getLeashOffset(pEntityCaps);
 	}
 
 	/**

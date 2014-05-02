@@ -31,6 +31,21 @@ public class MultiModelManager extends FileLoaderBase {
 		"mob_littlemaidw.png",
 		"mob_littlemaid_a00.png", "mob_littlemaid_a01.png"
 	};
+	// テクスチャの番号と識別の対応
+	public static final int tx_texture		= 0x00; //0;
+	public static final int tx_oldwild		= 0x10; //16;
+	public static final int tx_oldarmor1	= 0x11; //17;
+	public static final int tx_oldarmor2	= 0x12; //18;
+	public static final int tx_oldeye		= 0x13; //19;
+	public static final int tx_gui			= 0x20; //32;
+	public static final int tx_wild			= 0x30; //48;
+	public static final int tx_armor1		= 0x40; //64;
+	public static final int tx_armor2		= 0x50; //80;
+	public static final int tx_eye			= 0x60; //96;
+	public static final int tx_eyecontract	= 0x60; //96;
+	public static final int tx_eyewild		= 0x70; //112;
+	public static final int tx_armor1light	= 0x80; //128;
+	public static final int tx_armor2light	= 0x90; //144;
 	
 	public static MultiModelManager instance = new MultiModelManager();
 	
@@ -127,7 +142,7 @@ public class MultiModelManager extends FileLoaderBase {
 						lname.replace('/', '.');
 						MultiModelContainer lcon = textures.get(lname);
 						if (lcon == null) {
-							lcon = new MultiModelContainer();
+							lcon = new MultiModelContainer(lname);
 							textures.put(lname, lcon);
 						}
 //						MMMLib.Debug("addTexturePack: %s - %d: %s", lname, lcol, pFileName);

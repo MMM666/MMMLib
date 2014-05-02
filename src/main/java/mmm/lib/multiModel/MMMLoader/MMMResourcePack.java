@@ -64,15 +64,9 @@ public class MMMResourcePack implements IResourcePack {
 	}
 
 	@Override
-	public BufferedImage getPackImage() {// throws IOException {
-		try {
-			return ImageIO.read(DefaultResourcePack.class.getResourceAsStream("/"
-					+ (new ResourceLocation("pack.png")).getResourcePath()));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+	public BufferedImage getPackImage() throws IOException {
+		return ImageIO.read(DefaultResourcePack.class.getResourceAsStream("/"
+				+ (new ResourceLocation("pack.png")).getResourcePath()));
 	}
 
 	@Override
