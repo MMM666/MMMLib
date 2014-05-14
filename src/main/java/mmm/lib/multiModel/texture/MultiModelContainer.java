@@ -35,6 +35,7 @@ public class MultiModelContainer {
 		name = pName;
 		models = new HashMap<Integer, AbstractModelBase[]>();
 		textures = new HashMap<Integer, ResourceLocation>();
+		armors = new HashMap<String, Map<Integer,ResourceLocation>>();
 		isDecodeJSON = false;
 		colorContracts = colorWilds = 0;
 	}
