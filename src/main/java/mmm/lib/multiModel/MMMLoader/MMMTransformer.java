@@ -87,6 +87,9 @@ public class MMMTransformer implements IClassTransformer, Opcodes {
 		if (!targets.containsKey(lcreader.getSuperName())) {
 			// 親クラスが特定クラスではないので抜けますね^^;
 //			return basicClass;
+		} else if (transformedName.indexOf("ModelLittleMaid") < 0 && transformedName.indexOf("ModelMulti") < 0) {
+			// 特定名称がクラス名に含まれないので抜けますね^^;
+			return basicClass;
 		} else {
 			Debug("Load Old-MulitiModel: %s", name);
 		}

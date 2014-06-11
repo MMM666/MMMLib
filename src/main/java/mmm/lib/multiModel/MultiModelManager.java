@@ -1,4 +1,4 @@
-package mmm.lib.multiModel.texture;
+package mmm.lib.multiModel;
 
 import java.io.File;
 import java.io.InputStream;
@@ -17,6 +17,7 @@ import mmm.lib.FileLoaderBase;
 import mmm.lib.MMMLib;
 import mmm.lib.multiModel.model.AbstractModelBase;
 import mmm.lib.multiModel.model.mc162.ModelLittleMaid_Orign;
+import mmm.lib.multiModel.texture.MultiModelContainer;
 
 public class MultiModelManager extends FileLoaderBase {
 
@@ -100,12 +101,19 @@ public class MultiModelManager extends FileLoaderBase {
 	@SuppressWarnings("unchecked")
 	protected boolean addModelClass(String pFileName) {
 		if (pFileName.endsWith(".class") && pFileName.indexOf("$") == -1) {
+			// TODO この辺調整
+			if (pFileName.indexOf("ModelMulti") == -1) {
+				return false;
+			}
+			if (pFileName.indexOf("ModelLittleMaid") == -1) {
+				return false;
+			}
 			String lcname = pFileName.substring(0, pFileName.length() - 6);
 			if (lcname.startsWith("/")) {
 				lcname = lcname.substring(1);
 			}
 			lcname = lcname.replace("/", ".");
-//			MMMLib.Debug("try MultiModelClass: %s", lcname);
+			MMMLib.Debug("try MultiModelClass: %s", lcname);
 			try {
 				ClassLoader lcl = getClass().getClassLoader();
 				Class<?> lc = lcl.loadClass(lcname);
@@ -121,7 +129,7 @@ public class MultiModelManager extends FileLoaderBase {
 					}
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
+//				e.printStackTrace();
 			}
 		}
 		return false;
@@ -164,14 +172,14 @@ public class MultiModelManager extends FileLoaderBase {
 		for (Entry<String, MultiModelContainer> le : textures.entrySet()) {
 			String lmname = le.getKey();
 			MultiModelContainer lcont = le.getValue();
-			if (lcont.defaultModel == null) {
+			if (lcont.getDefaultModel() == null) {
 				MMMLib.Debug("checkModel: %s(%d)", lmname, lcont.getTextureCount());
 				int lindex = lmname.lastIndexOf('_');
 				if (lindex > 0) {
 					lmname = lmname.substring(lindex + 1,lmname.length());
-					lcont.defaultModel = getModelFromName(lmname);
+					lcont.setDefaultModel(getModelFromName(lmname));
 				} else {
-					lcont.defaultModel = defaultModel;
+					lcont.setDefaultModel(defaultModel);
 				}
 			}
 		}

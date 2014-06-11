@@ -2,12 +2,15 @@ package mmm.lib.multiModel.texture;
 
 import io.netty.buffer.ByteBuf;
 import mmm.lib.multiModel.MultiModelHandler;
+import mmm.lib.multiModel.MultiModelManager;
 import mmm.lib.multiModel.model.AbstractModelBase;
 import mmm.lib.multiModel.model.IModelCaps;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
+
+import com.google.common.base.Charsets;
 
 /**
  * Entityに関連付けられるデータ保持用のクラス
@@ -24,6 +27,11 @@ public class MultiModelData implements IExtendedEntityProperties {
 	protected int color;
 	protected int modelPartsVisible;
 	protected int armorPartsVisible;
+	
+	protected float width;
+	protected float height;
+	protected float yOffset;
+	protected float mountHeight;
 	
 	public MultiModelContainer model;
 	public MultiModelContainer armor;
@@ -47,7 +55,7 @@ public class MultiModelData implements IExtendedEntityProperties {
 
 	@Override
 	public void loadNBTData(NBTTagCompound compound) {
-		// TODO Auto-generated method stub
+		// モデルに関連付けられたデータを読み込む
 		if (compound.hasKey("MultiModel")) {
 			NBTTagCompound lnbt = compound.getCompoundTag("MultiModel");
 			color = lnbt.getInteger("color");
@@ -78,9 +86,11 @@ public class MultiModelData implements IExtendedEntityProperties {
 	 * @return
 	 */
 	public boolean setModelFromName(String pName) {
-		modelName = pName;
-		model = MultiModelManager.instance.getMultiModel(pName);
-		isChanged = true;
+		if (modelName == null || !modelName.equalsIgnoreCase(pName)) {
+			modelName = pName;
+			model = MultiModelManager.instance.getMultiModel(pName);
+			isChanged = true;
+		}
 		return model != null;
 	}
 
@@ -150,15 +160,31 @@ public class MultiModelData implements IExtendedEntityProperties {
 		pBuf.writeByte(color);
 		// visibleFlags
 		// stabilizers
+		pBuf.writeFloat(height);
+		pBuf.writeFloat(width);
+		pBuf.writeFloat(yOffset);
+		pBuf.writeFloat(mountHeight);
+		pBuf.writeByte(modelName.length());
+		pBuf.writeBytes(modelName.getBytes(Charsets.UTF_8));
+		
 	}
 
 	public void reciveFromClient(ByteBuf pBuf) {
 		// EntityIDは既に読まれている
+//		PacketBuffer lbuf = new PacketBuffer(pBuf);
+		
 		// modelName
 		// color
 		color = pBuf.readByte();
 		// visibleFlags
 		// stabilizers
+		height		= pBuf.readFloat();
+		width		= pBuf.readFloat();
+		yOffset		= pBuf.readFloat();
+		mountHeight	= pBuf.readFloat();
+		int ll = pBuf.readByte();
+		modelName	=  new String(pBuf.readBytes(ll).array(), Charsets.UTF_8);
+		
 	}
 
 	public void sendToClient(ByteBuf pBuf) {
@@ -169,6 +195,13 @@ public class MultiModelData implements IExtendedEntityProperties {
 		pBuf.writeByte(color);
 		// visibleFlags
 		// stabilizers
+		pBuf.writeFloat(height);
+		pBuf.writeFloat(width);
+		pBuf.writeFloat(yOffset);
+		pBuf.writeFloat(mountHeight);
+		pBuf.writeByte(modelName.length());
+		pBuf.writeBytes(modelName.getBytes(Charsets.UTF_8));
+		
 	}
 
 	public void reciveFromServer(ByteBuf pBuf) {
@@ -178,6 +211,13 @@ public class MultiModelData implements IExtendedEntityProperties {
 		color = pBuf.readByte();
 		// visibleFlags
 		// stabilizers
+		height		= pBuf.readFloat();
+		width		= pBuf.readFloat();
+		yOffset		= pBuf.readFloat();
+		mountHeight	= pBuf.readFloat();
+		int ll = pBuf.readByte();
+		modelName	=  new String(pBuf.readBytes(ll).array(), Charsets.UTF_8);
+		
 	}
 
 }

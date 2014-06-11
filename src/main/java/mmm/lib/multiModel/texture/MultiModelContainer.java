@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import mmm.lib.multiModel.MultiModelManager;
 import mmm.lib.multiModel.model.AbstractModelBase;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
@@ -237,5 +238,12 @@ public class MultiModelContainer {
 		return !armors.isEmpty();
 	}
 
+	public void setDefaultModel(AbstractModelBase[] pDefaultModel) {
+		defaultModel = pDefaultModel;
+	}
+
+	public AbstractModelBase[] getDefaultModel() {
+		return defaultModel;
+	}
 
 }
