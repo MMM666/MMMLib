@@ -11,6 +11,7 @@ import mmm.lib.guns.GunsBase;
 import mmm.lib.multiModel.MultiModelManager;
 import mmm.lib.multiModel.MMMLoader.MMMTransformer;
 import net.minecraftforge.common.config.Configuration;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;

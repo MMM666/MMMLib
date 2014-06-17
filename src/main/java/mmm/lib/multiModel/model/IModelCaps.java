@@ -66,7 +66,7 @@ public interface IModelCaps {
 	public static final int caps_renderYawOffset		= 0x006d;
 	
 	/** Entityの位置にオフセットした座標のBlockを取得する [0]:offsetX, [1]:offsetY, [2]:offsetZ **/
-//	public static final int caps_PosBlock				= 0x0080;
+	public static final int caps_PosBlock				= 0x0080;
 	/** Entityの位置にオフセットした座標のBlockIDを取得する [0]:offsetX, [1]:offsetY, [2]:offsetZ **/
 	public static final int caps_PosBlockID				= 0x0081;
 	/** Entityの位置にオフセットした座標のBlockMetaDataを取得する [0]:offsetX, [1]:offsetY, [2]:offsetZ **/

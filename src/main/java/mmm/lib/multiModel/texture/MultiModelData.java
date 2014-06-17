@@ -1,16 +1,24 @@
 package mmm.lib.multiModel.texture;
 
 import io.netty.buffer.ByteBuf;
+
+import java.lang.reflect.Method;
+
 import mmm.lib.multiModel.MultiModelHandler;
 import mmm.lib.multiModel.MultiModelManager;
 import mmm.lib.multiModel.model.AbstractModelBase;
+import mmm.lib.multiModel.model.EntityCapsBase;
 import mmm.lib.multiModel.model.IModelCaps;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityAgeable;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 
 import com.google.common.base.Charsets;
+
+import cpw.mods.fml.relauncher.ReflectionHelper;
 
 /**
  * Entityに関連付けられるデータ保持用のクラス
@@ -39,6 +47,9 @@ public class MultiModelData implements IExtendedEntityProperties {
 	protected boolean isChanged = false;
 	/** 更新情報を送りたくない時に設定 */
 	public boolean isSuplessUpdate = false;
+	protected int sendCounter;
+	
+	public IModelCaps modelCaps;
 
 
 	@Override
@@ -70,8 +81,11 @@ public class MultiModelData implements IExtendedEntityProperties {
 	public void init(Entity entity, World world) {
 		// 初期化時に実行される
 		owner = entity;
+		if (owner instanceof EntityLivingBase) {
+			modelCaps = new EntityCapsBase((EntityLivingBase)owner);
+		}
 		if (owner instanceof IMultiModelEntity) {
-			((IMultiModelEntity)owner).initMultiModel();
+//			((IMultiModelEntity)owner).initMultiModel();
 		}
 	}
 
@@ -89,7 +103,7 @@ public class MultiModelData implements IExtendedEntityProperties {
 		if (modelName == null || !modelName.equalsIgnoreCase(pName)) {
 			modelName = pName;
 			model = MultiModelManager.instance.getMultiModel(pName);
-			isChanged = true;
+			setChange();
 		}
 		return model != null;
 	}
@@ -108,7 +122,7 @@ public class MultiModelData implements IExtendedEntityProperties {
 	 * @return 指定色が有ればtrue, 無ければfalse
 	 */
 	public boolean setColor(int pColor) {
-		isChanged = (pColor != color);
+		if (pColor != color) setChange();
 		color = pColor;
 		return true;
 	}
@@ -132,92 +146,270 @@ public class MultiModelData implements IExtendedEntityProperties {
 	 */
 	public void onUpdate() {
 		if (owner != null && !isSuplessUpdate) {
-			if (isChanged) {
+			if (isChanged && (--sendCounter <= 0)) {
+				MultiModelHandler.Debug("update %s Entity(%d):%s",
+						owner.worldObj.isRemote ? "Client" : "Server",
+						owner.getEntityId(), owner.getClass().toString());
 				isChanged = false;
+				sendCounter = 0;
 				// 情報に変更があった。
 				if (owner.worldObj.isRemote) {
-					// client
-					// サーバーへ変更情報を送信
-					MultiModelHandler.sendToServer(this);
+					onUpdateClient();
 				} else {
-					// server
-					// クライアントへ変更情報を送信
-					MultiModelHandler.sendToClient(this);
+					onupdateServer();
 				}
 			}
 		}
+	}
+
+	public void onUpdateClient() {
+		// client
+		// サーバーへ変更情報を送信
+		MultiModelHandler.sendToServer(this, 0xffff);
+	}
+
+	public void onupdateServer() {
+		// server
+		// クライアントへ変更情報を送信
+		MultiModelHandler.sendToClient(this, 0xffff);
 	}
 
 	/**
 	 * 送信時に書き込まれるデータ
 	 * @param pBuf
 	 */
-	public void sendToServer(ByteBuf pBuf) {
+	public void sendToServer(ByteBuf pBuf, int pMode) {
 		// EntityID
 		pBuf.writeInt(owner.getEntityId());
-		// modelName
-		// color
-		pBuf.writeByte(color);
-		// visibleFlags
-		// stabilizers
-		pBuf.writeFloat(height);
-		pBuf.writeFloat(width);
-		pBuf.writeFloat(yOffset);
-		pBuf.writeFloat(mountHeight);
-		pBuf.writeByte(modelName.length());
-		pBuf.writeBytes(modelName.getBytes(Charsets.UTF_8));
-		
+		// Mode
+		pBuf.writeShort(pMode);
+		if ((pMode & 0x0001) > 0) {
+			// color
+			pBuf.writeByte(color);
+		}
+		if ((pMode & 0x0002) > 0) {
+			// size
+			pBuf.writeFloat(height);
+			pBuf.writeFloat(width);
+			pBuf.writeFloat(yOffset);
+			pBuf.writeFloat(mountHeight);
+		}
+		if ((pMode & 0x0004) > 0) {
+			// visibleFlags
+		}
+		if ((pMode & 0x0008) > 0) {
+			// stabilizers
+		}
+		if ((pMode & 0x0010) > 0) {
+		}
+		if ((pMode & 0x0020) > 0) {
+		}
+		if ((pMode & 0x0040) > 0) {
+			// modelName
+			if (modelName == null) {
+				pBuf.writeByte(0);
+			} else {
+				pBuf.writeByte(modelName.length());
+				pBuf.writeBytes(modelName.getBytes(Charsets.UTF_8));
+			}
+		}
+		if ((pMode & 0x0080) > 0) {
+			// armorName
+			if (armorName == null) {
+				pBuf.writeByte(0);
+			} else {
+				pBuf.writeByte(armorName.length());
+				pBuf.writeBytes(armorName.getBytes(Charsets.UTF_8));
+			}
+		}
 	}
 
 	public void reciveFromClient(ByteBuf pBuf) {
 		// EntityIDは既に読まれている
 //		PacketBuffer lbuf = new PacketBuffer(pBuf);
-		
-		// modelName
-		// color
-		color = pBuf.readByte();
-		// visibleFlags
-		// stabilizers
-		height		= pBuf.readFloat();
-		width		= pBuf.readFloat();
-		yOffset		= pBuf.readFloat();
-		mountHeight	= pBuf.readFloat();
-		int ll = pBuf.readByte();
-		modelName	=  new String(pBuf.readBytes(ll).array(), Charsets.UTF_8);
-		
+		int lmode = pBuf.readShort();
+		if (lmode == 0) {
+			// クライアントからデータの要求
+			MultiModelHandler.sendToClient(this, 0xffff);
+			MultiModelHandler.Debug("RequestData(%d)", owner.getEntityId());
+		} else {
+			int ll;
+			if ((lmode & 0x0001) > 0) {
+				// color
+				color = pBuf.readByte();
+			}
+			if ((lmode & 0x0002) > 0) {
+				height		= pBuf.readFloat();
+				width		= pBuf.readFloat();
+				yOffset		= pBuf.readFloat();
+				mountHeight	= pBuf.readFloat();
+			}
+			if ((lmode & 0x0004) > 0) {
+				// visibleFlags
+			}
+			if ((lmode & 0x0008) > 0) {
+				// stabilizers
+			}
+			if ((lmode & 0x0010) > 0) {
+				
+			}
+			if ((lmode & 0x0020) > 0) {
+				
+			}
+			if ((lmode & 0x0040) > 0) {
+				// modelName
+				ll = pBuf.readByte();
+				modelName	=  new String(pBuf.readBytes(ll).array(), Charsets.UTF_8);
+			}
+			if ((lmode & 0x0080) > 0) {
+				// armorName
+				ll = pBuf.readByte();
+				armorName	=  new String(pBuf.readBytes(ll).array(), Charsets.UTF_8);
+			}
+			setSize(width, height);
+			setScale(1.0F);
+		}
 	}
 
-	public void sendToClient(ByteBuf pBuf) {
+	public void sendToClient(ByteBuf pBuf, int pMode) {
 		// EntityID
 		pBuf.writeInt(owner.getEntityId());
-		// modelName
-		// color
-		pBuf.writeByte(color);
-		// visibleFlags
-		// stabilizers
-		pBuf.writeFloat(height);
-		pBuf.writeFloat(width);
-		pBuf.writeFloat(yOffset);
-		pBuf.writeFloat(mountHeight);
-		pBuf.writeByte(modelName.length());
-		pBuf.writeBytes(modelName.getBytes(Charsets.UTF_8));
-		
+		// Mode
+		pBuf.writeShort(pMode);
+		if ((pMode & 0x0001) > 0) {
+			// color
+			pBuf.writeByte(color);
+		}
+		if ((pMode & 0x0002) > 0) {
+			// size
+			pBuf.writeFloat(height);
+			pBuf.writeFloat(width);
+			pBuf.writeFloat(yOffset);
+			pBuf.writeFloat(mountHeight);
+		}
+		if ((pMode & 0x0004) > 0) {
+			// visibleFlags
+		}
+		if ((pMode & 0x0008) > 0) {
+			// stabilizers
+		}
+		if ((pMode & 0x0010) > 0) {
+		}
+		if ((pMode & 0x0020) > 0) {
+		}
+		if ((pMode & 0x0040) > 0) {
+			// modelName
+			if (modelName == null) {
+				pBuf.writeByte(0);
+			} else {
+				pBuf.writeByte(modelName.length());
+				pBuf.writeBytes(modelName.getBytes(Charsets.UTF_8));
+			}
+		}
+		if ((pMode & 0x0080) > 0) {
+			// armorName
+			if (armorName == null) {
+				pBuf.writeByte(0);
+			} else {
+				pBuf.writeByte(armorName.length());
+				pBuf.writeBytes(armorName.getBytes(Charsets.UTF_8));
+			}
+		}
 	}
 
 	public void reciveFromServer(ByteBuf pBuf) {
 		// EntityIDは既に読まれている
-		// modelName
-		// color
-		color = pBuf.readByte();
-		// visibleFlags
-		// stabilizers
-		height		= pBuf.readFloat();
-		width		= pBuf.readFloat();
-		yOffset		= pBuf.readFloat();
-		mountHeight	= pBuf.readFloat();
-		int ll = pBuf.readByte();
-		modelName	=  new String(pBuf.readBytes(ll).array(), Charsets.UTF_8);
+		int lmode = pBuf.readShort();
+		int ll;
+		if ((lmode & 0x0001) > 0) {
+			// color
+			color = pBuf.readByte();
+		}
+		if ((lmode & 0x0002) > 0) {
+			height		= pBuf.readFloat();
+			width		= pBuf.readFloat();
+			yOffset		= pBuf.readFloat();
+			mountHeight	= pBuf.readFloat();
+		}
+		if ((lmode & 0x0004) > 0) {
+			// visibleFlags
+		}
+		if ((lmode & 0x0008) > 0) {
+			// stabilizers
+		}
+		if ((lmode & 0x0010) > 0) {
+			
+		}
+		if ((lmode & 0x0020) > 0) {
+			
+		}
+		if ((lmode & 0x0040) > 0) {
+			// modelName
+			ll = pBuf.readByte();
+			modelName	=  new String(pBuf.readBytes(ll).array(), Charsets.UTF_8);
+		}
+		if ((lmode & 0x0080) > 0) {
+			// armorName
+			ll = pBuf.readByte();
+			armorName	=  new String(pBuf.readBytes(ll).array(), Charsets.UTF_8);
+		}
+		setSize(width, height);
+		setScale(1.0F);
+	}
+
+	public void forceChanged(boolean pFlag) {
+		isChanged = pFlag;
+	}
+
+	public void setChange() {
+		isChanged = true;
+		sendCounter = 10;
 		
+		AbstractModelBase lamb = model.getModelClass(getColor())[0];
+		height = lamb.getHeight(null);
+		width = lamb.getWidth(null);
+		yOffset = lamb.getyOffset(null);
+		mountHeight = lamb.getMountedYOffset(null);
+		setSize(width, height);
+		setScale(1.0F);
+	}
+
+	public void setSize(float pWidth, float pHeight) {
+		if (owner instanceof Entity) {
+			// 対象がprotectなので無理やり
+			try {
+				Method lmethod = ReflectionHelper.findMethod(Entity.class, owner, new String[] {"setSize", "func_70105_a"}, float.class, float.class);
+				lmethod.invoke(owner, pWidth, pHeight);
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+			
+		}
+	}
+
+	public void setScale(float pScale) {
+		if (owner instanceof EntityAgeable) {
+			// 対象がprotectなので無理やり
+			try {
+				MultiModelHandler.Debug("popSizeB:%f, %f - %f, %f, (%f, %f, %f - %f %f, %f), %s - %s",
+						owner.width, owner.height, owner.yOffset, owner.ySize,
+						owner.boundingBox.minX, owner.boundingBox.minY, owner.boundingBox.minZ,
+						owner.boundingBox.maxX, owner.boundingBox.maxY, owner.boundingBox.maxZ,
+						owner.myEntitySize.toString(),
+						owner.worldObj.isRemote ? "client" : "server");
+
+				Method lmethod = ReflectionHelper.findMethod(EntityAgeable.class, (EntityAgeable)owner, new String[] {"setScale", "func_98055_j"}, float.class);
+				lmethod.invoke(owner, pScale);
+				MultiModelHandler.Debug("popSizeA:%f, %f - %f, %f, (%f, %f, %f - %f %f, %f), %s - %s",
+						owner.width, owner.height, owner.yOffset, owner.ySize,
+						owner.boundingBox.minX, owner.boundingBox.minY, owner.boundingBox.minZ,
+						owner.boundingBox.maxX, owner.boundingBox.maxY, owner.boundingBox.maxZ,
+						owner.myEntitySize.toString(),
+						owner.worldObj.isRemote ? "client" : "server");
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 }

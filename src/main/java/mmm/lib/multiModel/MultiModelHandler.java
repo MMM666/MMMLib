@@ -3,8 +3,12 @@ package mmm.lib.multiModel;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.IdentityHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import mmm.lib.multiModel.texture.IMultiModelEntity;
 import mmm.lib.multiModel.texture.MultiModelData;
@@ -13,10 +17,15 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.WorldTickEvent;
 import cpw.mods.fml.common.network.FMLEventChannel;
 import cpw.mods.fml.common.network.FMLNetworkEvent;
+import cpw.mods.fml.common.network.FMLNetworkEvent.ClientConnectedToServerEvent;
+import cpw.mods.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.internal.FMLProxyPacket;
 import cpw.mods.fml.relauncher.Side;
@@ -32,7 +41,8 @@ public class MultiModelHandler {
 	public Map<Class<? extends Entity>, String> defaultModels = new HashMap<Class<? extends Entity>, String>();
 	
 	/** Entityに関連付けられたデータのリスト */
-	public Map<Entity, MultiModelData> datas = new HashMap<Entity, MultiModelData>();
+	public Map<Entity, MultiModelData> datasClient = new IdentityHashMap<Entity, MultiModelData>();
+	public Map<Entity, MultiModelData> datasServer = new IdentityHashMap<Entity, MultiModelData>();
 
 	public static boolean isDebugMessage = true;
 
@@ -45,8 +55,11 @@ public class MultiModelHandler {
 	}
 
 
+	/**
+	 * マルチモデルを使用する場合は此処を呼ぶこと
+	 */
 	public static void init() {
-		// TODO イベントハンドラに登録
+		// イベントハンドラに登録
 		if (instance instanceof MultiModelHandler) return;
 		
 		// ネットワークのハンドラを登録
@@ -54,6 +67,14 @@ public class MultiModelHandler {
 		networkEventChannel = NetworkRegistry.INSTANCE.newEventDrivenChannel(packetChannel);
 		networkEventChannel.register(instance);
 		MinecraftForge.EVENT_BUS.register(instance);
+		FMLCommonHandler.instance().bus().register(instance);
+	}
+
+	public static void clear() {
+		if (instance != null) {
+			instance.datasClient.clear();
+			instance.datasServer.clear();
+		}
 	}
 
 	/**
@@ -79,7 +100,11 @@ public class MultiModelHandler {
 				MultiModelData ledata = targets.get(lentity.getClass()).newInstance();
 				ledata.setModelFromName(defaultModels.get(lentity.getClass()));
 				lentity.registerExtendedProperties("MultiModel", ledata);
-				datas.put(lentity, ledata);
+				if (lentity.worldObj.isRemote) {
+					datasClient.put(lentity, ledata);
+				} else {
+					datasServer.put(lentity, ledata);
+				}
 				if (lentity instanceof IMultiModelEntity) {
 					((IMultiModelEntity)lentity).setMultiModelData(ledata);
 				}
@@ -89,14 +114,32 @@ public class MultiModelHandler {
 		}
 	}
 
+	@SubscribeEvent
+	public void onEntityJoinInWorld(EntityJoinWorldEvent pEvent) {
+		// ワールドに追加された時の処理
+		Entity lentity = pEvent.entity;
+		if (targets.containsKey(lentity.getClass())) {
+			if (lentity.worldObj.isRemote) {
+				// Client
+				MultiModelData ldata = datasClient.get(lentity);
+				if (ldata != null) {
+					sendToServer(ldata, 0x0000);
+				}
+			} else {
+				// Server
+				
+			}
+		}
+	}
+
 	/**
 	 * サーバーへ変更通知
 	 * @param pData
 	 */
-	public static void sendToServer(MultiModelData pData) {
+	public static void sendToServer(MultiModelData pData, int pMode) {
 		Debug("send MultiModelData to Server.");
 		ByteBuf lbuf = Unpooled.buffer();
-		pData.sendToServer(lbuf);
+		pData.sendToServer(lbuf, pMode);
 		FMLProxyPacket lpacket = new FMLProxyPacket(lbuf, packetChannel);
 		networkEventChannel.sendToServer(lpacket);
 	}
@@ -105,10 +148,10 @@ public class MultiModelHandler {
 	 * クライアントへ変更通知
 	 * @param pData
 	 */
-	public static void sendToClient(MultiModelData pData) {
+	public static void sendToClient(MultiModelData pData, int pMode) {
 		Debug("send MultiModelData to Client.");
 		ByteBuf lbuf = Unpooled.buffer();
-		pData.sendToClient(lbuf);
+		pData.sendToClient(lbuf, pMode);
 		FMLProxyPacket lpacket = new FMLProxyPacket(lbuf, packetChannel);
 		networkEventChannel.sendToDimension(lpacket, pData.getOwner().dimension);
 	}
@@ -122,7 +165,7 @@ public class MultiModelHandler {
 				int lindex = pEvent.packet.payload().readInt();
 				EntityPlayerMP lplayer = ((NetHandlerPlayServer)pEvent.handler).playerEntity;
 				Entity lentity = lplayer.worldObj.getEntityByID(lindex);
-				MultiModelData lmme = datas.get(lentity);
+				MultiModelData lmme = datasServer.get(lentity);
 				if (lmme != null) {
 					lmme.reciveFromClient(pEvent.packet.payload());
 				}
@@ -138,10 +181,46 @@ public class MultiModelHandler {
 			Debug("get MultiModelData from Server.");
 			int lindex = pEvent.packet.payload().readInt();
 			Entity lentity = FMLClientHandler.instance().getWorldClient().getEntityByID(lindex);
-			MultiModelData lmme = datas.get(lentity);
+			MultiModelData lmme = datasClient.get(lentity);
 			if (lmme != null) {
 				lmme.reciveFromServer(pEvent.packet.payload());
 			}
+		}
+	}
+
+	@SubscribeEvent
+	public void onDisconnectClient(ClientDisconnectionFromServerEvent pEvent) {
+		Debug("Disconnect From Server. last datasCount CL:%d, SV:%d", datasClient.size(), datasServer.size());
+		clear();
+	}
+
+	@SubscribeEvent
+	public void onConnectClient(ClientConnectedToServerEvent pEvent) {
+		Debug("Connect To Server. datasCount CL:%d, SV:%d", datasClient.size(), datasServer.size());
+	}
+
+	@SubscribeEvent
+	public void onUpdate(WorldTickEvent pEvent) {
+		// 毎時処理
+		List<Entity> llist = new ArrayList<Entity>();
+		for (Entry<Entity, MultiModelData> le : datasServer.entrySet()) {
+			le.getValue().onUpdate();
+			if (le.getValue().getOwner().isDead) {
+				llist.add(le.getKey());
+			}
+		}
+		for (Entity le : llist) {
+			datasServer.remove(le);
+		}
+		llist.clear();
+		for (Entry<Entity, MultiModelData> le : datasClient.entrySet()) {
+			le.getValue().onUpdate();
+			if (le.getValue().getOwner().isDead) {
+				llist.add(le.getKey());
+			}
+		}
+		for (Entity le : llist) {
+			datasClient.remove(le);
 		}
 	}
 

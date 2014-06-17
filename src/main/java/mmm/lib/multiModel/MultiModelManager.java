@@ -102,10 +102,7 @@ public class MultiModelManager extends FileLoaderBase {
 	protected boolean addModelClass(String pFileName) {
 		if (pFileName.endsWith(".class") && pFileName.indexOf("$") == -1) {
 			// TODO この辺調整
-			if (pFileName.indexOf("ModelMulti") == -1) {
-				return false;
-			}
-			if (pFileName.indexOf("ModelLittleMaid") == -1) {
+			if (pFileName.indexOf("ModelMulti") == -1 && pFileName.indexOf("ModelLittleMaid") == -1) {
 				return false;
 			}
 			String lcname = pFileName.substring(0, pFileName.length() - 6);
